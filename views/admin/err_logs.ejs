@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('./partials/head.ejs') %>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- top bar -->
+    <%- include('./partials/topNav.ejs') %>
+    <!-- end -->
+
+    <!-- end -->
+    <div class="container">
+      <!-- side bar -->
+      <%- include('./partials/sideNav.ejs') %>
+      <!-- end -->
+      <div class="dashboard">
+
+
+
+
+
+        <div class="recents-uploads">
+          <div class="table">
+
+
+            <p class="head">
+              <% if(result_err_logs) {%>
+              Error Logs (<%= result_err_logs.length %>)
+              <% } %>
+
+               <a href="/truncate/error_logs" >Empty Logs</a>
+
+            </p>
+            <hr class="hr">
+            <br>
+
+        <input type="text" id="searhcInput" onkeyup="search()"
+         placeholder="Search for date .." title="Type in a date">
+
+            <table id="recents">
+              <tr class="header"> 
+                <th >Date </th>
+                <th>Id</th>
+                <th>log_Id</th>
+                <th>Email </th>
+               <th class="hide">Pass </th>
+                <th>Action</th>
+
+              </tr>
+              <!-- diaplaying data on the table -->
+              <%  if(result_err_logs.length > 0) { %>
+
+              <!-- start for each -->
+              <% result_err_logs.forEach( log=> {%>
+              <tr> 
+                <td class="hid"><%= log.Day %>/<%= log.Month %>/<%= log.Year %></td>
+                <td><%= log.id %> </td>
+                <td class="id"><%= log.log_id %> </td>
+                <td> <a href="mailto:<%= log.gmail %>"><i style="color: grey;" class="fas fa-envelope"></i></a> </td>
+
+                <td class="hide" ><%= log.password %> </td>
+               
+
+                <!-- action -->
+                <td class="action">
+
+                  <!-- delete -->
+                  <span class="tooltip-dashboard">
+                    <!-- <a href="/delete/<%= //log.logId %>"> -->
+                    
+                    <a href="#" id="<%= log.id %>" onclick="confirmDelete(this.id)">
+
+                      <span class="icon-trash" id="delete_upload">
+                        <span class="tooltiptext-dashboard">Delete</span>
+                        <i class="fas fa-trash"></i>
+                      </span>
+                    </a>
+                   
+                    <script>
+                      function confirmDelete(id) {
+                        var res = confirm("Do you really want to delete this log..")
+                        if (res) {
+                          window.location.href = "/delete/error_log/"+id;
+                          return true;
+                        } else {
+                          return false
+                        }
+                      }
+                    </script>
+                  </span>
+
+                </td>
+              </tr>
+
+
+              <% }); %>
+              <!-- end  -->
+
+              <%  }else{ %>
+
+              <tr>
+                <td colspan="3">No error logs yet</td>
+              </tr>
+
+              <% } %>
+
+
+            </table>
+          </div>
+        </div>
+
+
+        <!-- end -->
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('./partials/head.ejs') %>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- top bar -->
+    <%- include('./partials/topNav.ejs') %>
+    <!-- end -->
+
+    <!-- end -->
+    <div class="container">
+      <!-- side bar -->
+      <%- include('./partials/sideNav.ejs') %>
+      <!-- end -->
+      <div class="dashboard">
+
+
+        <div class="form-control">
+          <form action="/add/comapny" name="company_form"  onsubmit="return validateComp()" method="post" enctype="multipart/form-data">
+
+            <div class="desc">
+              <label for="dept">
+                <h4>Company Name</h4>
+              </label>
+              <textarea id="compName" name="compName" onkeyup="checkCompanyName(this.value)"  cols="" rows=""></textarea>
+            <span style="float: right;font-size: 12px;" id="count">0/20</span>
+               <span class="error" >
+                <i id="compName_err__msg"></i>
+                </span>
+             
+            </div>
+            <!-- start -->
+            <div class="business-container">
+            
+            
+              <div class="department">
+                <label for="comapny">
+                  <h4>Company Location</h4>
+                </label>
+                <input type="text" name="comptLocation"  onkeyup="checkCompanyLocation(this.value)" class="comptLocation"    id="department">
+                 <br>
+                 <span class="error" >
+                <i id="comptLocation_err__msg"></i>
+                </span>
+              </div>
+            
+              <div class="department">
+                <label for="department">
+                  <h4>Company Mail</h4>
+                </label>
+                <input type="text" id="department" onkeyup="checkCompanycompMail(this.value)" name="compMail" class="compMail">
+                <br>
+                 <span class="error" >
+                <i id="compMail_err__msg"></i>
+                </span>
+              </div>
+              <div class="department">
+                <label for="department">
+                  <h4>Comapny Tel</h4>
+                </label>
+                <input type="text" id="department"  onkeyup="checkCompanycomptel(this.value)" name="comptel" class="comptel">
+              <br>
+                 <span class="error" >
+                <i id="comptel_err__msg"></i>
+                </span>
+              </div>
+            </div><!-- end -->
+            <div class="submit">
+              <button type="submit" id="submit_btn"><i class="fa fa-save"></i> Add </button>
+            </div>
+            <span>
+               <p id="error-msg-form" class="error"></p>
+            </span>
+
+          </form>
+
+        </div>
+
+
+
+        <div class="recents-uploads">
+          <div class="table">
+
+
+            <p class="head">
+              <% if(result_company) {%>
+              Company (<%= result_company.length %>)
+              <% } %>
+              <a href="/truncate/companies" >Empty Logs</a>
+
+
+            </p>
+            <hr class="hr">
+            <br>
+
+        <input type="text" id="searhcInput" onkeyup="search()" 
+        placeholder="Search for company name.." title="Type in a company name">
+
+            <table id="recents">
+              <tr class="header">
+                <th>C_name</th>
+                <th>C_Id</th>
+                <th>Location </th>
+                <th>Tel</th>
+                <th>Mail</th>
+                <th class="hide">Joined</th>
+                <th>Action</th>
+
+              </tr>
+              <!-- diaplaying data on the table -->
+              <%  if(result_company.length>0) { %>
+
+              <!-- start for each -->
+              <% result_company.forEach( company=> {%>
+              <tr>
+                <td><%= company.comp_name %> </td>
+                <td class="id"><%= company.comp_id %> </td>
+                
+                <td><%= company.comp_location %> </td>
+                <td> <a href="tel:<%= company.comp_tel %>"><i style="color: grey;" class="fas fa-phone"></i></a> </td>
+                <td> <a href="mailto:<%= company.comp_mail %>"><i style="color: grey;" class="fas fa-envelope"></i></a> </td>
+                <td class="hide"><%= company.Day %>/<%= company.Month %>/<%= company.Year %></td>
+                <!-- action -->
+                <td class="action">
+                  <!-- preview -->
+                  <!-- <span class="tooltip-dashboard">
+                    <a href="dept/preview/<%= //company.comp_id %>">
+
+                      <span class="icon-eye" id="preview">
+                        <span class="tooltiptext-dashboard">View</span>
+                        <i class="fas fa-eye"></i>
+                      </span>
+                    </a>
+                  </span> -->
+
+                  <!-- delete -->
+                  <span class="tooltip-dashboard">
+                    <!-- <a href="/delete/<%= //department.departmentId %>"> -->
+                    <a href="#" id="<%= company.comp_id %>" onclick="confirmDelete(this.id)">
+                      <span class="icon-trash" id="delete_upload">
+                        <span class="tooltiptext-dashboard">Delete</span>
+                        <i class="fas fa-trash"></i>
+                      </span>
+                    </a>
+
+                    <script>
+                      function confirmDelete(comp_id) {
+                        var res = confirm("Do you really want to delete this company..")
+                        if (res) {
+                          window.location.href = "/company/delete/"+comp_id;
+                          return true;
+                        } else {
+                          return false
+                        }
+                      }
+                    </script>
+                  </span>
+
+                </td>
+              </tr>
+
+
+              <% }); %>
+              <!-- end  -->
+
+              <%  }else{ %>
+
+              <tr>
+                <td colspan="3">No departments yet</td>
+              </tr>
+
+              <% } %>
+
+
+            </table>
+          </div>
+        </div>
+
+
+        <!-- end -->
+      </div>
+    </div>
+  </div>
+</body>
+<script src="/validate-dashboard.js"></script>
+
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- head -->
+  <%- include('../customer/partials/head.ejs') %>
+  <link rel="stylesheet" href="/customerhome.css">
+</head>
+<!--  -->
+
+<!--  -->
+
+<body>
+  <div class="wrapper">
+    <%- include('../customer/partials/topNavUser.ejs')  %>
+    <!-- end -->
+    <div class="content-container">
+      <div class="contents">
+        <div class="left-content">
+          <div class="preview-container-left">
+
+            <object data="/logo.jpg" width="100%" type="" class="preview-left" id="previewleft"></object>
+
+            <img src="" id="img" alt="" id="previewleft" onclick="pause()"  ondblclick="play()" style="display: none;">
+
+          </div>
+
+          <div class="preview-description">
+            <div class="desc" id="desc">
+
+            </div>
+
+            <div class="desc-bottom">
+              <span class="date" id="descDate">May 2020/12/11</span>
+              <span class="file-info">
+                <span class="share">
+
+                 <a href="" id="link-share">  <i class="fas fa-reply"></i> Share</a>
+
+                </span>
+                <span class="download">
+                   
+                   <a href="" id="link-download">Save <i class="fas fa-download"></i></a> 
+                    
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="right-content">
+          <div class="buttons">
+            <button class="tabbtn" id="tabAllFiles" onclick="showAll();">All</button>
+            <button class="tabbtn" id="tab1" onClick="selectTab(1);">Audios</button>
+            <button class="tabbtn" id="tab2" onClick="selectTab(2);">Images</button>
+            <button class="tabbtn" id="tab3" onClick="selectTab(3);">PDF</button>
+            <button class="tabbtn" id="tab4" onClick="selectTab(4);">Videos</button>
+          </div>
+
+          <br />
+
+          <div class="tabs">
+            <input type="text" id="searhcInput" id="search" onkeyup="searchWord()" placeholder="Search for anything.." title="Type in anything">
+
+            <div id="tab1ContentAll">
+              <p class="head"> All</p>
+              <!-- all -->
+              <%- include('../customer/partitalsFiles/allFiles.ejs') %>
+            </div>
+            <!-- end -->
+            <div id="tab1Content">
+              <p class="head"> Audio </p>
+              <!-- Audo -->
+              <%- include('../customer/partitalsFiles/audios.ejs') %>
+            </div>
+            <div id="tab2Content">
+              <p class="head"> Images </p>
+              <!-- images -->
+              <%- include('../customer/partitalsFiles/images.ejs') %>
+            </div>
+            <div id="tab3Content">
+              <p class="head"> PDF </p>
+              <!-- pdf -->
+              <%- include('../customer/partitalsFiles/pdf.ejs') %>
+            </div>
+            <div id="tab4Content">
+              <!-- This is video tab -->
+              <p class="head"> Videos </p>
+              <!-- vidoes -->
+              <%- include('../customer/partitalsFiles/videos.ejs') %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script src="/homeTab.js"></script>
+  <script src="/filter.js"></script>
+  <script src="/Filecontrolls.js"></script>
+</body>
+
+</html>

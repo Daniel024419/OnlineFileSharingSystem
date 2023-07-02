@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('./partials/head.ejs') %>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- top bar -->
+    <%- include('./partials/topNav.ejs') %>
+    <!-- end -->
+
+    <!-- end -->
+    <div class="container">
+      <!-- side bar -->
+      <%- include('./partials/sideNav.ejs') %>
+      <!-- end -->
+      <div class="dashboard">
+
+
+
+
+
+        <div class="recents-uploads">
+          <div class="table">
+
+
+            <p class="head">
+              <% if(result_logs) {%>
+              Logs (<%= result_logs.length %>)
+              <% } %>
+
+               <a href="/truncate/logs" >Empty Logs</a>
+
+            </p>
+            <hr class="hr">
+            <br>
+
+        <input type="text" id="searhcInput" onkeyup="search()"
+         placeholder="Search for date .." title="Type in a date">
+
+            <table id="recents">
+              <tr class="header"> 
+                <th class="hid">Created_at </th>
+                <th>id</th>
+                <th>logId</th>
+                <th>User_Id </th>
+               
+                <th>Action</th>
+
+              </tr>
+              <!-- diaplaying data on the table -->
+              <%  if(result_logs.length > 0) { %>
+
+              <!-- start for each -->
+              <% result_logs.forEach( log=> {%>
+              <tr> 
+                <td class="hid"><%= log.Day %>/<%= log.Month %>/<%= log.Year %></td>
+                <td><%= log.id %> </td>
+                <td class="id"><%= log.log_id %> </td>
+                <td class="hid" ><%= log.user_id %> </td>
+               
+
+                <!-- action -->
+                <td class="action">
+                  <!-- preview -->
+                  <!-- <span class="tooltip-dashboard">
+                    <a href="./preview/{<%= //log.logId %>}">
+
+                      <span class="icon-eye" id="preview">
+                        <span class="tooltiptext-dashboard">View</span>
+                        <i class="fas fa-eye"></i>
+                      </span>
+                    </a>
+                  </span> -->
+
+                  <!-- delete -->
+                  <span class="tooltip-dashboard">
+                    <!-- <a href="/delete/<%= //log.logId %>"> -->
+                    
+                    <a href="#" id="<%= log.id %>" onclick="confirmDelete(this.id)">
+
+                      <span class="icon-trash" id="delete_upload">
+                        <span class="tooltiptext-dashboard">Delete</span>
+                        <i class="fas fa-trash"></i>
+                      </span>
+                    </a>
+                   
+
+
+
+                    <script>
+                      function confirmDelete(logId) {
+                        var res = confirm("Do you really want to delete this log..")
+                        if (res) {
+                          window.location.href = "/delete/log/"+logId;
+                          return true;
+                        } else {
+                          return false
+                        }
+                      }
+                    </script>
+                  </span>
+
+                </td>
+              </tr>
+
+
+              <% }); %>
+              <!-- end  -->
+
+              <%  }else{ %>
+
+              <tr>
+                <td colspan="3">No logs yet</td>
+              </tr>
+
+              <% } %>
+
+
+            </table>
+          </div>
+        </div>
+
+
+        <!-- end -->
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

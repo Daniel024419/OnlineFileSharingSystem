@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <%- include('./customer/partials/head.ejs') %>
+     <link rel="stylesheet" href="/login.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+        <div class="logo">
+            <img src="/logo.jpg" alt="logo" srcset="">
+        </div>
+        </div>
+        <div class="right">
+<%  if (error_register) {%>
+
+ <div class="alert-error">
+    <!-- alert error -->
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    <span class="error_auth"> <%= error_register %> </span>
+
+</div>
+<% }%>
+<!-- alert success -->
+
+<%  if (success_register) {%>
+
+<div class="alert-success">
+    <!-- alert error -->
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+  <span class="error_auth"> <%= success_register %> </span>
+</span>
+</div>
+<% }%>
+        <div class="form-container">
+            <div class="header-title" id="register-head">
+                <h3>Get started with account</h3>
+                <p class="new-account">Create a new account to start accessing files on the sever 
+                  <span>Already Account? <a href="/login" id="login-btn">Log in</a></span>
+                </p>
+                 
+            </div>
+            <form  autofill="false" autocomplete="false"  name="register" class="form"   action="/register" onsubmit="return validateForm()" method="post" id="form-signup">
+
+
+                <div class="input-box">
+                    <input type="text" name="userName"   onkeyup="checkUsername(this.value)" placeholder="Username" id="username" class="username">
+                        <span class="error" id="error_username">
+                            <i id="uname_err__msg"></i>
+                        </span>
+
+                    <div class="business-container">
+
+                   
+                    <div class="company">
+                         
+                        <input list="comp" onkeyup="checkCompany(this.value)" name="company"
+                        placeholder="Company" id="company" value="">
+        
+                        <datalist id="comp">
+                            <%  if(result_company) { %>
+                                <!-- start for each -->
+                                <% result_company.forEach( company=> {%>
+                                              <option value="<%= company.comp_id %>" 
+                                                label="<%= company.comp_name %>"> 
+                              
+                          <% }) } %>
+                        </datalist>
+                        <br> 
+                               <span class="error" >
+                                <i id="comp_err__msg"></i>
+                                </span>
+                      </div> 
+
+                        <div class="department">
+                         
+                <input list="dept" name="department" 
+                        placeholder="Department" onkeyup="checkDept(this.value)" id="department">
+        
+                       <datalist id="dept">
+<%  if(result_department) { %>
+ <!-- start for each -->
+ <% result_department.forEach( department => {%>
+ <option value="<%= department.dept_id %>" label="<%= department.dept_name %>" id="dept-lbl">
+
+   <% }) } %>
+                        </datalist>
+                        <br> 
+                               <span class="error" >
+                                <i id="dept_err__msg"></i>
+                                </span>
+                      </div> 
+
+ 
+                     </div>
+                </div>
+
+
+<datalist id="check-list" style="display: none;">
+<%  if(result_check) { %>
+ <!-- start for each -->
+ <% result_check.forEach( check => {%>
+ <option value="<%= check.gmail %>">
+
+   <% }) } %>
+    </datalist>
+
+                <div class="input-box">
+                    <input type="email" name="email" onkeyup="checkEmail(this.value)"
+                    id="email" placeholder="Email"
+                       class="email">
+                   <span class="error" id="error_email">
+                       <i id="email_err__msg"></i>
+                   </span>
+                </div>
+
+                <div class="input-box">
+                    <span class="password-container">
+                        <span class="password1">
+                            <span class="showpass">
+
+                                <input type="password" name="password" placeholder="Password" id="newpassword"  class="password">
+
+                                <i class="fa fa-eye" id="eye-newpass" class="eye-open" onclick="showPassNew()"></i>
+                                <i class="fa fa-eye-slash" id="eye-close-newpass" class="eye-open"
+                                    onclick="showPassNew()"> </i>
+
+                            </span>
+
+
+
+                            <span class="error" id="error_password">
+                                <i id="pass_err__msg"></i>
+                            </span>
+                        </span>
+                        <span class="password2">
+                            <span class="showpass">
+                                <input type="password" autocomplete="none" name="repassword" placeholder="Re-enter Password"
+                                    onkeyup="checkPass(this.value);" id="repassword" class="password">
+
+                                <i class="fa fa-eye" id="eye-repass" class="eye-open" onclick="showPassRe()"></i>
+                                <i class="fa fa-eye-slash" id="eye-close-repass" class="eye-open"
+                                    onclick="showPassRe()"></i>
+
+
+
+                            </span>
+                            <span class="error" id="error_password">
+                                <i id="repass_err__msg"></i>
+                            </span>
+                        </span>
+
+
+                    </span> </div>
+
+
+                    <div id="input-box-submit">
+                        <input type="submit" value="Get Started" id="submit-btn" class="submit-btn">
+                        <p>By clicking this button , you agree to the
+                            <span> <a href="/terms">Terms and conditions</a></span>
+                        </p>
+        
+        
+                    </div>
+                    <span>
+                        <p id="error-msg-form">
+        
+                        </p>
+                    </span>
+            </form>
+
+            
+        </div> 
+     <footer>
+    <h5>ALL RIGHT RESERVED 2023 CONTACT <a href="mailto:danielpmensah926@gmail.com">MAIL</a> </h5>  
+   </footer>
+        </div>
+  
+    </div>
+   
+</body>
+<script src="/validate.js"></script>
+
+</html>

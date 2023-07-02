@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('./customer/partials/head.ejs') %>
+        <link rel="stylesheet" href="/login.css">
+   </head>
+<body>
+    <div class="container">
+        <div class="left">
+        <div class="logo">
+            <img src="/logo.jpg" alt="logo" srcset="">
+        </div>
+        </div>
+        <div class="right">
+
+<% if(error_login) {      %>
+<div class="alert-error">
+    <!-- alert error -->
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+  <span class="error_auth"> <%= error_login %> </span>
+</div>
+
+<%   }%>
+
+<!-- pass update success -->
+<!-- alert success -->
+
+<%  if (success_update_pass) {%>
+
+<div class="alert-success">
+    <!-- alert error -->
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+  <span class="error_auth"> <%= success_update_pass %> </span>
+</span>
+</div>
+<% }%>
+
+<% if(error_update_pass) {      %>
+<div class="alert-error">
+    <!-- alert error -->
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+  <span class="error_auth"> <%= error_update_pass %> </span>
+</div>
+
+<%   }%>
+
+      <div class="form-container">
+            <div class="header-title">
+                <h3>Continue from here</h3>
+                <p> 
+                    <span>No Account yet? <a href="/">Create it here</a> to start accessing files on the sever </span>
+                </p>
+                
+            </div>
+            <form action="/auth" method="post" class="form">
+
+                <div class="input-box">
+                    <input type="email" name="email"  id="email" placeholder="Email"
+                        class="email">
+                    <span class="error" id="error_email">
+                        <i id="email_err__msg"></i>
+                    </span>
+
+                </div>
+                 <span class="password1">
+
+                <style type="text/css">
+
+                    .showBtn{
+                        float: right;cursor: pointer;
+                        margin-left:-70px !important;  
+                        margin-top:13px ;
+                        font-size:11px; 
+                        padding-top: 2px;                
+                    }
+                   
+
+           
+
+
+                    #hidepass{
+                        display: none;
+                    }
+                    @media screen and (max-width:900px){
+                     .showBtn{
+                        float: right;cursor: pointer;
+                        margin-left:-30px !important;  
+                        margin-top:13px  ;
+                        font-size:14px;                 
+                    }
+
+                    .txt{
+                        display: none;
+                    }
+            .password-login::placeholder {
+            padding-right: 70px  !important;
+            }
+                    }
+                </style>
+                            <span class="showpass">
+                               
+                               <input type="password" name="password" id="password" placeholder="Password"
+                        class="password-login">
+
+ <span  class="showBtn">
+                               <span onclick="showPassNew()"  id="showpass"><span class="txt">Show Password</span>   <i class="fa fa-eye"></i></span>
+                               <span onclick="showPassNew()"  id="hidepass"><span class="txt">Hide Password</span> <i class="fa fa-eye-slash"></i></span>
+                              </span>
+
+                            </span>
+
+
+
+                            <span class="error" id="error_password">
+                                <i id="pass_err__msg"></i>
+                            </span>
+                        </span>
+                <div  id="input-box-submit">
+                    <input type="submit" style="padding: 9px 10px;" value="Log In" id="submit-btn" class="submit-btn">
+                    
+                </div><h4> <a href="/forgot/password">forgot password?</a> </h4>
+            </form>
+        </div>
+        </div>
+    </div>
+    <script>
+        
+        //email
+var email=document.querySelector('#email');
+var email_err__msg=document.querySelector('#email_err__msg')
+var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+
+    email.addEventListener('keyup',(e)=>{
+       
+      if(e.target.value.match(mailformat))
+         {
+            //document.write("Valid email address!");
+            email.style.border='1px solid #01cb44';
+            email_err__msg.style.color='green';
+            email_err__msg.style.display='none'
+            email_err__msg.textContent='Email Good..';
+
+            return true;
+         }
+         else if(!e.target.value.match(mailformat))         {
+
+            //email.style.placeholder='example@email/com';
+            email.style.border='1px solid #FF5466';
+            email_err__msg.style.color='red';
+            email_err__msg.style.display='initial';            
+            email_err__msg.textContent='Invalid email..';
+            email_err__msg.color='red';
+
+            document.email-form.email.focus();
+         
+             return false;
+         }
+         
+         email.removeEventListener('keyup');
+    });
+
+
+    var password =document.getElementById('password');
+
+    //show and hide pass newpass
+function showPassNew() {
+   // alert('all')
+    if (password.type === "password") {
+        password.type = "text";
+        document.getElementById('showpass').style.display='none';
+        document.getElementById('hidepass').style.display='initial';
+        // alert('pass')
+    } else {
+        password.type = "password";
+        document.getElementById('showpass').style.display='initial';
+        document.getElementById('hidepass').style.display='none';
+        
+       // alert('text');
+    }
+  }
+
+
+ 
+    </script>
+</body>
+</html>

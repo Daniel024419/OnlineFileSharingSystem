@@ -1,0 +1,84 @@
+<section>
+    <table id="recents" data-name="recents">
+    <tbody>
+      <% if(result_files_audio) {  %>
+
+      <% result_files_audio.forEach( file =>{ %>
+      <tr>
+        <th class="files" id="files">
+          <span>
+            <!-- img -->
+            <% if(file.fileType==".gif"
+                ||file.fileType==".png"
+                ||file.fileType==".jpeg"
+                ||file.fileType==".jpg") {%>
+            <img class="img" id="noAudio"  src="/<%= file.fileName %>" alt="<%= file.fileName %>/<%= file.id %>/<%= file.fileId %>">
+            <!-- video -->
+            <% } else if(
+                 file.fileType==".mp4"
+                 ||file.fileType==".wav"
+                 ||file.fileType==".mov"||file.fileType==".f4v"
+                 ||file.fileType==".avi"||file.fileType==".swf"
+                 ||file.fileType==".mkv"||file.fileType==".flv"
+                 ||file.fileType==".webm"||file.fileType==".mpeg-2")
+                 {%>
+
+  <video class="video" src="/<%= file.fileName %>" id="<%= file.fileName %>/<%= file.id %>/<%= file.fileId %>" muted ></video>
+            <!-- pdf -->
+            <% }else if(
+                  file.fileType==".pdf"||file.fileType==".docx"
+                  ||file.fileType==".dot"||file.fileType==".docm"
+                  ||file.fileType==".csv"||file.fileType==".dotx"
+                  ||file.fileType==".txt"||file.fileType==".ppt"
+                ){ %>
+
+            <span class="pdf">
+              <embed src="/<%= file.fileName %>" type="/pdf" id="pdfFile" style=" display: none;">
+              <img class="img" id="pdfCover" src="/pdfCover.jpg" id="pdfPreview" alt="<%= file.fileName %>/<%= file.id %>/<%= file.fileId %>">
+            </span>
+            <!-- audio -->
+            <% }else if(
+                  file.fileType==".mp3"||file.fileType==".m4a"
+                  ||file.fileType==".wma"||file.fileType==".acc"
+                  ||file.fileType==".wav"||file.fileType==".flac"
+                ){ %>
+
+            <span id="audio">
+              <audio id="audioFile" style=" display: none;" src="/<%= file.fileName %>" controls></audio>
+  <img class="img" id="audio"  src="/musicCover.jpg" id="audioPreview" onclick="play()" alt="<%= file.fileName %>/<%= file.id %>/<%= file.fileId %>">
+            </span>
+            <% } %>
+          </span>
+        </th>
+
+
+
+
+        <td>
+          <div class="info">
+            <span class="desc" id="desc">
+              <%= file.description %> 
+            </span>
+
+
+            
+           <span class="date" id="date">
+
+            <%= file.Day %>-<%= file.Month %>-<%= file.Year %> 
+            </span>
+
+
+
+
+            <span class="preview-action">
+              <span class="share" ><a href="/share/file/<%= file.fileName %>/<%= file.id %>/<%= file.fileId %>"><i class="fas fa-reply"> Share</i></a> </span>
+     <span   class="download" ><a href="/download/file/<%= file.fileName %>/<%= file.id %>" id="fileID"><i class="fas fa-download"></i> Save</a> </span>
+            </span>
+          </div>
+        </td>
+      </tr>
+      <% }); %>
+      <% } %>
+    </tbody>
+  </table>
+</section>

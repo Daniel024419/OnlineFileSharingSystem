@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <!-- head -->
+ <%- include('./partials/head.ejs') %>
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- top bar -->
+    <%- include('./partials/topNav.ejs') %>
+    <!-- end -->
+
+    <div class="container">
+
+      <!-- side bar -->
+      <%- include('./partials/sideNav.ejs') %>
+      <!-- end -->
+
+
+
+      <section>
+        <div class="dashboard">
+          <div class="stats">
+            <div class="stats-box" id="stats_emails">
+              <span class="icon-emails">
+                <i class="fas fa-file-video"></i>
+                <span class="total-emails"> 
+                  <span>
+                  <% if(result_files_video) {%>
+                  <%= result_files_video.length %>
+                  <% } %>
+                </span>
+              </span>
+      
+              </span>
+              <p>Total Videos <i class="fas fa-arrow-circle-right"></i></p>
+            </div>
+            <div class="stats-box" id="stats_uploads">
+              <span class="icon-uploads">
+                <i class="fas fa-file-image"></i>
+                <span class="total-uploads"> <span>
+                  <% if(result_files_image) {%>
+                    <%= result_files_image.length %>
+                    <% } %>
+                </span>
+              </span>
+      
+              </span>
+              <p>Total Images <i class="fas fa-arrow-circle-right"></i></p>
+            </div>
+            <div class="stats-box" id="stats_downloads">
+              <span class="icon-downloads">
+                <i class="fas fa-file-audio"></i>
+                <span class="total-download">
+                  <% if(result_files_audio) {%>
+                    <%= result_files_audio.length %>
+                    <% } %>
+                </span>
+              </span>
+              </span>
+              <p>Total Audios <i class="fas fa-arrow-circle-right"></i></p>
+      
+            </div>
+      
+            <div class="stats-box" id="stats_downloads">
+              <span class="icon-downloads">
+                <i class="fas fa-file-pdf"></i>
+                <span class="total-download">
+                  <% if(result_files_doc) {%>
+                    <%= result_files_doc.length %>
+                    <% } %>
+                </span>
+              </span>
+              </span>
+              <p>Total PDF Files <i class="fas fa-file-pdf"></i>
+      
+            </div>
+
+          </div>
+          <!-- end -->
+          <div class="recents-uploads">
+            <div class="table">
+      
+      
+              <p class="head">
+                
+                <% if(result_downloads) {%>
+                  Downloads (<%= result_downloads.length %>)
+                  <% } %>
+
+              <a href="/truncate/downloads" >Empty Logs</a>
+
+
+              </p>
+              <hr class="hr">
+              <br>
+      
+          <input type="text" id="searhcInput" onkeyup="search()" placeholder="Search for file id.." title="Type in a file id">
+      
+              <table id="recents">
+                <tr class="header">
+                  <th>F_Id</th>
+                  <th>U_ID</th>
+                  <th>D_ID</th>
+                  <th>C_ID </th>
+                  <th>Email </th>
+                  <th>Action</th>
+  
+                </tr>
+                <!-- diaplaying data on the table -->
+                <%  if(result_downloads.length>0) { %>
+  
+                <!-- start for each -->
+                <% result_downloads.forEach( file=> {%>
+                <tr>
+                  <td class="id"><%= file.id %> </td>
+                  <td class="id"><%= file.userId %> </td>
+                  <td><%= file.dept_id %> </td>
+                  <td> <%= file.comp_id %></td>
+                  <td> <a href="mailto:<%= file.email %>"><i style="color: grey;" class="fas fa-envelope"></i></a> </td>
+
+                  <!-- action -->
+                  <td class="action">
+                    <!-- preview -->
+                    <!-- <span class="tooltip-dashboard">
+                      <a href="./preview/{<%= //file.fileId %>}">
+  
+                        <span class="icon-eye" id="preview">
+                          <span class="tooltiptext-dashboard">View</span>
+                          <i class="fas fa-eye"></i>
+                        </span>
+                      </a>
+                    </span> -->
+  
+                    <!-- delete -->
+                    <span class="tooltip-dashboard">
+                      <!-- <a href="/delete/<%= //file.fileId %>"> -->
+  
+  
+  
+                     
+                     
+                     <a href="#" id="<%= file.fileId %>"    onclick="confirmDelete(this.id)">
+
+                        <span class="icon-trash" id="delete_upload">
+                          <span class="tooltiptext-dashboard">Delete</span>
+                          <i class="fas fa-trash"></i>
+                        </span>
+                      </a>
+                  
+  
+  
+  
+                      <script>
+                        function confirmDelete(fileId) {
+                          var res = confirm("Do you really want to delete this download history..")
+                          if (res) {
+                            window.location.href = "/delete/download/history/"+fileId;
+                            return true;
+                          } else {
+                            return false
+                          }
+                        }
+                      </script>
+                    </span>
+  
+                  </td>
+                </tr>
+  
+  
+                <% }); %>
+                <!-- end  -->
+  
+                <%  }else{ %>
+  
+                <tr>
+                  <td colspan="3">No files downloaded yet</td>
+                </tr>
+  
+                <% } %>
+  
+  
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+
+        <!-- end -->
+
+  </div>
+  </div>
+</body>
+</html>

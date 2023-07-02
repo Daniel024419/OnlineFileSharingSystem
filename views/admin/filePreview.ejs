@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('./partials/head.ejs') %>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- top bar -->
+    <%- include('./partials/topNav.ejs') %>
+    <!-- end -->
+
+    <!-- end -->
+    <div class="container">
+      <!-- side bar -->
+      <%- include('./partials/sideNav.ejs') %>
+      <!-- end -->
+      <div class="dashboard">
+
+        <div class="preview-control">
+
+          <!-- diaplaying data on fm -->
+          <%  if(result.length>0) { %>
+          <!-- start for each -->
+          <% result.forEach( file=> { %>
+
+
+          <% if(file.fileType) {%>
+          <object data="/<%= file.fileName %>" class="object-preview"></object>
+          <% } else{%>
+            <h1>File extension not found</h1>
+           <% } %>
+<br>
+        <hr>
+        <p class="head">
+          <% if(result) {%>
+          File ID (<%= file.fileId %>) <br> File Name  (<%= file.fileName %>)
+          <br> File Description  (<%= file.description %>)
+          <br> Created_At  (<%= file.created_at %>)
+          <% } %>
+
+
+        </p>
+          <% }) } %>
+
+        </div>
+
+
+        
+
+
+
+
+        <!-- end -->
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

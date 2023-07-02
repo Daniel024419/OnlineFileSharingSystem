@@ -1,0 +1,31 @@
+<section>
+    <!-- top -->
+    <div class="top-nav">
+        <span class="top-nav-left">
+            <span class="logo">
+              <a href="/home"> <h3>File Server</h3></a> 
+            </span>
+        </span>
+
+
+        <!-- end -->
+        <span class="top-nav-right">
+        <a href="/edit/user/profile" >
+            <span class="nav-profile">
+                <img src="/user.png" alt="user profile">
+                                     
+              <span class="name">  
+              <%  if(CurrentUser){%>
+               <%= CurrentUser.userName %> </span>
+                  <% } %>
+            </span>
+        </a>
+        </span>
+    </div>
+ <!-- end -->
+ <%  if(CurrentUser == undefined){%>
+                        <script>
+                            window.location.href='/login';
+                         </script>
+                         <% } %>
+</section>

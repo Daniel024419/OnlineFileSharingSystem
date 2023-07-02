@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('./partials/head.ejs') %>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- top bar -->
+    <%- include('./partials/topNav.ejs') %>
+    <!-- end -->
+
+    <!-- end -->
+    <div class="container">
+      <!-- side bar -->
+      <%- include('./partials/sideNav.ejs') %>
+      <!-- end -->
+      <div class="dashboard">
+
+        <div class="form-control">
+          <form action="/update-file" method="post" enctype="multipart/form-data">
+<!-- diaplaying data on fm -->
+     <%  if(result.length>0) { %>
+   <!-- start for each -->
+   <% result.forEach( file=> {%>
+ 
+              <input type="text" value="<%= file.fileId %>" name="fileId" style="display:none"; >
+              <div class="desc">
+              <label for="desc"><h4>Description</h4></label>
+              <textarea name="desc" id="desc" name="desc"  cols="" rows=""><%= file.description %></textarea>
+
+            </div>
+            <!-- start -->
+            <div class="business-container">
+
+              <div class="company">
+                <label for="desc"><h4>Company</h4></label>
+                <input list="comp" name="company" id="company" value="<%= file.comp_id %>" >
+
+                <datalist id="comp">
+                  <!-- diaplaying data in datalist -->
+  <%  if(result_company) { %>
+    <!-- start for each -->
+    <% result_company.forEach( company=> {%>
+                  <option value="<%= company.comp_id %>" 
+                    label="<%= company.comp_name %>"> 
+  
+                    <% }) } %>
+                </datalist>
+              </div> 
+              <!-- start -->
+              <div class="department">
+                <label for="dept"><h4>Department</h4></label>
+                <input list="dept" name="department" id="department" value="<%= file.dept_id %>" >
+                <datalist id="dept">
+                  <%  if(result_department) { %>
+    <!-- start for each -->
+    <% result_department.forEach( department => {%>
+                  <option value="<%= department.dept_id %>" 
+                    label="<%= department.dept_name %>"> 
+  
+                   <% }) } %>
+                </datalist>
+              </div> 
+            
+            <div class="file">
+              <label for="file"><h4>File</h4></label>
+              <input type="file" id="file" name="fileUpload" >
+             <input type="text" name="oldfile" value="<%= file.fileName %>" style="display: none;" >
+              <div class="filename">
+              <!-- <p style="color:rgb(255, 1, 1)"> old file: <%= //file.fileName %></p> -->
+              <!-- checking file type -->
+
+                  
+              <% if(file.fileType) {%>
+                <object data="/<%= file.fileName %>"></object>
+              <% } %>
+             
+               
+            
+            </div>
+            </div>
+          </div>
+          
+          <!-- end -->
+            <div class="submit">
+              <button type="submit" id="submit_btn"><i class="fa fa-save"></i> Save </button>
+            </div>
+
+            <% }) } %>
+          </form>
+        </div>
+
+         
+
+
+ 
+
+
+        
+          
+            <br>
+<hr>
+            <p class="head">
+              <% if(result) {%> 
+              File (<%= result.length %>)
+              <% } %>
+              
+            
+            </p>
+             
+       
+
+
+        <!-- end -->
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

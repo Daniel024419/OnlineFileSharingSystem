@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('./partials/head.ejs') %>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- top bar -->
+    <%- include('./partials/topNav.ejs') %>
+    <!-- end -->
+
+    <!-- end -->
+    <div class="container">
+      <!-- side bar -->
+      <%- include('./partials/sideNav.ejs') %>
+      <!-- end -->
+      <div class="dashboard">
+
+
+        <div class="form-control">
+          <form action="/add-department" method="post" name="dept_form" onsubmit="return validateDept()" enctype="multipart/form-data">
+
+            <div class="desc">
+              <label for="dept">
+                <h4>Dept Name</h4>
+              </label>
+              <textarea id="dept" name="deptName"  onkeyup="checkdeptName(this.value)" cols="" rows=""></textarea>
+            <span style="float: right;font-size: 12px;" id="count">0/20</span>
+               <span class="error" >
+                <i id="deptName_err__msg"></i>
+                </span>
+             
+            </div>
+            <!-- start -->
+            <div class="business-container">
+            
+            
+              <div class="department">
+                <label for="department">
+                  <h4>Dept Location</h4>
+                </label>
+                <input type="text" name="deptLocation" onkeyup="checkdeptLocation(this.value)" id="department" class="deptLocation">
+                <br>
+                 <span class="error" >
+                <i id="deptLocation_err__msg"></i>
+                </span>
+              </div>
+            
+              <div class="department">
+                <label for="department">
+                  <h4>Dept Mail</h4>
+                </label>
+                <input type="text" id="department" name="deptMail" onkeyup="checkdeptMail(this.value)" class="deptMail">
+                <br>
+                 <span class="error" >
+                <i id="deptMail_err__msg"></i>
+                </span>
+              </div>
+              <div class="company">
+                <label for="desc"><h4>Company</h4></label>
+                <input list="comp" class="deptComp" name="company" id="company"  onkeyup="checkdeptCompany(this.value)" class="company">
+                <datalist id="comp">
+                  <!-- diaplaying data in datalist -->
+                <%  if(result_company) { %>
+                <!-- start for each -->
+                 <% result_company.forEach( company=> {%>
+                  <option value="<%= company.comp_id %>" 
+                    label="<%= company.comp_name %>"> 
+  
+                    <% }) } %>
+                </datalist>
+                 <br>
+                 <span class="error" >
+                <i id="dept_comp_err__msg"></i>
+                </span>
+              </div> 
+
+              <div class="department">
+                <label for="department">
+                  <h4>Telephone</h4>
+                </label>
+                <input type="text" id="department" onkeyup="checkdept_tel(this.value)" name="tel" class="dept_tel">
+                 <br>
+                 <span class="error" >
+                <i id="dept_tel_err__msg"></i>
+                </span>
+              </div>
+            </div><!-- end -->
+            <div class="submit">
+              <button type="submit" id="submit_btn"><i class="fa fa-save"></i> Add </button>
+            </div>
+              <span>
+               <p id="error-msg-form" class="error"></p>
+            </span>
+
+          </form>
+        </div>
+
+
+
+        <div class="recents-uploads">
+          <div class="table">
+
+
+            <p class="head">
+              <% if(result_department) {%>
+              Departments (<%= result_department.length %>)
+              <% } %>
+
+              <a href="/truncate/department" >Empty Logs</a>
+
+            </p>
+            <hr class="hr">
+            <br>
+
+        <input type="text" id="searhcInput" onkeyup="search()" 
+        placeholder="Search for department name.." title="Type in a department name">
+
+            <table id="recents">
+              <tr class="header">
+                <th>D_name</th>
+                <th>D_Id</th>
+                <th >C_Id </th>     
+                <th class="dept-location">Location </th>
+                <th>Tel</th>
+
+                <th>Mail</th> 
+                <th class="hide">Joined</th>
+                <th>Action</th>
+
+              </tr>
+              <!-- diaplaying data on the table -->
+              <%  if(result_department.length>0) { %>
+
+              <!-- start for each -->
+              <% result_department.forEach( department=> {%>
+              <tr>
+                <td><%= department.dept_name %> </td>
+                <td class="id"><%= department.dept_id %> </td>
+                <td ><%= department.comp_id%> </td>
+                <td class="dept-location"><%= department.dept_location %> </td>
+                <td> <a href="tel:<%= department.tel %>"><i style="color: grey;" class="fas fa-phone"></i></a> </td>
+
+                <td> <a href="mailto:<%= department.dept_mail %>"><i style="color: grey;" class="fas fa-envelope"></i></a> </td>
+                <td class="hide"><%= department.Day %>/<%= department.Month %>/<%= department.Year %></td>
+
+                <!-- action -->
+                <td class="action">
+                  <!-- preview -->
+                  <!-- <span class="tooltip-dashboard">
+                    <a href="dept/preview/<%= //department.dept_id %>">
+
+                      <span class="icon-eye" id="preview">
+                        <span class="tooltiptext-dashboard">View</span>
+                        <i class="fas fa-eye"></i>
+                      </span>
+                    </a>
+                  </span> -->
+
+                  <!-- delete -->
+                  <span class="tooltip-dashboard">
+                    <!-- <a href="/delete/<%= //department.departmentId %>"> -->
+                    <a href="#" id="<%= department.dept_id %>" onclick="confirmDelete(this.id)">
+                      <span class="icon-trash" id="delete_upload">
+                        <span class="tooltiptext-dashboard">Delete</span>
+                        <i class="fas fa-trash"></i>
+                      </span>
+                    </a>
+
+                    <script>
+                      function confirmDelete(dept_id) {
+                        var res = confirm("Do you really want to delete this department..")
+                        if (res) {
+                          window.location.href = "/dept/delete/"+dept_id;
+                          return true;
+                        } else {
+                          return false
+                        }
+                      }
+                    </script>
+                  </span>
+
+                </td>
+              </tr>
+
+
+              <% }); %>
+              <!-- end  -->
+
+              <%  }else{ %>
+
+              <tr>
+                <td colspan="3">No departments yet</td>
+              </tr>
+
+              <% } %>
+
+
+            </table>
+          </div>
+        </div>
+
+
+        <!-- end -->
+      </div>
+    </div>
+  </div>
+</body>
+<script src="/validate-dashboard.js"></script>
+
+</html>

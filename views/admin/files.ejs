@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('./partials/head.ejs') %>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- top bar -->
+    <%- include('./partials/topNav.ejs') %>
+    <!-- end -->
+
+    <!-- end -->
+    <div class="container">
+      <!-- side bar -->
+      <%- include('./partials/sideNav.ejs') %>
+      <!-- end -->
+      <div class="dashboard">
+
+        <div class="form-control">
+          <form action="/file-upload"  method="post" name="file_form" onsubmit="return validateForm()" enctype="multipart/form-data">
+
+            <div class="desc">
+              <label for="desc">
+                <h4>Description</h4>
+              </label>
+              <textarea name="desc" id="desc"  onkeyup="checkDesc(this.value)" name="desc" cols="" rows=""></textarea>
+              <span style="float: right;font-size: 12px;" id="count">0/20</span>
+               <span class="error" >
+                <i id="desc_err__msg"></i>
+                </span>
+
+            </div>
+            <!-- start -->
+            <div class="business-container">
+
+
+              <div class="company">
+                <label for="desc">
+                  <h4>Company</h4>
+                </label>
+                <input list="comp" name="company" onkeyup="checkCompany(this.value)" id="company">
+                <datalist id="comp">
+                  <!-- diaplaying data in datalist -->
+                  <%  if(result_company) { %>
+                  <!-- start for each -->
+                  <% result_company.forEach( company=> {%>
+                  <option value="<%= company.comp_id %>" label="<%= company.comp_name %>">
+
+                    <% }) } %>
+                </datalist>
+                <br>
+                <span class="error" >
+                                <i id="comp_err__msg"></i>
+                </span>
+              </div>
+              <!-- start -->
+              <div class="department">
+                <label for="dept">
+                  <h4>Department</h4>
+                </label>
+                <input list="dept" name="department" onkeyup="checkDept(this.value)" id="department">
+                <datalist id="dept">
+                  <%  if(result_department) { %>
+                  <!-- start for each -->
+                  <% result_department.forEach( department => {%>
+                  <option value="<%= department.dept_id %>" label="<%= department.dept_name %>">
+
+                    <% }) } %>
+                </datalist><br>
+                <span class="error" >
+                                <i id="dept_err__msg"></i>
+                                </span>
+
+              </div>
+
+              <div class="file">
+                <label for="file">
+                  <h4>File</h4>
+                </label>
+                <input type="file"    id="file" name="fileUpload">
+              </div>
+            </div><!-- end -->
+            <div class="submit">
+              <button type="submit" id="submit_btn"><i class="fa fa-save"></i> Save </button>
+            </div>
+            <span>
+                        <p id="error-msg-form" class="error">
+        
+                        </p>
+                    </span>
+
+          </form>
+        </div>
+
+
+
+        <div class="recents-uploads">
+          <div class="table">
+
+
+            <p class="head">
+              <% if(result) {%>
+              Files (<%= result.length %>)
+              <% } %>
+
+              <a href="/truncate/files" >Empty Logs</a>
+            </p>
+            <hr class="hr">
+            <br>
+
+        <input type="text" id="searhcInput" onkeyup="search()" placeholder="Search for desc.." title="Type in a desc">
+
+            <table id="recents">
+              <tr class="header">
+                <th style="width: 70px;">Desc</th>
+                <th>F_ID</th>
+                <th>C_ID</th>
+                <th>D_ID</th>
+                <th class="fileName">F_Name</th>
+                <th class="fileSize">F_Size</th>
+                <th class="hide" >F_Type</th>
+                <th>Action</th>
+
+              </tr>
+              <!-- diaplaying data on the table -->
+              <%  if(result.length>0) { %>
+
+              <!-- start for each -->
+              <% result.forEach( file=> {%>
+              <tr>
+                <td  style="width: 70px;"><%= file.description%></td>
+
+                <td class="id"><%= file.id %> </td>
+                <td><%= file.comp_id %> </td>
+                <td><%= file.dept_id %> </td>
+                <td class="fileName"><%= file.fileName %> </td>
+
+                <!-- reducing decimals -->
+                <% 
+                  var fileSize=file.fileSize
+                  var valMb=fileSize/1024/1024*1;
+                  var valKB=fileSize/1024;
+
+                  var decMB=valMb.toFixed(2);
+                  var decKB=valKB.toFixed(2);
+                  %>
+
+   
+                <td class="fileSize">
+                  <% if(fileSize<=10000){ %>
+                      <%= decKB %>KB
+                    <% } else {%>
+                      <%= decMB %>MB
+                      <% } %>
+                </td>
+                <!-- checking file type -->
+
+
+                <!-- img -->
+                <% if(file.fileType==".gif"
+                     ||file.fileType==".png"
+                     ||file.fileType==".jpeg"
+                     ||file.fileType==".jpg") {%> 
+                  <td class="hide" > Image </td>
+                  <% } else if(
+                    file.fileType==".mp4"
+                    ||file.fileType==".wav"
+                    ||file.fileType==".mov"||file.fileType==".f4v"
+                    ||file.fileType==".avi"||file.fileType==".swf"
+                    ||file.fileType==".mkv"||file.fileType==".flv"
+                    ||file.fileType==".webm"||file.fileType==".mpeg-2")
+                    {%>                
+                    <td class="hide" > Video </td>
+                    <% }else if(
+                      file.fileType==".mp3"||file.fileType==".m4a"
+                      ||file.fileType==".wma"||file.fileType==".acc"
+                      ||file.fileType==".wav"||file.fileType==".flac"
+                    ){ %>
+                    <td class="hide" > Audio </td>
+                <!-- pdf -->
+                <% }else if(
+                  file.fileType==".pdf"||file.fileType==".docx"
+                  ||file.fileType==".dot"||file.fileType==".docm"
+                  ||file.fileType==".csv"||file.fileType==".dotx"
+                  ||file.fileType==".txt"||file.fileType==".ppt"
+                ){ %>                
+                  <td class="hide" > Doc </td>
+                <% } else{%>
+                <td class="hide" > Others </td>
+                <% } %>
+                <!-- action -->
+                <td class="action">
+                  <!-- preview -->
+                  <span class="tooltip-dashboard">
+                    <a href="/preview-file/<%= file.fileId %>">
+
+                      <span class="icon-eye" id="preview">
+                        <span class="tooltiptext-dashboard">View</span>
+                        <i class="fas fa-eye"></i>
+                      </span>
+                    </a>
+                  </span>
+
+                  <!-- delete -->
+                  <span class="tooltip-dashboard">
+                    <!-- <a href="/delete/<%= file.fileId %>"> -->
+
+                    <a href="#" id="<%= file.fileId %>" class="<%= file.description %>"   onclick="confirmDelete(this.id)">
+
+                      <span class="icon-trash" id="delete_upload">
+                        <span class="tooltiptext-dashboard">Delete</span>
+                        <i class="fas fa-trash"></i>
+                      </span>
+                    </a>
+
+                    <script>
+
+                     var Delete = document.getElementById('Delete');
+                      function confirmDelete(fileId) {
+                  //    alert(fileId);
+                       var res = confirm("Do you really want to delete this file..")
+                        if (res) {
+                        window.location.href = "/delete/file/"+fileId;
+                          return true;
+                        } else {
+                          return false
+                        }
+                      }
+                    </script>
+                  </span>
+                  <span class="tooltip-dashboard">
+                    <a href="./edit-file/<%= file.fileId %>">
+                      <span class="icon-edit" id="edit">
+                        <span class="tooltiptext-dashboard">Edit</span>
+                        <i class="fas fa-edit"></i></span>
+                    </a>
+                  </span>
+                </td>
+              </tr>
+
+
+              <% }); %>
+              <!-- end  -->
+
+              <%  }else{ %>
+
+              <tr>
+                <td colspan="3">No files uploaded yet</td>
+              </tr>
+
+              <% } %>
+
+
+
+
+
+            </table>
+          </div>
+        </div>
+
+
+        <!-- end -->
+      </div>
+
+
+
+    </div>
+  </div>
+</body>
+<script src="/validate-dashboard.js"></script>
+</html>

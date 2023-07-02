@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('./partials/head.ejs') %>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- top bar -->
+    <%- include('./partials/topNav.ejs') %>
+    <!-- end -->
+
+    <!-- end -->
+    <div class="container">
+      <!-- side bar -->
+      <%- include('./partials/sideNav.ejs') %>
+      <!-- end -->
+      <div class="dashboard">
+
+
+
+
+
+        <div class="recents-uploads">
+          <div class="table">
+
+
+            <p class="head">
+              <% if(result_users) {%>
+              Users (<%= result_users.length %>)
+              <% } %>
+              <a href="/truncate/users" >Empty Logs</a>
+
+
+            </p>
+            <hr class="hr">
+            <br>
+
+        <input type="text" id="searhcInput" onkeyup="search()"
+         placeholder="Search for user name.." title="Type in a desc">
+
+            <table id="recents">
+              <tr class="header">
+                <th>Username</th>
+                <th>UserId</th>
+                <th>Role </th>
+                <th class="hide">C_ID </th>
+                <th class="hide">D_ID </th>
+                <th class="hide">Joined </th>
+                <th>Mail </th>
+
+                <th>Action</th>
+
+              </tr>
+              <!-- diaplaying data on the table -->
+              <%  if(result_users.length>0) { %>
+
+              <!-- start for each -->
+              <% result_users.forEach( user=> {%>
+              <tr>
+                <td><%= user.userName %> </td>
+                <td class="id"><%= user.userId %> </td>
+                <td class="id">
+                  <% if(user.role==1) {%>
+                  
+                      <span>Admin</span>
+                      <!-- <i class="fas fa-user"></i> -->
+                     
+                    <% }else  {%>
+                    
+                        <span>User</span>
+                        <i class="fas fa-padlock"></i>
+                    <% } %>
+                </td>
+                <td class="hide" ><%= user.comp_id %> </td>
+                <td class="hide" ><%= user.dept_id %> </td>
+                <td class="hide"><%= user.Day %>/<%= user.Month %>/<%= user.Year %></td>
+                <td> <a href="mailto:<%= user.comp_mail %>"><i style="color: grey;" class="fas fa-envelope"></i></a> </td>
+
+                <!-- action -->
+                <td class="action">
+                  <!-- preview -->
+                  <!-- <span class="tooltip-dashboard">
+                    <a href="./preview/{<%= //user.userId %>}">
+
+                      <span class="icon-eye" id="preview">
+                        <span class="tooltiptext-dashboard">View</span>
+                        <i class="fas fa-eye"></i>
+                      </span>
+                    </a>
+                  </span> -->
+
+                  <!-- delete -->
+                  <span class="tooltip-dashboard">
+                    <!-- <a href="/delete/<%= //user.userId %>"> -->
+
+
+
+                    <% if(user.role==1) {%>
+                    <span class="icon-trash" style="background-color: rgb(0, 191, 0)" id="delete_upload">
+                      <span class="tooltiptext-dashboard">Admin</span>
+                      <i class="fas fa-user"></i>
+                    </span>
+                    <% }else  {%>
+                    
+                    <a href="#" id="<%= user.userId %>" onclick="confirmDelete(this.id)">
+
+                      <span class="icon-trash" id="delete_upload">
+                        <span class="tooltiptext-dashboard">Delete</span>
+                        <i class="fas fa-trash"></i>
+                      </span>
+                    </a>
+                    <% } %>
+
+
+
+                    <script>
+                      function confirmDelete(userId) {
+                        var res = confirm("Do you really want to delete this user..")
+                        if (res) {
+                          window.location.href = "/delete/user/"+userId;
+                          return true;
+                        } else {
+                          return false
+                        }
+                      }
+                    </script>
+                  </span>
+
+                </td>
+              </tr>
+
+
+              <% }); %>
+              <!-- end  -->
+
+              <%  }else{ %>
+
+              <tr>
+                <td colspan="3">No users yet</td>
+              </tr>
+
+              <% } %>
+
+
+            </table>
+          </div>
+        </div>
+
+
+        <!-- end -->
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
