@@ -78,7 +78,7 @@ index = (req, res) => {
   var sql_select_company = `SELECT * FROM COMPANY`;
 
   //company
-  var sql_select_department = `SELECT * FROM DEPARTMENT`;
+  var sql_select_department = `SELECT * FROM department`;
 
   //company
   var sql_select_email = `SELECT * FROM USERS`;
