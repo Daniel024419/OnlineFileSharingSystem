@@ -1,5 +1,5 @@
 <section>
-    <table id="recents" data-name="recents">
+    <table id="recents" class="scrolldown" data-name="recents">
     <tbody>
       <% if(result_files_all) {  %>
 
@@ -69,10 +69,10 @@
 
 
 
-
+<br>
             <span class="preview-action">
               <span class="share" ><a href="/share/file/<%= file.fileName %>/<%= file.id %>/<%= file.fileId %>"><i class="fas fa-reply"> Share</i></a> </span>
-     <span   class="download" ><a href="/download/file/<%= file.fileName %>/<%= file.id %>" id="fileID"><i class="fas fa-download"></i> Save</a> </span>
+     <span   class="download" ><a href="/download/file/<%= file.fileName %>/<%= file.id %>/<%= file.fileId %>" id="fileID"><i class="fas fa-download"></i> Save</a> </span>
             </span>
           </div>
         </td>

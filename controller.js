@@ -1,8 +1,8 @@
 //mysql
 var mysql = require("mysql");
 //importing connection
-var connectionPool = require("./include/connection");
-
+var importCon = require("./include/connection");
+var con =importCon.con;
 //bcrypt
 
 const bcrypt = require('bcryptjs');
@@ -85,31 +85,28 @@ index = (req, res) => {
 
   //catching blockages
   try {
-    //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
-      //get connection
-      connection.query(sql_select_company, (err, result_company, fields) => {
-      connection.query(sql_select_email, (err, result_check, fields) => {
 
-        connection.query(sql_select_department,(err, result_department, fields) => {
+      con.query(sql_select_company, (err, result_company, fields) => {
+      con.query(sql_select_email, (err, result_check, fields) => {
+
+        con.query(sql_select_department,(err, result_department, fields) => {
             if (result_company) {
               res.render("../views/register.ejs", {
                 result_company: result_company,result_check:result_check,
                 result_department: result_department
               });
             }
-
             if (err) throw err;
             //releasing connection,when done using it
-            connection.release();
+           
           }
         );
       });
     });
-    });
+ 
   } catch (error) {
     console.log("can not select....");
+    console.log(error);
   }
   req.session.destroy();
 }
@@ -147,10 +144,10 @@ auth = (req, res) => {
     //catching blockages
     try {
       //inserting
-      connectionPool.pool.getConnection(function(err, connection) {
-        if (err) throw err; // not connected!
+      
+         
         //get connection
-        connection.query(sql_check_user, filData, (err, result) => {
+        con.query(sql_check_user, filData, (err, result) => {
           
 
           if (result) {
@@ -179,7 +176,7 @@ auth = (req, res) => {
               var logData = [, log_id, userId, new Date()];
               var sql_user_log = `INSERT INTO LOGS (id,log_id,user_id,created_at) VALUE (?,?,?,?)`;
 
-              connection.query(sql_user_log, logData, (err, result) => {
+              con.query(sql_user_log, logData, (err, result) => {
                 if (result) {
                   // admin
                   if (role == 1) {
@@ -233,7 +230,7 @@ auth = (req, res) => {
               var sql_user_error_log = `INSERT INTO ERROR_LOGS (id,log_id,gmail,password,created_at)
           VALUES (?,?,?,?,?)`;
 
-              connection.query(
+              con.query(
                 sql_user_error_log,
                 errorlogData,
                 (err, result) => {
@@ -262,8 +259,8 @@ auth = (req, res) => {
         });
 
         //releasing connection,when done using it
-        connection.release();
-      });
+        
+       
     } catch (error) {
       console.log("can not insert....");
     }
@@ -340,10 +337,10 @@ register = (req, res) => {
     //catching blockages
     try {
       //inserting
-      connectionPool.pool.getConnection(function(err, connection) {
-        if (err) throw err; // not connected!
+      
+        
         //get connection
-        connection.query(sql_insert_users, filData, (err, result) => {
+        con.query(sql_insert_users, filData, (err, result) => {
           if (result) {
                     var success_register="Account created successfully,you can now login";
                     req.session.success_register = success_register;
@@ -360,8 +357,8 @@ register = (req, res) => {
         });
 
         //releasing connection,when done using it
-        connection.release();
-      });
+        
+      
     } catch (error) {
       console.log("can not insert....");
     }
@@ -389,15 +386,15 @@ dashboard = (req, res) => {
   //catching blockages
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_select_files, (err, result_files, fields) => {
-        connection.query(sql_select_users, (err, result_users, fields) => {
-          connection.query(
+      con.query(sql_select_files, (err, result_files, fields) => {
+        con.query(sql_select_users, (err, result_users, fields) => {
+          con.query(
             sql_select_downloads,
             (err, result_downloads, fields) => {
-              connection.query(
+              con.query(
                 sql_select_company,
                 (err, result_company, fields) => {
                   if (result_files) {
@@ -411,14 +408,14 @@ dashboard = (req, res) => {
 
                   if (err) throw err;
                   //releasing connection,when done using it
-                  connection.release();
+                  
                 }
               );
             }
           );
         });
       });
-    });
+     
   } catch (error) {
     console.log("can not select....");
   }
@@ -480,10 +477,10 @@ for (var i=0;i<25; i++) {
     //catching blockages
     try {
       //inserting
-      connectionPool.pool.getConnection(function(err, connection) {
-        if (err) throw err; // not connected!
+      
+        
         //get connection
-        connection.query(sql_insert_file, fileData, (err, result) => {
+        con.query(sql_insert_file, fileData, (err, result) => {
           if (result) {
             res.redirect("back");
           }
@@ -491,9 +488,8 @@ for (var i=0;i<25; i++) {
         });
 
         //releasing connection,when done using it
-        connection.release();
-      });
-    } catch (error) {
+        
+     } catch (error) {
       console.log("can not insert....");
     }
 
@@ -516,12 +512,12 @@ filesView = (req, res) => {
   //catching blockages
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_select_file, (err, result, fields) => {
-        connection.query(sql_select_company, (err, result_company, fields) => {
-          connection.query(
+      con.query(sql_select_file, (err, result, fields) => {
+        con.query(sql_select_company, (err, result_company, fields) => {
+          con.query(
             sql_select_department,
             (err, result_department, fields) => {
               if (result) {
@@ -534,12 +530,11 @@ filesView = (req, res) => {
 
               if (err) throw err;
               //releasing connection,when done using it
-              connection.release();
+              
             }
           );
         });
       });
-    });
   } catch (error) {
     console.log("can not select....");
   }
@@ -554,20 +549,19 @@ deleteFile = (req, res) => {
   var sql_delete_file = `DELETE FROM FILES WHERE fileId = ?`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_delete_file, fileId, (err, result, fields) => {
+      con.query(sql_delete_file, fileId, (err, result, fields) => {
         if (err) throw err;
         if (result.affectedRows > 0) {
           res.redirect("back");
         }  
 
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not delete....");
   }
 };
@@ -592,16 +586,16 @@ editFile = (req, res) => {
 
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
-      connection.query(sql_select_company, (err, result_company, fields) => {
-        if (err) throw err; // not connected!
-        connection.query(
+    
+      
+      con.query(sql_select_company, (err, result_company, fields) => {
+        
+        con.query(
           sql_select_department,
           (err, result_department, fields) => {
-            if (err) throw err; // not connected!
+            
             //get connection
-            connection.query(sql_select_file, fileId, (err, result, fields) => {
+            con.query(sql_select_file, fileId, (err, result, fields) => {
               if (result) {
                 res.render("../views/admin/filesEdit.ejs", {
                   result: result,
@@ -612,13 +606,12 @@ editFile = (req, res) => {
 
               if (err) throw err;
               //releasing connection,when done using it
-              connection.release();
+              
             });
           }
         );
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not select....");
   }
 }
@@ -640,19 +633,18 @@ filePreview = (req, res) => {
 
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
+    
       //get connection
-      connection.query(sql_preview_file, fileId, (err, result, fields) => {
+      con.query(sql_preview_file, fileId, (err, result, fields) => {
         if (result) {
           res.render("../views/admin/filePreview.ejs", { result: result });
         }
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not select....");
   }
 }
@@ -703,10 +695,10 @@ fileUpdate = (req, res, err) => {
     //catching blockages
     try {
       //inserting
-      connectionPool.pool.getConnection(function(err, connection) {
-        if (err) throw err; // not connected!
+      
+        
         //get connection
-        connection.query(sql_update_file, fileData, (err, result) => {
+        con.query(sql_update_file, fileData, (err, result) => {
           if (result) {
             res.redirect("/files");
           }
@@ -714,9 +706,8 @@ fileUpdate = (req, res, err) => {
         });
 
         //releasing connection,when done using it
-        connection.release();
-      });
-    } catch (error) {
+        
+     } catch (error) {
       console.log("can not update....");
     }
 
@@ -730,20 +721,19 @@ emptyfiles = (req, res) => {
   var sql_empty_logs = `TRUNCATE TABLE FILES`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_empty_logs, (err, result, fields) => {
+      con.query(sql_empty_logs, (err, result, fields) => {
         if (result) {
           res.redirect("back");
         }
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not TRUNCATE....");
   }
 };
@@ -777,24 +767,24 @@ viewDownloads = (req, res) => {
   //catching blockages
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
-      connection.query(
+    
+      
+      con.query(
         sql_select_files_audio,
         (err, result_files_audio, fields) => {
-          connection.query(
+          con.query(
             sql_select_files_video,
             (err, result_files_video, fields) => {
-              connection.query(
+              con.query(
                 sql_select_files_doc,
                 (err, result_files_doc, fields) => {
-                  connection.query(
+                  con.query(
                     sql_select_files_image,
                     (err, result_files_image, fields) => {
-                      connection.query(
+                      con.query(
                         sql_select_dowwnloads,
                         (err, result_downloads, fields) => {
-                          if (err) throw err; // not connected!
+                          
 
                           if (result_downloads) {
                             res.render("../views/admin/downloads.ejs", {
@@ -808,7 +798,7 @@ viewDownloads = (req, res) => {
 
                           if (err) throw err;
                           //releasing connection,when done using it
-                          connection.release();
+                          
                         }
                       );
                     }
@@ -819,8 +809,7 @@ viewDownloads = (req, res) => {
           );
         }
       );
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not select....");
   }
 }
@@ -833,20 +822,19 @@ deleteDownload = (req, res) => {
   var sql_delete_downloads = `DELETE FROM downloads WHERE fileId = ?`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_delete_downloads, fileId, (err, result, fields) => {
+      con.query(sql_delete_downloads, fileId, (err, result, fields) => {
         if (result) {
           res.redirect("black");
         }
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not delete....");
   }
 };
@@ -858,20 +846,19 @@ emptydownload = (req, res) => {
   var sql_empty_logs = `TRUNCATE TABLE DOWNLOADS`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_empty_logs, (err, result, fields) => {
+      con.query(sql_empty_logs, (err, result, fields) => {
         if (result) {
           res.redirect("back");
         }
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not TRUNCATE....");
   }
 };
@@ -883,20 +870,19 @@ emptycompanies = (req, res) => {
   var sql_empty_logs = `TRUNCATE TABLE COMPANY`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_empty_logs, (err, result, fields) => {
+      con.query(sql_empty_logs, (err, result, fields) => {
         if (result) {
           res.redirect("back");
         }
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not TRUNCATE....");
   }
 };
@@ -918,11 +904,11 @@ viewCompanines = (req, res) => {
   //catching blockages
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
 
-      connection.query(sql_select_company, (err, result_company, fields) => {
-        if (err) throw err; // not connected!
+      con.query(sql_select_company, (err, result_company, fields) => {
+        
 
         if (result_company) {
           res.render("../views/admin/companines.ejs", {
@@ -932,10 +918,9 @@ viewCompanines = (req, res) => {
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not select....");
   }
 }
@@ -974,14 +959,14 @@ addCompany = (req, res) => {
     //catching blockages
     try {
       //inserting
-      connectionPool.pool.getConnection(function(err, connection) {
-        if (err) throw err; // not connected!
+      
+        
 
-        connection.query(
+        con.query(
           sql_insert_company,
           fileData,
           (err, result, fields) => {
-            if (err) throw err; // not connected!
+            
 
             if (result) {
               res.redirect("back");
@@ -989,11 +974,10 @@ addCompany = (req, res) => {
 
             if (err) throw err;
             //releasing connection,when done using it
-            connection.release();
+            
           }
         );
-      });
-    } catch (error) {
+     } catch (error) {
       console.log("can not insert....");
     }
   });
@@ -1007,20 +991,19 @@ deleteCompany = (req, res) => {
   var sql_delete_comp = `DELETE FROM company WHERE comp_id = ?`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_delete_comp, comp_id, (err, result, fields) => {
+      con.query(sql_delete_comp, comp_id, (err, result, fields) => {
         if (result) {
           res.redirect("back");
         }
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not delete....");
   }
 };
@@ -1039,17 +1022,17 @@ viewDepartment = (req, res) => {
   //catching blockages
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
 
-      connection.query(
+      con.query(
         sql_select_department,
         (err, result_department, fields) => {
-          if (err) throw err; // not connected!
-          connection.query(
+          
+          con.query(
             sql_select_company,
             (err, result_company, fields) => {
-              if (err) throw err; // not connected!
+              
               if (result_department) {
                 res.render("../views/admin/department.ejs", {
                   result_department: result_department,
@@ -1059,13 +1042,12 @@ viewDepartment = (req, res) => {
 
               if (err) throw err;
               //releasing connection,when done using it
-              connection.release();
+              
             }
           );
         }
       );
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not select....");
   }
 }
@@ -1105,14 +1087,14 @@ addDepartment = (req, res) => {
     //catching blockages
     try {
       //inserting
-      connectionPool.pool.getConnection(function(err, connection) {
-        if (err) throw err; // not connected!
+      
+        
 
-        connection.query(
+        con.query(
           sql_insert_department,
           fileData,
           (err, result_department, fields) => {
-            if (err) throw err; // not connected!
+            
 
             if (result_department) {
               res.redirect("back");
@@ -1120,11 +1102,10 @@ addDepartment = (req, res) => {
 
             if (err) throw err;
             //releasing connection,when done using it
-            connection.release();
+            
           }
         );
-      });
-    } catch (error) {
+     } catch (error) {
       console.log("can not insert....");
     }
   });
@@ -1138,20 +1119,19 @@ deleteDepartment = (req, res) => {
   var sql_delete_dept = `DELETE FROM department WHERE dept_id = ?`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_delete_dept, dept_id, (err, result, fields) => {
+      con.query(sql_delete_dept, dept_id, (err, result, fields) => {
         if (result) {
           res.redirect("back");
         }
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not delete....");
   }
 };
@@ -1163,20 +1143,19 @@ emptydepartment = (req, res) => {
   var sql_empty_logs = `TRUNCATE TABLE DEPARTMENT`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_empty_logs, (err, result, fields) => {
+      con.query(sql_empty_logs, (err, result, fields) => {
         if (result) {
           res.redirect("back");
         }
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not TRUNCATE....");
   }
 };
@@ -1196,11 +1175,11 @@ viewUsers = (req, res) => {
   //catching blockages
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
 
-      connection.query(sql_select_users, (err, result_users, fields) => {
-        if (err) throw err; // not connected!
+      con.query(sql_select_users, (err, result_users, fields) => {
+        
 
         if (result_users) {
           res.render("../views/admin/users.ejs", {
@@ -1210,10 +1189,9 @@ viewUsers = (req, res) => {
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not select....");
   }
 }
@@ -1226,20 +1204,19 @@ deleteUsers = (req, res) => {
   var sql_delete_user = `DELETE FROM users WHERE userId = ?`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_delete_user, userId, (err, result, fields) => {
+      con.query(sql_delete_user, userId, (err, result, fields) => {
         if (result) {
           res.redirect("back");
         }
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not delete....");
   }
 };
@@ -1252,20 +1229,19 @@ emptyusers = (req, res) => {
   var sql_empty_logs = `TRUNCATE TABLE USERS`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_empty_logs, (err, result, fields) => {
+      con.query(sql_empty_logs, (err, result, fields) => {
         if (result) {
           res.redirect("back");
         }
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not TRUNCATE....");
   }
 };
@@ -1285,11 +1261,11 @@ viewLogs = (req, res) => {
   //catching blockages
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
 
-      connection.query(sql_select_logs, (err, result_logs, fields) => {
-        if (err) throw err; // not connected!
+      con.query(sql_select_logs, (err, result_logs, fields) => {
+        
 
         if (result_logs) {
           res.render("../views/admin/logs.ejs", {
@@ -1299,10 +1275,9 @@ viewLogs = (req, res) => {
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not select....");
   }
 }
@@ -1316,20 +1291,19 @@ deletelog = (req, res) => {
   var sql_delete_log = `DELETE FROM logs WHERE id = ?`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_delete_log, Id, (err, result, fields) => {
+      con.query(sql_delete_log, Id, (err, result, fields) => {
         if (result) {
           res.redirect("back");
         }
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not delete....");
   }
 };
@@ -1343,20 +1317,19 @@ emptylogs = (req, res) => {
   var sql_empty_logs = `TRUNCATE TABLE logs`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_empty_logs, (err, result, fields) => {
+      con.query(sql_empty_logs, (err, result, fields) => {
         if (result) {
           res.redirect("back");
         }
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not TRUNCATE....");
   }
 };
@@ -1376,11 +1349,11 @@ viewErrLogs = (req, res) => {
   //catching blockages
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
 
-      connection.query(sql_select_err_logs, (err, result_err_logs, fields) => {
-        if (err) throw err; // not connected!
+      con.query(sql_select_err_logs, (err, result_err_logs, fields) => {
+        
 
         if (result_err_logs) {
           res.render("../views/admin/err_logs.ejs", {
@@ -1390,10 +1363,9 @@ viewErrLogs = (req, res) => {
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not select....");
   }
 }
@@ -1406,20 +1378,19 @@ delete_Errlog = (req, res) => {
   var sql_delete_log = `DELETE FROM ERROR_LOGS WHERE id = ?`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_delete_log, Id, (err, result, fields) => {
+      con.query(sql_delete_log, Id, (err, result, fields) => {
         if (result) {
           res.redirect("back");
         }
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not delete....");
   }
 };
@@ -1433,20 +1404,19 @@ emptyerror_logs = (req, res) => {
   var sql_empty_logs = `TRUNCATE TABLE ERROR_LOGS`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_empty_logs, (err, result, fields) => {
+      con.query(sql_empty_logs, (err, result, fields) => {
         if (result) {
           res.redirect("back");
         }
 
         if (err) throw err;
         //releasing connection,when done using it
-        connection.release();
+        
       });
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not TRUNCATE....");
   }
 };
@@ -1463,10 +1433,10 @@ adminProfile = (req, res) => {
   var sql_view_admin_user = `SELECT * FROM USERS WHERE userId = ?`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(
+      con.query(
         sql_view_admin_user,
         userId,
         (err, result_admin_profile, fields) => {
@@ -1478,11 +1448,10 @@ adminProfile = (req, res) => {
 
           if (err) throw err;
           //releasing connection,when done using it
-          connection.release();
+          
         }
       );
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not select....");
   }
 }
@@ -1516,27 +1485,27 @@ Customerhome = (req, res) => {
   //catching blockages
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+       
 
-      connection.query(
+      con.query(
         sql_select_files_all,
         (err, result_files_all, fields) => {
 
           // audio
-          connection.query(
+          con.query(
             sql_select_files_audio,
             (err, result_files_audio, fields) => {
-              connection.query(
+              con.query(
                 sql_select_files_video,
                 (err, result_files_video, fields) => {
-                  connection.query(
+                  con.query(
                     sql_select_files_doc,
                     (err, result_files_doc, fields) => {
-                      connection.query(
+                      con.query(
                         sql_select_files_image,
                         (err, result_files_image, fields) => {
-                          if (err) throw err; // not connected!
+                          
 
                           if (result_files_all) {
 
@@ -1555,7 +1524,7 @@ Customerhome = (req, res) => {
 
                           if (err) throw err;
                           //releasing connection,when done using it
-                          connection.release();
+                          
                         }
                       );
                     }
@@ -1566,8 +1535,7 @@ Customerhome = (req, res) => {
           );
         }
       );
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not select....");
   }
 }
@@ -1585,10 +1553,10 @@ userProfile = (req, res) => {
   var sql_view_user = `SELECT * FROM USERS WHERE userId = ?`;
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(
+      con.query(
         sql_view_user,
         userId,
         (err, result_user_profile, fields) => {
@@ -1600,11 +1568,10 @@ userProfile = (req, res) => {
 
           if (err) throw err;
           //releasing connection,when done using it
-          connection.release();
+          
         }
       );
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("can not select....");
   }
   }
@@ -1623,9 +1590,9 @@ downloadFile = (req, res ,next ) => {
    var sql_select_file = `SELECT * FROM FILES WHERE id = ?`;
 
     var sql_download = `INSERT INTO downloads (id,userId,fileId,fileType,comp_id,dept_id,email,created_at) VALUES (?,?,?,?,?,?,?,?)`;
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
-      connection.query(sql_select_file,id,(err, result_select_files) => {
+    
+      
+      con.query(sql_select_file,id,(err, result_select_files) => {
 
         if(result_select_files){
           result_select_files.forEach( data => {
@@ -1644,7 +1611,7 @@ downloadFile = (req, res ,next ) => {
       new Date()];
 
         }
-   connection.query(sql_download, downloadData, (err, result) => {
+   con.query(sql_download, downloadData, (err, result) => {
         if (err) throw err;
         if (result) {
          //inserted
@@ -1665,8 +1632,7 @@ downloadFile = (req, res ,next ) => {
       // 	{ path: folderPath+'/multiple_three_gfg.txt',
       // 		name: 'three_gfg.txt'}
       // ])
-    });
-              // Download function
+               // Download function
               res.download(folderPath + "/" + fileName, function(err) {
                 if (err) {
                   console.log(err);
@@ -1709,10 +1675,10 @@ accountVerification = (req, res, err) => {
     //catching blockages
     try {
       //inserting
-      connectionPool.pool.getConnection(function(err, connection) {
-        if (err) throw err; // not connected!
+      
+        
         //get connection
-        connection.query(sql_verify_user, gmail, (err, result) => {
+        con.query(sql_verify_user, gmail, (err, result) => {
          
           if (result) {
              //fetching user data
@@ -1781,9 +1747,8 @@ if(dbGmail === gmail){
         });
 
         //releasing connection,when done using it
-        connection.release();
-      });
-    } catch (error) {
+        
+     } catch (error) {
       console.log("can not send mail....");
     }
 
@@ -1837,13 +1802,13 @@ updatePassword = (req, res) => {
     //catching blockages
     try {
       //inserting
-      connectionPool.pool.getConnection(function(err, connection) {
-        if (err) throw err; // not connected!
+      
+        
 
-        connection.query(
+        con.query(
           sql_update_user_pass, fileData,
           (err, result_update_pass, fields) => {
-            if (err) throw err; // not connected!
+            
 
             if(result_update_pass) {
              //redirect back
@@ -1861,11 +1826,10 @@ updatePassword = (req, res) => {
 
             if (err) throw err;
             //releasing connection,when done using it
-            connection.release();
+            
           }
         );
-      });
-    } catch (error) {
+     } catch (error) {
       console.log("can not update....");
     }
   });
@@ -1887,10 +1851,10 @@ shareFile = (req, res) => {
   //catching blockages
   try {
     //inserting
-    connectionPool.pool.getConnection(function(err, connection) {
-      if (err) throw err; // not connected!
+    
+      
       //get connection
-      connection.query(sql_select_file,fileId,(err, result_files, fields) => {
+      con.query(sql_select_file,fileId,(err, result_files, fields) => {
 
               if (result_files) {
                 res.render("../views/shareFile.ejs",
@@ -1899,11 +1863,10 @@ shareFile = (req, res) => {
 
               if (err) throw err;
               //releasing connection,when done using it
-              connection.release();
+              
             }
           );
-        });
-     
+      
   } catch (error) {
     console.log("can not select....");
   }
@@ -1927,10 +1890,10 @@ sendFile = (req, res, err) => {
     //catching blockages
     try {
       //inserting
-      connectionPool.pool.getConnection(function(err, connection) {
-        if (err) throw err; // not connected!
+      
+        
         //get connection
-        connection.query(sql_select_file, fileId, (err, result) => {
+        con.query(sql_select_file, fileId, (err, result) => {
          
           if (result) {
              //fetching user data
@@ -1988,9 +1951,8 @@ const mailConfigurations = {
         });
 
         //releasing connection,when done using it
-        connection.release();
-      });
-    } catch (error) {
+        
+     } catch (error) {
       console.log("can not send mail....");
     }
 //redirect back

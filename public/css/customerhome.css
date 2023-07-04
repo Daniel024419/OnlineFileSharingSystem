@@ -138,6 +138,7 @@ z-index: -3;
 .files{
     margin-right: 30px;
     cursor: pointer;
+
     
 }
 .files span .img{
@@ -145,16 +146,17 @@ z-index: -3;
   border-radius: 2px;
   height: 70px;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  margin-bottom: 6px;
 }
 .files span video{
     width: 100px;
     border-radius: 2px;
     height: 70px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    margin-bottom: 6px;
 }
 .info{
-    display: flex;
-    flex-direction: column;
+ 
     padding: 1px 5px 7px 15px;
     width: 100%;
     cursor: pointer;
@@ -166,7 +168,7 @@ z-index: -3;
   color: #353535;
 }
 .desc{
-    font-size: 15px;
+font-size: 15px;
 word-break: break-all;
 padding: 1px 20px 1px 0px;
 text-transform: lowercase;
@@ -191,6 +193,23 @@ text-transform: lowercase;
     color: gray;
     font-size: 13px;
   }
+
+
+
+
+
+
+@media screen and (max-width:800px) {
+   
+   
+     .desc-bottom{
+        justify-content: space-between;
+        gap: 10px;
+        padding-top: 10px;
+        
+    }
+   
+}
 
 
 
@@ -289,6 +308,9 @@ text-transform: lowercase;
 
 
 
+
+
+
     /* table */
     /* table */
 .recents-uploads {
@@ -307,7 +329,7 @@ text-transform: lowercase;
       }
   }
   #searhcInput{
-    width: 236px;
+    width: 276px;
     font-size: 14px;
     border-radius: 100px;
     padding: 7px 20px 7px 20px;
@@ -319,24 +341,22 @@ text-transform: lowercase;
  
   
 /*  */
-        table#recents {
+    table#recents {
             border-collapse: collapse;
             width: 100%;
             /* border: 1px solid #ddd; */
             border-radius: 2px; 
-          
+
         }
-     table#recents tbody {
-            display: block;
-           
-        }
+      
     
     
         table#recents tbody {
             height: 300px;
             overflow-y: auto;
             overflow-x: hidden;
-            width: 100%;
+            width: 100%; 
+            display: block;
     
         }
 
@@ -347,32 +367,7 @@ text-transform: lowercase;
         }
         
 
-    ::-webkit-scrollbar-button{
-       display: initial;
-       color: gray;
-    }
-     /* width */
-::-webkit-scrollbar {
-    width: 7px;
-    
-  }
-  
- 
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: darkgray; 
-     scroll-behavior: smooth !important ;
-    border-radius: 50px;
-     cursor:pointer;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555; 
 
-  }
-     
-  /* end table */
 
 
 #link-download , #link-share , #descDate{
