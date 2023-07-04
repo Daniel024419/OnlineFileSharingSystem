@@ -9,7 +9,7 @@ var con  = mysql.createConnection({
     port:3306,
  });
 
-   con.connect(async (err)=> {
+   con.connect((err)=> {
       if (err) throw err; // not connected!
    });
 module.exports=con;
