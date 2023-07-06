@@ -1,5 +1,5 @@
 //importing mysql instances from the package
-var mysql = require('mysql');
+var mysql = require('mysql2');
 require('dotenv').config();
 try{
 //creating connection variables
@@ -9,7 +9,7 @@ var con = mysql.createConnection({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
 });
-con.connect((error)=> {
+con.connect( (error)=> {
     
     try{
     // throwing error /exception
@@ -17,8 +17,6 @@ con.connect((error)=> {
     if(error){
 
         console.log(error);
-
-
         console.log("Xampp not connected");
     }
 }
