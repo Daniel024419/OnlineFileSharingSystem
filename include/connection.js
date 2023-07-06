@@ -9,12 +9,16 @@ var con = mysql.createConnection({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
 });
-con.connect( async (error)=> {
+con.connect((error)=> {
     
     try{
     // throwing error /exception
    // if (error) throw error;
     if(error){
+
+        console.log(error);
+
+
         console.log("Xampp not connected");
     }
 }
@@ -22,13 +26,6 @@ catch(ex){
  console.log("database error,xampp is not running");
 }
 
-    if (error) {
-         console.log('db not connected');
-        }
-    else if(!error) {
-        // console.log('db connected');
-
-    }
 });
 
 // exporting connection to be used globally
