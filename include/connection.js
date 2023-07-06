@@ -1,17 +1,41 @@
-var mysql = require('mysql2');
+//importing mysql instances from the package
+var mysql = require('mysql');
 require('dotenv').config();
-// dotenv.config();
-var con  = mysql.createConnection({
+try{
+//creating connection variables
+var con = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-   
- });
+});
+con.connect( async (error)=> {
+    
+    try{
+    // throwing error /exception
+   // if (error) throw error;
+    if(error){
+        console.log("Xampp not connected");
+    }
+}
+catch(ex){
+ console.log("database error,xampp is not running");
+}
 
-   con.connect((err)=> {
-      if (err) throw err; // not connected!
-   });
-module.exports=con;
+    if (error) {
+         console.log('db not connected');
+        }
+    else if(!error) {
+        // console.log('db connected');
 
+    }
+});
 
+// exporting connection to be used globally
+module.exports={
+    con:con
+}
+}
+catch(ex){
+ console.log("database error,xampp is not running");
+}
