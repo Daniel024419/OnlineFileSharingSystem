@@ -75,7 +75,7 @@ index = (req, res) => {
   else{
 
   //company
-  var sql_select_company = `SELECT * FROM COMPANY;SELECT * FROM department;SELECT * FROM USERS`;
+  var sql_select_company = `SELECT * FROM company;SELECT * FROM department;SELECT * FROM users`;
 
   //catching blockages
   try {
@@ -86,8 +86,6 @@ index = (req, res) => {
         con.query(sql_select_company,(err, result_department, fields) => {
             if (result_department) {
               res.render("../views/register.ejs", {
-
-
                 result_company: result_department[0],result_check:result_department[1],
                 result_department: result_department[2]
               });
