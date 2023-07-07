@@ -3,19 +3,19 @@ var mysql = require('mysql');
 require('dotenv').config();
 try{
 //creating connection variables
-// var con = mysql.createConnection({
-//     host: process.env.DB_HOST,
-//     user: process.env.DB_USER,
-//     password: process.env.DB_PASSWORD,
-//     database: process.env.DB_NAME,
-// });
-
- var con = mysql.createConnection({
-  host: "www.db4free.net",
-  user: "daniel024419",
-  password: "Daniel0547901448",
-  database: "fileserver"
+var con = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
 });
+
+//  var con = mysql.createConnection({
+//   host: "www.db4free.net",
+//   user: "daniel024419",
+//   password: "Daniel0547901448",
+//   database: "fileserver"
+// });
 con.connect( (error)=> {
     
     try{
