@@ -75,25 +75,21 @@ index = (req, res) => {
   else{
 
   //company
-  var sql_select_company = `SELECT * FROM COMPANY`;
-
-  //company
-  var sql_select_department = `SELECT * FROM department`;
-
-  //company
-  var sql_select_email = `SELECT * FROM USERS`;
+  var sql_select_company = `SELECT * FROM COMPANY;SELECT * FROM department;SELECT * FROM USERS`;
 
   //catching blockages
   try {
 
-      con.query(sql_select_company, (err, result_company, fields) => {
-      con.query(sql_select_email, (err, result_check, fields) => {
+      // con.query(sql_select_company, (err, result_company, fields) => {
+      // con.query(sql_select_email, (err, result_check, fields) => {
 
-        con.query(sql_select_department,(err, result_department, fields) => {
-            if (result_company) {
+        con.query(sql_select_company,(err, result_department, fields) => {
+            if (result_department) {
               res.render("../views/register.ejs", {
-                result_company: result_company,result_check:result_check,
-                result_department: result_department
+
+
+                result_company: result_department[0],result_check:result_department[1],
+                result_department: result_department[2]
               });
             }
             if (err) throw err;
@@ -101,8 +97,8 @@ index = (req, res) => {
            
           }
         );
-      });
-    });
+    //   });
+    // });
  
   } catch (error) {
     console.log("can not select....");
