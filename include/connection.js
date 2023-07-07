@@ -1,5 +1,5 @@
 //importing mysql instances from the package
-var mysql = require('mysql');
+var mysql = require('mysql2');
 require('dotenv').config();
 try{
 //creating connection variables
