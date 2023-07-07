@@ -1,5 +1,5 @@
 //mysql
-var mysql = require("mysql2");
+var mysql = require("mysql");
 //importing connection
 var importCon = require("./include/connection");
 var con =importCon.con;
