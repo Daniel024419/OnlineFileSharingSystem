@@ -25,6 +25,8 @@ con.connect( (error)=> {
 
         console.log(error);
         console.log("Xampp not connected");
+    }else{
+        console.log("db connected");
     }
 }
 catch(ex){
