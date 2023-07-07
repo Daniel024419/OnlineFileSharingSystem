@@ -18,9 +18,6 @@ app.use(urlencodedParser);
 //path
 const path = require('path');
 
-// Requiring express-zip for downloading a zip file
-const zip = require('express-zip');
-
 //session  "mysql2": "^3.4.3",
 const session = require('express-session');
 //const flash = require('connect-flash');
