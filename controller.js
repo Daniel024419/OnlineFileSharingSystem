@@ -1365,7 +1365,7 @@ viewErrLogs = (req, res) => {
   res.redirect('/login');
 }else{
 
-  var sql_select_err_logs = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM ERROR_LOGS ORDER BY created_at ASC`;
+  var sql_select_err_logs = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM error_logs ORDER BY created_at ASC`;
 
   //catching blockages
   try {
