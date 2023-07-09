@@ -3,7 +3,7 @@
     <div class="top-nav">
         <span class="top-nav-left">
             <span class="logo">
-              <a href="/home"> <h3>File Server</h3></a> 
+              <a style="color:white"  href="/home"> <h3 >File Server  <a style="color:margin-left:20px;"  href="/logout"><i class="fas  fa-sign-out-alt"></i></a> </h3></a> 
             </span>
         </span>
 
@@ -16,10 +16,22 @@
                                      
               <span class="name">  
               <%  if(CurrentUser){%>
-               <%= CurrentUser.userName %> </span>
+
+               <%= CurrentUser.userName %> 
+               
+               </span>
                   <% } %>
+
             </span>
+
+
+
+
         </a>
+
+
+         
+
         </span>
     </div>
  <!-- end -->
@@ -27,5 +39,5 @@
                         <script>
                             window.location.href='/login';
                          </script>
-                         <% } %>
+<% } %>
 </section>

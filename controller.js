@@ -372,10 +372,13 @@ dashboard = (req, res) => {
   }else{
 
   
-  var sql_select_files = `SELECT * FROM FILES`;
-  var sql_select_users = `SELECT * FROM USERS`;
-  var sql_select_downloads = `SELECT * FROM DOWNLOADS`;
-  var sql_select_company = `SELECT * FROM COMPANY`;
+  // var sql_select_files = `SELECT * FROM FILES`;
+  // var sql_select_users = `SELECT * FROM USERS`;
+  // var sql_select_downloads = `SELECT * FROM DOWNLOADS`;
+  // var sql_select_company = `SELECT * FROM COMPANY`;
+
+  var sql_select_files = `SELECT * FROM FILES;SELECT * FROM USERS;SELECT * FROM DOWNLOADS;SELECT * FROM COMPANY`;
+
 
   //catching blockages
   try {
@@ -383,20 +386,21 @@ dashboard = (req, res) => {
     
       
       //get connection
-      con.query(sql_select_files, (err, result_files, fields) => {
-        con.query(sql_select_users, (err, result_users, fields) => {
-          con.query(
-            sql_select_downloads,
-            (err, result_downloads, fields) => {
-              con.query(
-                sql_select_company,
-                (err, result_company, fields) => {
-                  if (result_files) {
+     // con.query(sql_select_files, (err, result_files, fields) => {
+    // con.query(sql_select_users, (err, result_users, fields) => {
+    //con.query(sql_select_downloads,(err, result_downloads, fields) => {
+
+
+
+
+              con.query(sql_select_files,
+                (err, results, fields) => {
+                  if (results) {
                     res.render("../views/admin/index.ejs", {
-                      result_files: result_files,
-                      result_users: result_users,
-                      result_downloads: result_downloads,
-                      result_company: result_company
+                      result_files: results[0],
+                      result_users: results[1],
+                      result_downloads: results[2],
+                      result_company: results[3]
                     });
                   }
 
@@ -405,10 +409,9 @@ dashboard = (req, res) => {
                   
                 }
               );
-            }
-          );
-        });
-      });
+            //});
+       // });
+      //});
      
   } catch (error) {
     console.log("can not select....");
@@ -496,12 +499,14 @@ filesView = (req, res) => {
   if(admin_Session.userId=='' && admin_Session.role==''){
     res.redirect('/login');
   }else{
-  var sql_select_file = `SELECT * FROM FILES ORDER BY created_at desc`;
-  //company
-  var sql_select_company = `SELECT * FROM COMPANY`;
+  // var sql_select_file = `SELECT * FROM FILES ORDER BY created_at desc`;
+  // //company
+  // var sql_select_company = `SELECT * FROM COMPANY`;
 
-  //company
-  var sql_select_department = `SELECT * FROM DEPARTMENT`;
+  // //company
+  // var sql_select_department = `SELECT * FROM DEPARTMENT`;
+
+  var sql_select_file = `SELECT * FROM FILES ORDER BY created_at desc;SELECT * FROM COMPANY;SELECT * FROM DEPARTMENT`;
 
   //catching blockages
   try {
@@ -509,26 +514,27 @@ filesView = (req, res) => {
     
       
       //get connection
-      con.query(sql_select_file, (err, result, fields) => {
-        con.query(sql_select_company, (err, result_company, fields) => {
+      //con.query(sql_select_file, (err, result, fields) => {
+      //  con.query(sql_select_company, (err, result_company, fields) => {
+          
+
           con.query(
-            sql_select_department,
-            (err, result_department, fields) => {
-              if (result) {
+            sql_select_file,
+            (err, results, fields) => {
+              if (results) {
                 res.render("../views/admin/files.ejs", {
-                  result: result,
-                  result_company: result_company,
-                  result_department: result_department
+                  result: results[0],
+                  result_company: results[1],
+                  result_department: results[2]
                 });
               }
 
               if (err) throw err;
               //releasing connection,when done using it
               
-            }
-          );
-        });
-      });
+            });
+        //});
+      //});
   } catch (error) {
     console.log("can not select....");
   }
@@ -571,30 +577,31 @@ editFile = (req, res) => {
 
   var fileId = req.params.fileId;
   //console.log(fileId);
-  var sql_select_file = `SELECT * FROM FILES WHERE fileId = ?`;
-  //company
-  var sql_select_company = `SELECT * FROM COMPANY`;
+  // var sql_select_file = `SELECT * FROM FILES WHERE fileId = ?`;
+  // //company
+  // var sql_select_company = `SELECT * FROM COMPANY`;
 
-  //company
-  var sql_select_department = `SELECT * FROM DEPARTMENT`;
+  // //company
+  // var sql_select_department = `SELECT * FROM DEPARTMENT`;
+
+    var sql_select_file = `SELECT * FROM FILES WHERE fileId = ?;SELECT * FROM COMPANY;SELECT * FROM DEPARTMENT`;
+
 
   try {
     //inserting
     
       
-      con.query(sql_select_company, (err, result_company, fields) => {
+      // con.query(sql_select_company, (err, result_company, fields) => {
         
-        con.query(
-          sql_select_department,
-          (err, result_department, fields) => {
+      //   con.query(sql_select_department,(err, result_department, fields) => {
             
             //get connection
-            con.query(sql_select_file, fileId, (err, result, fields) => {
+            con.query(sql_select_file, [fileId], (err, result, fields) => {
               if (result) {
                 res.render("../views/admin/filesEdit.ejs", {
-                  result: result,
-                  result_company: result_company,
-                  result_department: result_department
+                  result: result[0],
+                  result_company: result[1],
+                  result_department: result[2]
                 });
               }
 
@@ -602,9 +609,8 @@ editFile = (req, res) => {
               //releasing connection,when done using it
               
             });
-          }
-        );
-      });
+      //     });
+      // });
    } catch (error) {
     console.log("can not select....");
   }
@@ -742,20 +748,31 @@ viewDownloads = (req, res) => {
     res.redirect('/login');
   }else{
 
-  var sql_select_dowwnloads = `SELECT * FROM downloads`;
-  var sql_select_files_audio = `SELECT * FROM downloads WHERE 
+  // var sql_select_dowwnloads = `SELECT * FROM downloads`;
+  // var sql_select_files_audio = `SELECT * FROM downloads WHERE 
+  //                               fileType = '.mp3' OR fileType = '.m4a' OR fileType = '.wma'
+  //                                OR fileType = '.acc' OR fileType = '.wav' OR fileType = '.flac'`;
+
+  // var sql_select_files_video = `SELECT * FROM downloads WHERE 
+  //                               fileType = '.mp4' OR fileType = '.avi' OR fileType = '.mpeg-2'
+  //                                OR fileType = '.webm' OR fileType = '.mkv' OR fileType = '.mov'`;
+
+  // var sql_select_files_doc = `SELECT * FROM downloads WHERE 
+  //                               fileType = '.pdf' OR fileType = '.dot' OR fileType = '.doc' OR fileType = '.docm'
+  //                               OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv'`;
+
+  // var sql_select_files_image = `SELECT * FROM downloads WHERE 
+  //                               fileType = '.gif' OR fileType = '.png' OR fileType = '.jpg'
+  //                                OR fileType = '.jpeg'`;
+
+
+      var sql_select_dowwnloads = `SELECT * FROM downloads;SELECT * FROM downloads WHERE 
                                 fileType = '.mp3' OR fileType = '.m4a' OR fileType = '.wma'
-                                 OR fileType = '.acc' OR fileType = '.wav' OR fileType = '.flac'`;
-
-  var sql_select_files_video = `SELECT * FROM downloads WHERE 
+                                 OR fileType = '.acc' OR fileType = '.wav' OR fileType = '.flac';SELECT * FROM downloads WHERE 
                                 fileType = '.mp4' OR fileType = '.avi' OR fileType = '.mpeg-2'
-                                 OR fileType = '.webm' OR fileType = '.mkv' OR fileType = '.mov'`;
-
-  var sql_select_files_doc = `SELECT * FROM downloads WHERE 
+                                 OR fileType = '.webm' OR fileType = '.mkv' OR fileType = '.mov';SELECT * FROM downloads WHERE 
                                 fileType = '.pdf' OR fileType = '.dot' OR fileType = '.doc' OR fileType = '.docm'
-                                OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv'`;
-
-  var sql_select_files_image = `SELECT * FROM downloads WHERE 
+                                OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv';SELECT * FROM downloads WHERE 
                                 fileType = '.gif' OR fileType = '.png' OR fileType = '.jpg'
                                  OR fileType = '.jpeg'`;
   //catching blockages
@@ -763,18 +780,21 @@ viewDownloads = (req, res) => {
     //inserting
     
       
-      con.query(
-        sql_select_files_audio,
-        (err, result_files_audio, fields) => {
-          con.query(
-            sql_select_files_video,
-            (err, result_files_video, fields) => {
-              con.query(
-                sql_select_files_doc,
-                (err, result_files_doc, fields) => {
-                  con.query(
-                    sql_select_files_image,
-                    (err, result_files_image, fields) => {
+      // con.query(
+      //   sql_select_files_audio,
+      //   (err, result_files_audio, fields) => {
+      //     con.query(
+      //       sql_select_files_video,
+      //       (err, result_files_video, fields) => {
+      //         con.query(
+      //           sql_select_files_doc,
+      //           (err, result_files_doc, fields) => {
+                  // con.query(
+                  //   sql_select_files_image,
+                  //   (err, result_files_image, fields) => {
+
+
+
                       con.query(
                         sql_select_dowwnloads,
                         (err, result_downloads, fields) => {
@@ -782,11 +802,11 @@ viewDownloads = (req, res) => {
 
                           if (result_downloads) {
                             res.render("../views/admin/downloads.ejs", {
-                              result_downloads: result_downloads,
-                              result_files_audio: result_files_audio,
-                              result_files_video: result_files_video,
-                              result_files_doc: result_files_doc,
-                              result_files_image: result_files_image
+                              result_downloads: result_downloads[0],
+                              result_files_audio: result_downloads[1],
+                              result_files_video: result_downloads[2],
+                              result_files_doc: result_downloads[3],
+                              result_files_image: result_downloads[4]
                             });
                           }
 
@@ -795,14 +815,12 @@ viewDownloads = (req, res) => {
                           
                         }
                       );
-                    }
-                  );
-                }
-              );
-            }
-          );
-        }
-      );
+                    // });
+
+        //         });
+        //     });
+        // });
+
    } catch (error) {
     console.log("can not select....");
   }
@@ -1010,8 +1028,8 @@ viewDepartment = (req, res) => {
     res.redirect('/login');
   }else{
 
-  var sql_select_department = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM department ORDER BY created_at desc`;
-  var sql_select_company = `SELECT * FROM COMPANY ORDER BY created_at desc`;
+  var sql_select_department = `SELECT * , Day(created_at) AS Day,Year(created_at) AS 
+  Year,Month(created_at) AS Month FROM department ORDER BY created_at desc;SELECT * FROM COMPANY ORDER BY created_at desc`;
 
   //catching blockages
   try {
@@ -1019,18 +1037,18 @@ viewDepartment = (req, res) => {
     
       
 
-      con.query(
-        sql_select_department,
-        (err, result_department, fields) => {
+      // con.query(
+      //   sql_select_department,
+      //   (err, result_department, fields) => {
           
           con.query(
-            sql_select_company,
-            (err, result_company, fields) => {
+            sql_select_department,
+            (err, result, fields) => {
               
-              if (result_department) {
+              if (result) {
                 res.render("../views/admin/department.ejs", {
-                  result_department: result_department,
-                  result_company: result_company
+                  result_department: result[0],
+                  result_company: result[1]
                 });
               }
 
@@ -1039,8 +1057,8 @@ viewDepartment = (req, res) => {
               
             }
           );
-        }
-      );
+      //   }
+      // );
    } catch (error) {
     console.log("can not select....");
   }
@@ -1452,28 +1470,20 @@ adminProfile = (req, res) => {
 };
 
 //customer
-//view  downloads
+//view  files
 Customerhome = (req, res) => {
 
   //preventing unauthorised access 
    if(user_Session.userId=='' && user_Session.role==''){
     res.redirect('/login');
   }else{
-  var sql_select_files_all = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES ORDER BY created_at DESC`;
-
-  var sql_select_files_audio = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES WHERE 
+  var sql_select_files_all = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES ORDER BY created_at DESC;SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES WHERE 
                                 fileType = '.mp3' OR fileType = '.m4a' OR fileType = '.wma'
-                                 OR fileType = '.acc' OR fileType = '.wav' OR fileType = '.flac'`;
-
-  var sql_select_files_video = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES WHERE 
+                                 OR fileType = '.acc' OR fileType = '.wav' OR fileType = '.flac';SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES WHERE 
                                 fileType = '.mp4' OR fileType = '.avi' OR fileType = '.mpeg-2'
-                                 OR fileType = '.webm' OR fileType = '.mkv' OR fileType = '.mov'`;
-
-  var sql_select_files_doc = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES WHERE 
+                                 OR fileType = '.webm' OR fileType = '.mkv' OR fileType = '.mov';SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES WHERE 
                                 fileType = '.pdf' OR fileType = '.dot' OR fileType = '.doc' OR fileType = '.docm'
-                                OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv'`;
-
-  var sql_select_files_image = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES WHERE 
+                                OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv';SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES WHERE 
                                 fileType = '.gif' OR fileType = '.png' OR fileType = '.jpg'
                                  OR fileType = '.jpeg'`;
   //catching blockages
@@ -1482,37 +1492,38 @@ Customerhome = (req, res) => {
     
        
 
-      con.query(
-        sql_select_files_all,
-        (err, result_files_all, fields) => {
+      // con.query(
+      //   sql_select_files_all,
+      //   (err, result_files_all, fields) => {
 
-          // audio
-          con.query(
-            sql_select_files_audio,
-            (err, result_files_audio, fields) => {
-              con.query(
-                sql_select_files_video,
-                (err, result_files_video, fields) => {
-                  con.query(
-                    sql_select_files_doc,
-                    (err, result_files_doc, fields) => {
+      //     // audio
+      //     con.query(
+      //       sql_select_files_audio,
+      //       (err, result_files_audio, fields) => {
+      //         con.query(
+      //           sql_select_files_video,
+      //           (err, result_files_video, fields) => {
+      //             con.query(
+      //               sql_select_files_doc,
+      //               (err, result_files_doc, fields) => {
+
                       con.query(
-                        sql_select_files_image,
-                        (err, result_files_image, fields) => {
+                        sql_select_files_all,
+                        (err, result_files, fields) => {
                           
 
-                          if (result_files_all) {
+                          if (result_files) {
 
                              // result_files_all.forEach(file =>{
                              // console.log(file.Year);
 
                              //   });
                             res.render("../views/customer/index.ejs", {
-                              result_files_all: result_files_all,
-                              result_files_audio: result_files_audio,
-                              result_files_video: result_files_video,
-                              result_files_doc: result_files_doc,
-                              result_files_image: result_files_image
+                              result_files_all: result_files[0],
+                              result_files_audio:  result_files[1],
+                              result_files_video:  result_files[2],
+                              result_files_doc:  result_files[3],
+                              result_files_image:  result_files[4]
                             });
                           }
 
@@ -1521,14 +1532,11 @@ Customerhome = (req, res) => {
                           
                         }
                       );
-                    }
-                  );
-                }
-              );
-            }
-          );
-        }
-      );
+
+                    // } );
+                // } );
+            // } );
+        // });
    } catch (error) {
     console.log("can not select....");
   }
@@ -1605,6 +1613,7 @@ downloadFile = (req, res ,next ) => {
       new Date()];
 
         }
+        
    con.query(sql_download, downloadData, (err, result) => {
         if (err) throw err;
         if (result) {
@@ -1642,15 +1651,10 @@ downloadFile = (req, res ,next ) => {
 const jwt = require('jsonwebtoken');
 
 //forgot pass
-forgotPassword = (req, res) => {
-  //preventing unauthorised access  
-  if(user_Session.userId=='' && user_Session.role==''){
-    res.redirect('/login');
-    req.session.destroy();
-  }else{
+forgotPassword = (req, res) => {   
   res.render("../views/forgotPassword.ejs");
   req.session.destroy();
-  }
+ 
 };
 
 
