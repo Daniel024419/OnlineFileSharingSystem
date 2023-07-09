@@ -144,7 +144,7 @@ auth = (req, res) => {
         con.query(sql_check_user, filData, (err, result) => {
           
 
-          if (result.length > 0) {
+          if (result) {
             //fetching user data
           result.forEach(data => {
             userName = data.userName;
