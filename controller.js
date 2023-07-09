@@ -117,6 +117,10 @@ auth = (req, res) => {
       return res.end("Error uploading form data.");
     }
 
+    //catching blockages
+    try {
+      //inserting
+      
     //checking sql injection
     var gmail = mysql.format(req.body.email);
     var password = mysql.format(req.body.password);
@@ -135,16 +139,12 @@ auth = (req, res) => {
     var sql_check_user = `SELECT * FROM users WHERE gmail = ?`;
     //var sql_check_user = `SELECT * FROM users WHERE gmail = ? AND PASSWORD = ?`;
 
-    //catching blockages
-    try {
-      //inserting
-      
          
         //get connection
         con.query(sql_check_user, filData, (err, result) => {
           
 
-          if (result) {
+          if (result.length > 0) {
             //fetching user data
           result.forEach(data => {
             userName = data.userName;
@@ -159,6 +159,7 @@ auth = (req, res) => {
 
        //decrption of the hashed password
       //bcrypt for the hash password
+      if(dbPassword!='' && password!=''){
       bcrypt.compare(password,dbPassword,async function(err , verified){
         if (err) throw err;
 
@@ -242,6 +243,14 @@ auth = (req, res) => {
 
         
        });
+
+       }else{
+       var error_messsage="Account does not exist.";
+                    req.session.error_login = error_messsage;
+                    req.session.save();
+                    res.redirect("/login");
+       }
+
             // end for verification
           } else {
             var error_messsage="Account does not exist.";
