@@ -132,8 +132,8 @@ auth = (req, res) => {
     //var filData = [gmail, password];
     var filData = [gmail];
 
-    var sql_check_user = `SELECT * FROM USERS WHERE GMAIL = ?`;
-    //var sql_check_user = `SELECT * FROM USERS WHERE GMAIL = ? AND PASSWORD = ?`;
+    var sql_check_user = `SELECT * FROM users WHERE gmail = ?`;
+    //var sql_check_user = `SELECT * FROM users WHERE gmail = ? AND PASSWORD = ?`;
 
     //catching blockages
     try {
@@ -168,7 +168,7 @@ auth = (req, res) => {
               // Returns a random integer from 0 to 99999:
               var log_id = Math.floor(Math.random() * 99999);
               var logData = [, log_id, userId, new Date()];
-              var sql_user_log = `INSERT INTO LOGS (id,log_id,user_id,created_at) VALUE (?,?,?,?)`;
+              var sql_user_log = `INSERT INTO logs (id,log_id,user_id,created_at) VALUE (?,?,?,?)`;
 
               con.query(sql_user_log, logData, (err, result) => {
                 if (result) {
@@ -221,7 +221,7 @@ auth = (req, res) => {
               // Returns a random integer from 0 to 99999:
               var log_id = Math.floor(Math.random() * 99999);
               var errorlogData = [, log_id, gmail, password, new Date()];
-              var sql_user_error_log = `INSERT INTO ERROR_LOGS (id,log_id,gmail,password,created_at)
+              var sql_user_error_log = `INSERT INTO error_logs (id,log_id,gmail,password,created_at)
           VALUES (?,?,?,?,?)`;
 
               con.query(
@@ -372,12 +372,12 @@ dashboard = (req, res) => {
   }else{
 
   
-  // var sql_select_files = `SELECT * FROM FILES`;
-  // var sql_select_users = `SELECT * FROM USERS`;
-  // var sql_select_downloads = `SELECT * FROM DOWNLOADS`;
-  // var sql_select_company = `SELECT * FROM COMPANY`;
+  // var sql_select_files = `SELECT * FROM files`;
+  // var sql_select_users = `SELECT * FROM users`;
+  // var sql_select_downloads = `SELECT * FROM downloads`;
+  // var sql_select_company = `SELECT * FROM company`;
 
-  var sql_select_files = `SELECT * FROM FILES;SELECT * FROM USERS;SELECT * FROM DOWNLOADS;SELECT * FROM COMPANY`;
+  var sql_select_files = `SELECT * FROM files;SELECT * FROM users;SELECT * FROM downloads;SELECT * FROM company`;
 
 
   //catching blockages
@@ -468,7 +468,7 @@ for (var i=0;i<25; i++) {
       fileSize,
       new Date()
     ];
-    var sql_insert_file = `INSERT INTO FILES (id,fileId,comp_id,dept_id,description,fileName,fileType,fileSize,created_at) 
+    var sql_insert_file = `INSERT INTO files (id,fileId,comp_id,dept_id,description,fileName,fileType,fileSize,created_at) 
      VALUES (?,?,?,?,?,?,?,?,?)`;
 
     //catching blockages
@@ -499,14 +499,14 @@ filesView = (req, res) => {
   if(admin_Session.userId=='' && admin_Session.role==''){
     res.redirect('/login');
   }else{
-  // var sql_select_file = `SELECT * FROM FILES ORDER BY created_at desc`;
+  // var sql_select_file = `SELECT * FROM files ORDER BY created_at desc`;
   // //company
-  // var sql_select_company = `SELECT * FROM COMPANY`;
+  // var sql_select_company = `SELECT * FROM company`;
 
   // //company
-  // var sql_select_department = `SELECT * FROM DEPARTMENT`;
+  // var sql_select_department = `SELECT * FROM department`;
 
-  var sql_select_file = `SELECT * FROM FILES ORDER BY created_at desc;SELECT * FROM COMPANY;SELECT * FROM DEPARTMENT`;
+  var sql_select_file = `SELECT * FROM files ORDER BY created_at desc;SELECT * FROM company;SELECT * FROM department`;
 
   //catching blockages
   try {
@@ -546,7 +546,7 @@ filesView = (req, res) => {
 deleteFile = (req, res) => {
   var fileId = req.params.fileId;
  // console.log(fileId);
-  var sql_delete_file = `DELETE FROM FILES WHERE fileId = ?`;
+  var sql_delete_file = `DELETE FROM files WHERE fileId = ?`;
   try {
     //inserting
     
@@ -577,14 +577,14 @@ editFile = (req, res) => {
 
   var fileId = req.params.fileId;
   //console.log(fileId);
-  // var sql_select_file = `SELECT * FROM FILES WHERE fileId = ?`;
+  // var sql_select_file = `SELECT * FROM files WHERE fileId = ?`;
   // //company
-  // var sql_select_company = `SELECT * FROM COMPANY`;
+  // var sql_select_company = `SELECT * FROM company`;
 
   // //company
-  // var sql_select_department = `SELECT * FROM DEPARTMENT`;
+  // var sql_select_department = `SELECT * FROM department`;
 
-    var sql_select_file = `SELECT * FROM FILES WHERE fileId = ?;SELECT * FROM COMPANY;SELECT * FROM DEPARTMENT`;
+    var sql_select_file = `SELECT * FROM files WHERE fileId = ?;SELECT * FROM company;SELECT * FROM department`;
 
 
   try {
@@ -629,7 +629,7 @@ filePreview = (req, res) => {
 
   var fileId = req.params.fileId;
   //console.log(fileId);
-  var sql_preview_file = `SELECT * FROM FILES WHERE fileId = ?`;
+  var sql_preview_file = `SELECT * FROM files WHERE fileId = ?`;
 
   try {
     //inserting
@@ -718,7 +718,7 @@ fileUpdate = (req, res, err) => {
 
 //emptyfiles
 emptyfiles = (req, res) => {
-  var sql_empty_logs = `TRUNCATE TABLE FILES`;
+  var sql_empty_logs = `TRUNCATE TABLE files`;
   try {
     //inserting
     
@@ -855,7 +855,7 @@ deleteDownload = (req, res) => {
 
 //emptyfiles
 emptydownload = (req, res) => {
-  var sql_empty_logs = `TRUNCATE TABLE DOWNLOADS`;
+  var sql_empty_logs = `TRUNCATE TABLE downloads`;
   try {
     //inserting
     
@@ -879,7 +879,7 @@ emptydownload = (req, res) => {
 
 //emptycompanies
 emptycompanies = (req, res) => {
-  var sql_empty_logs = `TRUNCATE TABLE COMPANY`;
+  var sql_empty_logs = `TRUNCATE TABLE company`;
   try {
     //inserting
     
@@ -1029,7 +1029,7 @@ viewDepartment = (req, res) => {
   }else{
 
   var sql_select_department = `SELECT * , Day(created_at) AS Day,Year(created_at) AS 
-  Year,Month(created_at) AS Month FROM department ORDER BY created_at desc;SELECT * FROM COMPANY ORDER BY created_at desc`;
+  Year,Month(created_at) AS Month FROM department ORDER BY created_at desc;SELECT * FROM company ORDER BY created_at desc`;
 
   //catching blockages
   try {
@@ -1152,7 +1152,7 @@ deleteDepartment = (req, res) => {
 //end 
 //emptydepartment
 emptydepartment = (req, res) => {
-  var sql_empty_logs = `TRUNCATE TABLE DEPARTMENT`;
+  var sql_empty_logs = `TRUNCATE TABLE department`;
   try {
     //inserting
     
@@ -1182,7 +1182,7 @@ viewUsers = (req, res) => {
   res.redirect('/login');
 }else{
 
-  var sql_select_users = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM USERS ORDER BY created_at desc`;
+  var sql_select_users = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM users ORDER BY created_at desc`;
 
   //catching blockages
   try {
@@ -1238,7 +1238,7 @@ deleteUsers = (req, res) => {
 // empty logs
 
 emptyusers = (req, res) => {
-  var sql_empty_logs = `TRUNCATE TABLE USERS`;
+  var sql_empty_logs = `TRUNCATE TABLE users`;
   try {
     //inserting
     
@@ -1387,7 +1387,7 @@ viewErrLogs = (req, res) => {
 
 delete_Errlog = (req, res) => {
   var Id = req.params.id;
-  var sql_delete_log = `DELETE FROM ERROR_LOGS WHERE id = ?`;
+  var sql_delete_log = `DELETE FROM error_logs WHERE id = ?`;
   try {
     //inserting
     
@@ -1413,7 +1413,7 @@ delete_Errlog = (req, res) => {
 // empty err logs
 
 emptyerror_logs = (req, res) => {
-  var sql_empty_logs = `TRUNCATE TABLE ERROR_LOGS`;
+  var sql_empty_logs = `TRUNCATE TABLE error_logs`;
   try {
     //inserting
     
@@ -1442,7 +1442,7 @@ adminProfile = (req, res) => {
 }else{
 
   var userId = admin_Session.userId;
-  var sql_view_admin_user = `SELECT * FROM USERS WHERE userId = ?`;
+  var sql_view_admin_user = `SELECT * FROM users WHERE userId = ?`;
   try {
     //inserting
     
@@ -1477,13 +1477,13 @@ Customerhome = (req, res) => {
    if(user_Session.userId=='' && user_Session.role==''){
     res.redirect('/login');
   }else{
-  var sql_select_files_all = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES ORDER BY created_at DESC;SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES WHERE 
+  var sql_select_files_all = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files ORDER BY created_at DESC;SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE 
                                 fileType = '.mp3' OR fileType = '.m4a' OR fileType = '.wma'
-                                 OR fileType = '.acc' OR fileType = '.wav' OR fileType = '.flac';SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES WHERE 
+                                 OR fileType = '.acc' OR fileType = '.wav' OR fileType = '.flac';SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE 
                                 fileType = '.mp4' OR fileType = '.avi' OR fileType = '.mpeg-2'
-                                 OR fileType = '.webm' OR fileType = '.mkv' OR fileType = '.mov';SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES WHERE 
+                                 OR fileType = '.webm' OR fileType = '.mkv' OR fileType = '.mov';SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE 
                                 fileType = '.pdf' OR fileType = '.dot' OR fileType = '.doc' OR fileType = '.docm'
-                                OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv';SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM FILES WHERE 
+                                OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv';SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE 
                                 fileType = '.gif' OR fileType = '.png' OR fileType = '.jpg'
                                  OR fileType = '.jpeg'`;
   //catching blockages
@@ -1552,7 +1552,7 @@ userProfile = (req, res) => {
     res.redirect('/login');
   }else{
   var userId = user_Session.userId;
-  var sql_view_user = `SELECT * FROM USERS WHERE userId = ?`;
+  var sql_view_user = `SELECT * FROM users WHERE userId = ?`;
   try {
     //inserting
     
@@ -1589,7 +1589,7 @@ downloadFile = (req, res ,next ) => {
   const folderPath = __dirname + "/public/files";
    
  // try {
-   var sql_select_file = `SELECT * FROM FILES WHERE id = ?`;
+   var sql_select_file = `SELECT * FROM files WHERE id = ?`;
 
     var sql_download = `INSERT INTO downloads (id,userId,fileId,fileType,comp_id,dept_id,email,created_at) VALUES (?,?,?,?,?,?,?,?)`;
     
@@ -1613,7 +1613,7 @@ downloadFile = (req, res ,next ) => {
       new Date()];
 
         }
-        
+
    con.query(sql_download, downloadData, (err, result) => {
         if (err) throw err;
         if (result) {
@@ -1669,7 +1669,7 @@ accountVerification = (req, res, err) => {
     var gmail = mysql.format(req.body.email);
     //console.log(gmail);
     
-    var sql_verify_user = `SELECT * FROM USERS WHERE GMAIL = ?`;
+    var sql_verify_user = `SELECT * FROM users WHERE gmail = ?`;
     //catching blockages
     try {
       //inserting
@@ -1844,7 +1844,7 @@ shareFile = (req, res) => {
     req.session.destroy();
   }else{
   var fileId = req.params.fileId;
-  var sql_select_file = `SELECT * FROM FILES WHERE FILEID = ?`;
+  var sql_select_file = `SELECT * FROM files WHERE fileId = ?`;
 
   //catching blockages
   try {
@@ -1884,7 +1884,7 @@ sendFile = (req, res, err) => {
     var fileId = mysql.format(req.body.fileId);
     
     var recievers=emails.split(',');
-    var sql_select_file = `SELECT * FROM FILES WHERE FILEID = ?`;
+    var sql_select_file = `SELECT * FROM files WHERE fileId = ?`;
     //catching blockages
     try {
       //inserting
