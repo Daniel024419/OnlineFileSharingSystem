@@ -173,6 +173,7 @@ auth = (req, res) => {
 
               con.query(sql_user_log, logData, (err, result) => {
                 if (result) {
+
                   // admin
                   if (role == 1) {
                     //fetching admin data
@@ -188,6 +189,7 @@ auth = (req, res) => {
                     const sessionadmin = req.session.Admin;
                     console.log(sessionadmin);
                     res.redirect("/dashboard");
+                    
                   } else if (role == 0) {
                     //fetching admin data
                     user_Session.userId = userId;
@@ -308,7 +310,7 @@ register = (req, res) => {
     // var ext = path.extname(req.file.path);
     // var fileSize = req.file.size;
 
-//encrption of the string password
+   //encrption of the string password
     bcrypt.genSalt(10,function(err ,salt){
       if (err) throw err;
       //bcrppt for the password
@@ -1713,11 +1715,10 @@ if(dbGmail === gmail){
      
      // This would be the text of email body
    //  + user +
-     text: `Hi! There, You have recently visited
+     html: `<h1>Hi! There </h1>, <p>You have recently visited
        our website and entered your email.
-       Please follow the given link to verify your email
-       http://localhost:3030/verify/${token}/${userId}
-       Thanks`
+       Please follow the given link to verify your email</p>
+      <a href = "http://localhost:8080/verify/${token}/${userId}">click Here to Reset your password</a>`
      
    };
   
@@ -1729,7 +1730,7 @@ if(dbGmail === gmail){
      console.log('Email Sent Successfully');
      console.log(info);
 
-     var success_messsage="Token has been sent to the gmail provide, click to verify your account";
+     var success_messsage="Token has been sent to the mail provided, click to verify your account";
                     req.session.success_forgot_pass = success_messsage;
                     req.session.save();
                     res.redirect("/forgot/password");
@@ -1800,11 +1801,21 @@ updatePassword = (req, res) => {
     }
     //checking sql injection 
     var password = mysql.format(req.body.password);
+
+       //encrption of the string password
+    bcrypt.genSalt(10,function(err ,salt){
+      if (err) throw err;
+      //bcrppt for the password
+      bcrypt.hash(password,salt, async function(err , hashpass){
+      //log(hash);
+        
+
+
     //var repassword = mysql.format(req.body.repassword);
     var userId = mysql.format(req.body.userId);
 
-    var fileData = [ password ,userId ];
-    sql_update_user_pass = `UPDATE USERS SET PASSWORD = ? WHERE userId = ?`;
+    var fileData = [ hashpass ,userId ];
+    sql_update_user_pass = `UPDATE users SET PASSWORD = ? WHERE userId = ?`;
      
     //catching blockages
     try {
@@ -1839,6 +1850,9 @@ updatePassword = (req, res) => {
      } catch (error) {
       console.log("can not update....");
     }
+
+     });
+    });
   });
 };
 
@@ -1924,7 +1938,7 @@ const mailConfigurations = {
   
   // This would be the text of email body
  html: `<h2>Hi! There</h2> <h5> File receieved from your partner.. </h5>
- <br> <p> ${user_Session.userName} </p> <br> <p> Desc : ${description}</p>`  ,
+ <br> <p> Sender :  ${user_Session.userName} </p> <br> <p> Desc : ${description}</p>`  ,
  attachments: [
   //{  
     // utf-8 string as an attachment
