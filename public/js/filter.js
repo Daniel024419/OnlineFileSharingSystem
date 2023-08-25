@@ -2,7 +2,7 @@
 //admin
 function search() {
     var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("searhcInput");
+    input = document.getElementById("searhcInputNew");
     filter = input.value.toUpperCase();
     table = document.getElementById("recents");
 
@@ -26,7 +26,7 @@ function search() {
 //customer
 var input, filter, table, tr, td, i,alltables;
     alltables = document.querySelectorAll("table[data-name=recents]");
-    input = document.getElementById("searhcInput");
+    input = document.getElementById("searhcInputNew");
 
   function searchWord() {
     

@@ -30,7 +30,7 @@ function selectTab(tabIndex) {
 
  function refreshTable () {
    //clearing input after clicking on the tab
-   document.getElementById("searhcInput").value='';
+   document.getElementById("searhcInputNew").value='';
    //refreshig the table row ,by calling the search function 
    searchWord();
  }
