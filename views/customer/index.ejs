@@ -2,28 +2,45 @@
 <html lang="en">
 
 <head>
-  <!-- head -->
+  
   <%- include('../customer/partials/head.ejs') %>
-  <link rel="stylesheet" href="/customerhome.css">
-</head>
-<!--  -->
 
-<!--  -->
+</head>
+ 
 
 <body>
   <div class="wrapper">
     <%- include('../customer/partials/topNavUser.ejs')  %>
-    <!-- end -->
-    <div class="content-container">
-      <div class="contents">
-        <div class="left-content">
-          <div class="preview-container-left">
+    
+   
+     <main class="cd-main-content">
+<%- include('../customer/partials/sideNav.ejs')  %>
 
-            <object data="/logo.jpg" width="100%" type="" class="preview-left" id="previewleft"></object>
+<center>
+  
+  <%- include('../customer/partials/filters.ejs')  %>
 
-            <img src="" id="img" alt="" id="previewleft" onclick="pause()"  ondblclick="play()" style="display: none;">
+</center>
 
-          </div>
+ <div class="cd-content-wrapper">
+      <div class="text-component text-center">
+
+   
+<!-- here -->
+    <div class="container-fluid my-4 weather-data">
+      <div class="row">
+
+        <div class="col-xxl-9 col-md-8 mt-md-1 mt-4 pe-lg-4">
+      <div class="current-weather custom-bg text-white py-2 px-4 rounded-3">
+            <div class="mt-3 d-flex justify-content-between">
+              <div  id="cont">
+
+
+            <object data="/logo.jpg" type="" class="preview-left" id="previewleft"></object>
+
+            <img src="" id="img" alt="" onclick="pause()"  ondblclick="play()"  style="display: none;">
+
+          
 
           <div class="preview-description">
             <div class="desc" id="desc">
@@ -47,58 +64,70 @@
             </div>
           </div>
         </div>
-        <div class="right-content">
-          <div class="buttons">
-            <button class="tabbtn" id="tabAllFiles" onclick="showAll();">All</button>
-            <button class="tabbtn" id="tab1" onClick="selectTab(1);">Audios</button>
-            <button class="tabbtn" id="tab2" onClick="selectTab(2);">Images</button>
-            <button class="tabbtn" id="tab3" onClick="selectTab(3);">PDF</button>
-            <button class="tabbtn" id="tab4" onClick="selectTab(4);">Videos</button>
+              </div>
           </div>
+      </div>
+          
+       
 
-          <br />
 
-          <div class="tabs">
-            <input type="text" id="searhcInput" id="search" onkeyup="searchWord()" placeholder="Search for anything.." title="Type in anything">
+
+        <div class="col-xxl-3 col-md-4 px-lg-4">
+
+           
+           <div class="tabs">
+            <!-- <input type="text" id="searhcInput" id="search" onkeyup="searchWord()" placeholder="Search for anything.." title="Type in anything"> -->
 
             <div id="tab1ContentAll">
-              <p class="head"> All</p>
+              <!-- <p class="head"> All</p> -->
               <!-- all -->
               <%- include('../customer/partitalsFiles/allFiles.ejs') %>
             </div>
             <!-- end -->
             <div id="tab1Content">
-              <p class="head"> Audio </p>
+              <!-- <p class="head"> Audio </p> -->
               <!-- Audo -->
               <%- include('../customer/partitalsFiles/audios.ejs') %>
             </div>
             <div id="tab2Content">
-              <p class="head"> Images </p>
+              <!-- <p class="head"> Images </p> -->
               <!-- images -->
               <%- include('../customer/partitalsFiles/images.ejs') %>
             </div>
             <div id="tab3Content">
-              <p class="head"> PDF </p>
+              <!-- <p class="head"> PDF </p> -->
               <!-- pdf -->
               <%- include('../customer/partitalsFiles/pdf.ejs') %>
             </div>
             <div id="tab4Content">
               <!-- This is video tab -->
-              <p class="head"> Videos </p>
+              <!-- <p class="head"> Videos </p> -->
               <!-- vidoes -->
               <%- include('../customer/partitalsFiles/videos.ejs') %>
             </div>
           </div>
-        </div>
 
+
+
+        </div>
       </div>
     </div>
+
+
+    <!-- here -->
+
+
+
+
+
+     </div>
+          </div>
+  </main>
   </div>
   </div>
 
-  <script src="/homeTab.js"></script>
-  <script src="/filter.js"></script>
-  <script src="/Filecontrolls.js"></script>
+
+<%- include('../customer/partials/footer.ejs') %>
 </body>
 
 </html>

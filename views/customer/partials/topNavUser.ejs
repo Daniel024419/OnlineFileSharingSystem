@@ -1,43 +1,116 @@
 <section>
-    <!-- top -->
-    <div class="top-nav">
-        <span class="top-nav-left">
-            <span class="logo">
-              <a style="color:white"  href="/home"> <h3 >File Server  <a style="color:margin-left:20px;"  href="/logout"><i class="fas  fa-sign-out-alt"></i></a> </h3></a> 
-            </span>
-        </span>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 
-        <!-- end -->
-        <span class="top-nav-right">
-        <a href="/edit/user/profile" >
-            <span class="nav-profile">
-                <img src="/user.png" alt="user profile">
-                                     
-              <span class="name">  
-              <%  if(CurrentUser){%>
-
-               <%= CurrentUser.userName %> 
-               
-               </span>
-                  <% } %>
-
-            </span>
-
-
-
-
-        </a>
-
-
-         
-
-        </span>
+   <header class="cd-main-header js-cd-main-header" >
+    <div class="cd-logo-wrapper">
+      <a href="/home" class="cd-logo">
+      <img src="/logo.jpg" alt="Logo">
+      </a>
     </div>
- <!-- end -->
- <%  if(CurrentUser == undefined){%>
+
+
+    
+    <div class="cd-search js-cd-search">
+      <form>
+        <input class="reset"  id="searhcInputNew" id="search" onkeyup="searchWord()" type="search" placeholder="Search...">
+      </form>
+    </div>
+  
+    <button class="reset cd-nav-trigger js-cd-nav-trigger" aria-label="Toggle menu"><span></span></button>
+  
+    <ul class="cd-nav__list js-cd-nav__list">
+
+
+
+
+
+      <li class="cd-nav__item"><a href="#0">Tour</a></li>
+      <li class="cd-nav__item"><a href="#0">Support</a></li>
+
+      <li class="cd-nav__item cd-nav__item--has-children cd-nav__item--account js-cd-item--has-children">
+        <a href="#0">
+          Language <img style="margin-left:7px;" src="https://e7.pngegg.com/pngimages/273/380/png-clipart-round-world-flag-flags-of-the-world-globe-world-flag-country-miscellaneous-flag-thumbnail.png" >
+        </a>
+    
+ <ul class="cd-nav__sub-list">
+
+
+      <li><a href="#googtrans(en|en)" class="lang-en lang-select" data-lang="en"><img src="https://cdn-icons-png.flaticon.com/512/555/555526.png" alt="USA">USA</a></li>
+      <li><a href="#googtrans(en|es)" class="lang-es lang-select " data-lang="es"><img src="https://e7.pngegg.com/pngimages/632/422/png-clipart-flag-of-mexico-mexico-national-football-team-gallery-of-sovereign-state-flags-flag-miscellaneous-flag.png" alt="MEXICO">MEXICO</a></li>
+      <li><a href="#googtrans(en|fr)" class="lang-es lang-select " data-lang="fr"><img src="https://w7.pngwing.com/pngs/277/503/png-transparent-flag-of-france-flag-of-switzerland-flag-of-croatia-france-blue-flag-france-thumbnail.png" alt="FRANCE">FRANCE</a></li>
+      <li><a href="#googtrans(en|zh-CN)" class="lang-es lang-select " data-lang="zh-CN"><img src="https://w7.pngwing.com/pngs/414/267/png-transparent-dragon-ball-flag-of-china-icon-china-flag-file-flag-india-united-states.png" alt="CHINA">CHINA</a></li>
+      <li><a href="#googtrans(en|ja)" class="lang-es lang-select " data-lang="ja"><img src="https://i.pinimg.com/736x/d9/e7/ef/d9e7ef5fc864b510a594c1a74ebbabc4.jpg" alt="JAPAN">JAPAN</a></li>
+
+
+
+        </ul>
+      </li>
+
+
+
+
+      <li class="cd-nav__item cd-nav__item--has-children cd-nav__item--account js-cd-item--has-children">
+        <a href="#0">
+          <img src="assets/img/cd-avatar.svg" alt="avatar">
+          <span><%  if(CurrentUser){%>
+               <%= CurrentUser.userName %> </span>
+                  <% } %></span>
+        </a>
+    
+        <ul class="cd-nav__sub-list">
+          <li class="cd-nav__sub-item"><a href="#0">My Account</a></li>
+          <li class="cd-nav__sub-item"><a href="#0">Edit Account</a></li>
+          <li class="cd-nav__sub-item"> <a href="/logout" class="desk-a"><i class="fas  fa-sign-out-alt"></i> Sign Out</a></li>
+
+
+
+
+          
+        </ul>
+      </li>
+    </ul>
+
+     <%  if(CurrentUser == undefined){%>
                         <script>
                             window.location.href='/login';
                          </script>
-<% } %>
+                         <% } %>
+  </header> <!-- .cd-main-header -->
+
 </section>
+
+
+<script type="text/javascript"  src="/translator.js">
+
+    // function googleTranslateElementInit() {
+    //   new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.FloatPosition.TOP_LEFT}, 'google_translate_element');
+    // }
+
+    // function triggerHtmlEvent(element, eventName) {
+    //   var event;
+    //   if (document.createEvent) {
+    //     event = document.createEvent('HTMLEvents');
+    //     event.initEvent(eventName, true, true);
+    //     element.dispatchEvent(event);
+    //   } else {
+    //     event = document.createEventObject();
+    //     event.eventType = eventName;
+    //     element.fireEvent('on' + event.eventType, event);
+    //   }
+    // }
+
+    // jQuery('.lang-select').click(function() {
+    //   var theLang = jQuery(this).attr('data-lang');
+    //   jQuery('.goog-te-combo').val(theLang);
+
+    //   //alert(jQuery(this).attr('href'));
+    //   window.location = jQuery(this).attr('href');
+    //   location.reload();
+
+    // });
+ 
+
+
+</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>

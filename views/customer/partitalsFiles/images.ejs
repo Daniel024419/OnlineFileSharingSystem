@@ -1,5 +1,8 @@
 <section>
-    <table id="recents"  class="scrolldown" data-name="recents">
+          <input type="text"  class="py-2 form-control" id="searhcInputNew" onkeyup="searchimages(this.value)"  placeholder="Search for anything..." >
+    <table id="recents" class="scrolldown"   data-name="recents">
+    
+    <table id="images">
     <tbody>
       <% if(result_files_image) {  %>
 
@@ -82,3 +85,24 @@
     </tbody>
   </table>
 </section>
+
+<script>
+function searchimages(input) {
+  var  filter, table, tr, td, i, txtValue;
+ 
+  filter = input.toUpperCase();
+  table = document.getElementById("images");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+</script>

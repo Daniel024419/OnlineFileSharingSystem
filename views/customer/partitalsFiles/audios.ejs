@@ -1,7 +1,9 @@
 <section>
-    <table id="recents" class="scrolldown" data-name="recents">
+         <input type="text"  class="py-2 form-control"  onkeyup="searchaudio(this.value)"  placeholder="Search for anything..." >
+    <table id="recents"  class="scrolldown"  data-name="recents">
+    <table id="audio">
     <tbody>
-      <% if(result_files_audio) {  %>
+        <% if(result_files_audio) {  %>
 
       <% result_files_audio.forEach( file =>{ %>
       <tr>
@@ -82,3 +84,24 @@
     </tbody>
   </table>
 </section>
+
+<script>
+function searchaudio(input) {
+  var  filter, table, tr, td, i, txtValue;
+ 
+  filter = input.toUpperCase();
+  table = document.getElementById("audio");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+</script>
