@@ -108,6 +108,190 @@ index = (req, res) => {
 
 
 
+//auth screen page /post
+//after login
+
+auth = (req, res) => {
+  upload(req, res, function(err) {
+    if (err) {
+      return res.end("Error uploading form data.");
+    }
+
+    //catching blockages
+    try {
+      //inserting
+      
+    //checking sql injection
+    var gmail = mysql.format(req.body.email);
+    var password = mysql.format(req.body.password);
+    var dbGmail,
+      dbPassword,
+      userId,
+      role,
+      userName,
+      dept_id,
+      comp_id,
+      created_at;
+
+    //var filData = [gmail, password];
+    var filData = [gmail];
+
+    var sql_check_user = `SELECT * FROM users WHERE gmail = ?`;
+    //var sql_check_user = `SELECT * FROM users WHERE gmail = ? AND PASSWORD = ?`;
+
+         
+        //get connection
+        con.query(sql_check_user, filData, (err, result) => {
+          
+
+          if (result) {
+            //fetching user data
+          result.forEach(data => {
+            userName = data.userName;
+            dbGmail = data.gmail;
+            dbPassword = data.password;
+            userId = data.userId;
+            role = data.role;
+            dept_id = data.dept_id;
+            comp_id = data.comp_id;
+            created_at = data.created_at;
+          });
+
+       //decrption of the hashed password
+      //bcrypt for the hash password
+  //check for empty string
+          if (password && dbPassword) {
+
+      if(dbPassword!='' && password!=''){
+      bcrypt.compare(password,dbPassword,async function(err , verified){
+        if (err) throw err;
+
+        if(verified){
+         
+              // logins logs
+              // Returns a random integer from 0 to 99999:
+              var log_id = Math.floor(Math.random() * 99999);
+              var logData = [, log_id, userId, new Date()];
+              var sql_user_log = `INSERT INTO logs (id,log_id,user_id,created_at) VALUE (?,?,?,?)`;
+
+              con.query(sql_user_log, logData, (err, result) => {
+                if (result) {
+
+                  // admin
+                  if (role == 1) {
+                    //fetching admin data
+                    admin_Session.userId = userId;
+                    admin_Session.userName = userName;
+                    admin_Session.gmail = gmail;
+                    admin_Session.role = role;
+                    admin_Session.created_at = created_at;
+
+                    //save session admin
+                    req.session.Admin = admin_Session;
+                    req.session.save();
+                    const sessionadmin = req.session.Admin;
+                    console.log(sessionadmin);
+                    res.redirect("/dashboard");
+                    
+                  } else if (role == 0) {
+                    //fetching admin data
+                    user_Session.userId = userId;
+                    user_Session.userName = userName;
+                    user_Session.gmail = gmail;
+                    user_Session.role = role;
+                    user_Session.dept_id = dept_id;
+                    user_Session.comp_id = comp_id;
+                    user_Session.created_at = created_at;
+
+                    //save session user
+                    req.session.User = user_Session;
+                    req.session.save();
+                    const sessionuser = req.session.User;
+                    console.log(sessionuser);
+                    // customer
+                    res.redirect("/home");
+                  } else {
+                    var error_messsage="Account does not have any role.";
+                    req.session.error_login = error_messsage;
+                    req.session.save();
+                    res.redirect("/login");
+                    
+                  }
+                }
+                if (err) throw err;
+              });
+            
+            //end
+          }else{
+         //error logs
+              // Returns a random integer from 0 to 99999:
+              var log_id = Math.floor(Math.random() * 99999);
+              var errorlogData = [, log_id, gmail, password, new Date()];
+              var sql_user_error_log = `INSERT INTO error_logs (id,log_id,gmail,password,created_at)
+          VALUES (?,?,?,?,?)`;
+
+              con.query(
+                sql_user_error_log,
+                errorlogData,
+                (err, result) => {
+                  if (result) {
+                    var error_messsage="Wrong password, Try again";
+                    req.session.error_login = error_messsage;
+                    req.session.save();
+                    res.redirect("/login");
+                     }
+                  if (err) throw err;
+                }
+              );
+
+          }
+
+        
+       });
+
+       }else{
+       var error_messsage="Account does not exist.";
+                    req.session.error_login = error_messsage;
+                    req.session.save();
+                    res.redirect("/login");
+       }
+
+       }else{
+
+  console.log("system clashed..");
+  var error_messsage="Please , Try logging in again.";
+  req.session.error_login = error_messsage;
+  req.session.save();
+
+   res.redirect("/login");
+}
+  
+  //end if
+
+            // end for verification
+          } else {
+            var error_messsage="Account does not exist.";
+                    req.session.error_login = error_messsage;
+                    req.session.save();
+                    res.redirect("/login");
+          }
+          
+        });
+
+        //releasing connection,when done using it
+        
+       
+    } catch (error) {
+      console.log("can not insert....");
+    }
+
+    //end
+  });
+
+};
+
+//login screen page /get
+
 //login screen page /get
 
 login = (req, res) => {
@@ -150,180 +334,6 @@ login = (req, res) => {
   }
   req.session.destroy();
   }
-};
-
-
-
-
-//auth screen page /post
-//after login
-
-auth = (req, res) => {
-  upload(req, res, function(err) {
-    if (err) {
-      return res.end("Error uploading form data.");
-    }
-
-    //checking sql injection
-    var gmail = mysql.format(req.body.email);
-    var password = mysql.format(req.body.password);
-    var dbGmail,
-      dbPassword,
-      userId,
-      role,
-      userName,
-      dept_id,
-      comp_id,
-      created_at;
-
-    //var filData = [gmail, password];
-    var filData = [gmail];
-
-    var sql_check_user = `SELECT * FROM USERS WHERE GMAIL = ?`;
-    //var sql_check_user = `SELECT * FROM USERS WHERE GMAIL = ? AND PASSWORD = ?`;
-
-    //catching blockages
-    try {
-      //inserting
-      
-         
-        //get connection
-        con.query(sql_check_user, filData, (err, result) => {
-          
-
-          if (result) {
-            //fetching user data
-          result.forEach(data => {
-            userName = data.userName;
-            dbGmail = data.gmail;
-            dbPassword = data.password;
-            userId = data.userId;
-            role = data.role;
-            dept_id = data.dept_id;
-            comp_id = data.comp_id;
-            created_at = data.created_at;
-          });
-
-       //decrption of the hashed password
-      //bcrypt for the hash password
-
-          //check for empty string
-          if (password && dbPassword) {
-
-      bcrypt.compare(password,dbPassword,async function(err , verified){
-        if (err) throw err;
-
-        if(verified){
-         
-              // logins logs
-              // Returns a random integer from 0 to 99999:
-              var log_id = Math.floor(Math.random() * 99999);
-              var logData = [, log_id, userId, new Date()];
-              var sql_user_log = `INSERT INTO LOGS (id,log_id,user_id,created_at) VALUE (?,?,?,?)`;
-
-              con.query(sql_user_log, logData, (err, result) => {
-                if (result) {
-                  // admin
-                  if (role == 1) {
-                    //fetching admin data
-                    admin_Session.userId = userId;
-                    admin_Session.userName = userName;
-                    admin_Session.gmail = gmail;
-                    admin_Session.role = role;
-                    admin_Session.created_at = created_at;
-
-                    //save session admin
-                    req.session.Admin = admin_Session;
-                    req.session.save();
-                    const sessionadmin = req.session.Admin;
-                    console.log(sessionadmin);
-                    res.redirect("/dashboard");
-                  } else if (role == 0) {
-                    //fetching admin data
-                    user_Session.userId = userId;
-                    user_Session.userName = userName;
-                    user_Session.gmail = gmail;
-                    user_Session.role = role;
-                    user_Session.dept_id = dept_id;
-                    user_Session.comp_id = comp_id;
-                    user_Session.created_at = created_at;
-
-                    //save session user
-                    req.session.User = user_Session;
-                    req.session.save();
-                    const sessionuser = req.session.User;
-                    console.log(sessionuser);
-                    // customer
-                    res.redirect("/home");
-                  } else {
-                    var error_messsage="Account does not have any role.";
-                    req.session.error_login = error_messsage;
-                    req.session.save();
-                    res.redirect("/login");
-                    
-                  }
-                }
-                if (err) throw err;
-              });
-            
-            //end
-          }else{
-         //error logs
-              // Returns a random integer from 0 to 99999:
-              var log_id = Math.floor(Math.random() * 99999);
-              var errorlogData = [, log_id, gmail, password, new Date()];
-              var sql_user_error_log = `INSERT INTO ERROR_LOGS (id,log_id,gmail,password,created_at)
-          VALUES (?,?,?,?,?)`;
-
-              con.query(
-                sql_user_error_log,
-                errorlogData,
-                (err, result) => {
-                  if (result) {
-                    var error_messsage="Wrong password, Try again";
-                    req.session.error_login = error_messsage;
-                    req.session.save();
-                    res.redirect("/login");
-                     }
-                  if (err) throw err;
-                }
-              );
-
-          }
-
-        
-       });
-
-}else{
-
-  console.log("system clashed..");
-  var error_messsage="Please , Try logging in again.";
-  req.session.error_login = error_messsage;
-  req.session.save();
-
-   res.redirect("/login");
-}
-      //endif
-            // end for verification
-          } else {
-            var error_messsage="Account does not exist.";
-                    req.session.error_login = error_messsage;
-                    req.session.save();
-                    res.redirect("/login");
-          }
-          
-        });
-
-        //releasing connection,when done using it
-        
-       
-    } catch (error) {
-      console.log("can not insert....");
-    }
-
-    //end
-  });
-
 };
 
 
@@ -385,13 +395,13 @@ register = (req, res) => {
         //get connection
         con.query(sql_insert_users, filData, (err, result) => {
           if (result) {
-                    var success_register="Account created successfully";
+                    var success_register="Account created successfully,you can now login";
                     req.session.success_register = success_register;
                     req.session.save();
                     res.redirect("/");
           }
           else{
-                    var error_register="Account not created successfully";
+                    var error_register="Account not created successfully,Try again";
                     req.session.error_register = error_register;
                     req.session.save();
                     res.redirect("/");
@@ -1677,12 +1687,12 @@ downloadFile = (req, res ,next ) => {
       // zip method which take file path
       // and name as objects
       // res.zip([
-      //  { path: folderPath+'/multiple_one_gfg.txt',
-      //    name: 'one_gfg.txt'},
-      //  { path: folderPath+'/multiple_two_gfg.txt',
-      //    name: 'two_gfg.txt'},
-      //  { path: folderPath+'/multiple_three_gfg.txt',
-      //    name: 'three_gfg.txt'}
+      // 	{ path: folderPath+'/multiple_one_gfg.txt',
+      // 		name: 'one_gfg.txt'},
+      // 	{ path: folderPath+'/multiple_two_gfg.txt',
+      // 		name: 'two_gfg.txt'},
+      // 	{ path: folderPath+'/multiple_three_gfg.txt',
+      // 		name: 'three_gfg.txt'}
       // ])
                // Download function
               res.download(folderPath + "/" + fileName, function(err) {
@@ -1776,7 +1786,7 @@ if(dbGmail === gmail){
    
    
  }else{
-     var error_messsage_pass="No Account is associated with this gmail";
+     var error_messsage_pass="No Account is associated with this gmail, Try again";
                     req.session.error_forgot_pass = error_messsage_pass;
                     req.session.save();
                     res.redirect("/forgot/password");
