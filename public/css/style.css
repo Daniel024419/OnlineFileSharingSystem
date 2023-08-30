@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@100&family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital@0;1&display=swap');
 * {
   margin: 0;
   padding: 0;
-  font-family: 'Libre Franklin', sans-serif;
   font-family: 'Poppins', sans-serif;
 }
 :root {
@@ -300,7 +299,7 @@ body {
 .recents-uploads {
   margin-top: 30px;
 }
-#searhcInputRemoved {
+#searhcInput {
   width: 96%;
   font-size: 16px;
   border-radius: 7px;
@@ -389,7 +388,7 @@ float: right;
 /* table media query */
 
 @media screen and (max-width: 900px) {
-  #searhcInputRemoved {
+  #searhcInput {
     width: 85%;
     font-size: 16px;
     border-radius: 100px;
@@ -450,7 +449,7 @@ font-size: 10px;
 
 }
 @media screen and (min-width: 275px) and (max-width: 450px) {
-  #searhcInputRemoved {
+  #searhcInput {
     width: 85% !important;
     font-size: 16px;
     border-radius: 100px;
@@ -658,34 +657,28 @@ object{
 }
 
 
-//
-    ::-webkit-scrollbar-button{
-       display: initial;
-       color: gray;
-    }
-     /* width */
-::-webkit-scrollbar {
-    width: 9px;
-    margin-left: 2px;
-    
-  }
-  
- 
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: darkgray; 
-     scroll-behavior: smooth !important ;
-    border-radius: 50px;
-     cursor:pointer;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555; 
-
-  }
 
   .error{
     font-size: 12px;
     color: red;
       }
+
+      
+.loader {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 4px solid #3498db;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999; /* Ensure the spinner is on top of other elements */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

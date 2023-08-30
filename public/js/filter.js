@@ -2,7 +2,7 @@
 //admin
 function search() {
     var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("searhcInputNew");
+    input = document.getElementById("searhcInput");
     filter = input.value.toUpperCase();
     table = document.getElementById("recents");
 
@@ -49,6 +49,7 @@ var input, filter, table, tr, td, i,alltables;
         //
     });
   }
+
 
 
 

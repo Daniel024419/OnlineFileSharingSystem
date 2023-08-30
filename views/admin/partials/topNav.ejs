@@ -1,28 +1,46 @@
 <section>
-    <!-- top -->
-    <div class="top">
 
-     <span class="title">File Server</span>
-     <span class="user-profile">
-        <a href="/edit/admin/profile">
-         <span class="img-container">
-             
-             <img src="/user.png" alt="" class="img-userprofile">
-
-             <span class="username" style="text-transform: uppercase;">
-                <% if(CurrentAdmin != undefined) {%>
-                    <%= CurrentAdmin.userName %>
-                    <%  }else{%> 
-                        <script>
-                            window.location.href='/';
-                         </script>
-                        <% } %>
-             </span>
-            
-         </span>
-         </a>
-     </span>
-
- </div>
  <!-- end -->
+<nav id="navbar-top" class="">
+  <div class="navbar-top-wrapper">
+    <!-- navbar-top Logo -->
+    <div class="logo">
+      <!-- Logo Placeholder for Illustration -->
+      <a href="#home"><img width="100px" height="auto" src="https://www.codepel.com/wp-content/uploads/2023/01/CodePel-Logo-2.1.png"></a>
+    </div>
+
+
+    <!-- navbar-top Links -->
+ 
+
+    <div class="logo2">
+      
+<div class="dropdown">
+  <button class="dropbtn">
+
+ <% if(CurrentAdmin != undefined) {%>
+
+<img src="/user.png" alt="" class="img-userprofile">
+<span class="name"> <%= CurrentAdmin.userName %>  </span>
+
+
+<%  }else{%> 
+<script>
+window.location.href='/';
+</script>
+<% } %>
+  </button>
+  <div class="dropdown-content">
+
+
+    <a href="/edit/admin/profile" class="desk-a"><i class="fa  fa-user"></i> Profile</a>
+    <a href="#">Link 2</a>
+    <a href="/logout" class="desk-a"><i class="fa  fa-sign-out"></i> Sign Out</a>
+
+
+  </div>
+</div>
+  </div>
+</nav>
+ 
 </section>
