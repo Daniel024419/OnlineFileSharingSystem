@@ -79,7 +79,7 @@ app.use(express.static(path.join(__dirname, 'public', 'files' ,'staticFiles')));
  //globalizing sessions variables
 app.use(controller.globalVariables);
 
-
+//google
 // Auth Callback
 app.get('/auth/callback',
     passport.authenticate( 'google', {
@@ -100,6 +100,21 @@ app.get('/auth/callback/failure',controller.authgooglefailure);
 
 
 
+//FACEBOOK
+app.get('/auth/facebook', passport.authenticate('facebook', {
+    scope: ['public_profile', 'email']
+}));
+
+app.get('/auth/facebook/callback',
+    passport.authenticate('facebook', {
+        successRedirect: '/auth-success-facebook',
+        failureRedirect: '/error'
+    })
+);
+
+app.get('/auth-success-facebook',controller.authcallbacksuccess);
+app.get('/error',controller.authfailure);
+ 
 
 
 
