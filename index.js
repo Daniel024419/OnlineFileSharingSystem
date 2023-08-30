@@ -38,15 +38,19 @@ app.use(session({
 	secret: process.env.SESSION_SECRET,
 	saveUninitialized: true,
 	resave: true,
-  cookie:{maxAge:oneDay},
+  cookie:{
+    name: 'google-auth-session',
+    keys: ['key1', 'key2'],
+     maxAge:oneDay
+  },
 }));
 
-app.set(cookieSession({
-  name: 'google-auth-session',
-  keys: ['key1', 'key2'],
-  // Cookie Options
-  maxAge: 24 * 60 * 60 * 1000 // 24 hours
-}))
+// app.set(cookieSession({
+//   name: 'google-auth-session',
+//   keys: ['key1', 'key2'],
+//   // Cookie Options
+//   maxAge: 24 * 60 * 60 * 1000 // 24 hours
+// }));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -77,14 +81,15 @@ app.use(controller.globalVariables);
 
 
 // Auth Callback
-app.get( '/auth/callback',
+app.get('/auth/callback',
     passport.authenticate( 'google', {
         successRedirect: '/auth/callback/success',
         failureRedirect: '/auth/callback/failure'
 }));
 
 // Auth 
-app.get('/google/auth' , passport.authenticate('google', { scope:
+app.get('/google/auth' , passport.authenticate('google', { 
+  scope:
     [ 'email', 'profile' ]
 }));
 
@@ -92,6 +97,10 @@ app.get('/auth/callback/success',controller.authgooglecallbacksuccess);
 //end
 // failure
 app.get('/auth/callback/failure',controller.authgooglefailure);
+
+
+
+
 
 
 //dashboard

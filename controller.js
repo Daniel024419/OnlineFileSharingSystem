@@ -67,14 +67,15 @@ globalVariables = (req, res, next) => {
 
 //check auth for google account
 authgooglefailure = (req, res) => {
-res.send("Error");
+ res.redirect("/login");
+  console.log("google auth failed");
 };
 
 //end
 //success auth
-authgooglecallbacksuccess = (req, res) => {    
-        const user = req.user;
-        const email = user.email; // User's email
+authgooglecallbacksuccess = (req, res) => {   
+
+        const email = req.user.email
         var filData = [email];
 
         var sql_check_user = `SELECT * FROM users WHERE gmail = ?`;
@@ -82,7 +83,7 @@ authgooglecallbacksuccess = (req, res) => {
            //get connection
         con.query(sql_check_user, filData, (err, result) => {
 
-        if (result) {
+        if (result.length>0) {
             //fetching user data
           result.forEach(data => {
             userName = data.userName;
@@ -94,6 +95,8 @@ authgooglecallbacksuccess = (req, res) => {
             comp_id = data.comp_id;
             created_at = data.created_at;
           });
+
+          console.log(filData)
 
           //login and store session
           // logins logs
@@ -141,6 +144,9 @@ authgooglecallbacksuccess = (req, res) => {
                     res.redirect("/home");
                   } else {
                     var error_messsage="Account does not have any role.";
+                    
+
+
                     req.session.error_login = error_messsage;
                     req.session.save();
                     res.redirect("/login");
@@ -157,7 +163,7 @@ authgooglecallbacksuccess = (req, res) => {
          //error logs
               // Returns a random integer from 0 to 99999:
               var log_id = Math.floor(Math.random() * 99999);
-              var errorlogData = [, log_id, gmail, password, new Date()];
+              var errorlogData = [, log_id, email, password, new Date()];
               var sql_user_error_log = `INSERT INTO error_logs (id,log_id,gmail,password,created_at)
           VALUES (?,?,?,?,?)`;
 
@@ -261,6 +267,8 @@ auth = (req, res) => {
 
     //var filData = [gmail, password];
     var filData = [gmail];
+
+
 
     var sql_check_user = `SELECT * FROM users WHERE gmail = ?`;
     //var sql_check_user = `SELECT * FROM users WHERE gmail = ? AND PASSWORD = ?`;
