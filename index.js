@@ -1,7 +1,9 @@
 const express = require('express')
 const app = express()
+
 //controller
 const controller=require('./controller');
+
 ///env viriables
 const dotenv = require("dotenv");
 dotenv.config();
@@ -60,6 +62,11 @@ app.use(express.static(path.join(__dirname, 'public', 'files' ,'Profile')));
 app.use(express.static(path.join(__dirname, 'public', 'files' ,'staticFiles')));
 
 
+//google account login
+// Define routes for authentication
+app.get('/auth/google',controller.authgoogle);
+app.get('/auth/google/callback',controller.authgooglecallback);
+//end
 
  //globalizing sessions variables
 app.use(controller.globalVariables);

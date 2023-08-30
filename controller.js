@@ -3,7 +3,10 @@ var mysql = require("mysql");
 //importing connection
 var importCon = require("./include/connection");
 var con =importCon.con;
-//bcrypt
+//google passport
+const passportHelper=require('./googleAuth');
+const passport = passportHelper.passport;
+
 
 const bcrypt = require('bcryptjs');
 //files upload to storage
@@ -62,6 +65,146 @@ globalVariables = (req, res, next) => {
 
   next();
 };
+
+
+//check auth for google account
+authgoogle = (req, res) => {
+
+passport.authenticate('google', { scope: ['profile', 'email'] })
+
+}
+
+//end
+//success auth
+authgooglecallback = (req, res) => {
+
+passport.authenticate('google', { failureRedirect: '/' }),
+    (req, res) => {
+        // Successful authentication, redirect to a success page or do something else
+        // Successful authentication, user profile data is available in req.user
+       
+        const user = req.user;
+        const name = user.displayName; // User's display name
+        const email = user.emails[0].value; // User's email
+        var filData = [email];
+
+        var sql_check_user = `SELECT * FROM users WHERE gmail = ?`;
+        try {
+           //get connection
+        con.query(sql_check_user, filData, (err, result) => {
+
+        if (result) {
+            //fetching user data
+          result.forEach(data => {
+            userName = data.userName;
+            dbGmail = data.gmail;
+            dbPassword = data.password;
+            userId = data.userId;
+            role = data.role;
+            dept_id = data.dept_id;
+            comp_id = data.comp_id;
+            created_at = data.created_at;
+          });
+
+          //login and store session
+          // logins logs
+              // Returns a random integer from 0 to 99999:
+              var log_id = Math.floor(Math.random() * 99999);
+              var logData = [, log_id, userId, new Date()];
+              var sql_user_log = `INSERT INTO logs (id,log_id,user_id,created_at) VALUE (?,?,?,?)`;
+
+              con.query(sql_user_log, logData, (err, result) => {
+
+                if (result) {
+
+                  // admin
+                  if (role == 1) {
+                    //fetching admin data
+                    admin_Session.userId = userId;
+                    admin_Session.userName = userName;
+                    admin_Session.gmail = gmail;
+                    admin_Session.role = role;
+                    admin_Session.created_at = created_at;
+
+                    //save session admin
+                    req.session.Admin = admin_Session;
+                    req.session.save();
+                    const sessionadmin = req.session.Admin;
+                    console.log(sessionadmin);
+                    res.redirect("/dashboard");
+                    
+                  } else if (role == 0) {
+                    //fetching admin data
+                    user_Session.userId = userId;
+                    user_Session.userName = userName;
+                    user_Session.gmail = gmail;
+                    user_Session.role = role;
+                    user_Session.dept_id = dept_id;
+                    user_Session.comp_id = comp_id;
+                    user_Session.created_at = created_at;
+
+                    //save session user
+                    req.session.User = user_Session;
+                    req.session.save();
+                    const sessionuser = req.session.User;
+                    console.log(sessionuser);
+                    // customer
+                    res.redirect("/home");
+                  } else {
+                    var error_messsage="Account does not have any role.";
+                    req.session.error_login = error_messsage;
+                    req.session.save();
+                    res.redirect("/login");
+                    
+                  }
+                }
+                if (err) throw err;
+              });
+
+
+
+
+        }else{
+         //error logs
+              // Returns a random integer from 0 to 99999:
+              var log_id = Math.floor(Math.random() * 99999);
+              var errorlogData = [, log_id, gmail, password, new Date()];
+              var sql_user_error_log = `INSERT INTO error_logs (id,log_id,gmail,password,created_at)
+          VALUES (?,?,?,?,?)`;
+
+              con.query(
+                sql_user_error_log,
+                errorlogData,
+                (err, result) => {
+                  if (result) {
+                    var error_messsage="Wrong credentials,Sign up first";
+                    req.session.error_login = error_messsage;
+                    req.session.save();
+                    res.redirect("/login");
+                     }
+                  if (err) throw err;
+                }
+              );
+
+          }
+
+
+        });
+
+        }
+        catch(error){
+          console.log("Can not select db....");
+        }
+       
+          
+
+
+//end redirect
+        //res.redirect('/success');
+    }
+
+}
+
 
 //index screen page get  /signnup get
 index = (req, res) => {
@@ -160,7 +303,7 @@ auth = (req, res) => {
        //decrption of the hashed password
       //bcrypt for the hash password
   //check for empty string
-          if (password && dbPassword) {
+      if (password && dbPassword) {
 
       if(dbPassword!='' && password!=''){
       bcrypt.compare(password,dbPassword,async function(err , verified){
@@ -2063,6 +2206,10 @@ error_404 = (req, res, next) => {
 
 module.exports = {
   globalVariables: globalVariables,
+  //google auth
+  
+  authgoogle: authgoogle,
+  authgooglecallback: authgooglecallback,
   index: index,
   login: login,
   auth: auth,

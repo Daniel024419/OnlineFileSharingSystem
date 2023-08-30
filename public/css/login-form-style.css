@@ -7,7 +7,7 @@
   font-family: "Poppins" , sans-serif;
 }
 body{
-  min-height: 100vh;
+  min-height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,7 +60,7 @@ body{
   z-index: 12;
 }
 .container .cover::after{
-  opacity: 0.3;
+  opacity: 0.9;
   transform: rotateY(180deg);
   backface-visibility: hidden;
 }
@@ -125,12 +125,12 @@ body{
   width: 20px;
 }
 .forms .form-content .input-boxes{
-  margin-top: 30px;
+  margin-top: 20px;
 }
 .forms .form-content .input-box{
   display: flex;
   align-items: center;
-  height: 50px;
+  height:35px;
   width: 100%;
   margin: 10px 0;
   position: relative;
@@ -220,4 +220,29 @@ body{
 
 .error_auth{
   color: red;
+}
+.Social button.google-btn,
+.Social button.facebook-btn {
+   width: 100%;
+   font-size: 18px;
+   margin: 0px 0px 10px;
+   border: 1px solid #ccc;
+   border-radius: 8px;
+}
+.Social button.google-btn {
+   background-color: indianred;
+   color: white;
+}
+.Social button.facebook-btn {
+   background-color: #3f68be;
+      color: white;
+}
+.Social {
+   border: none;
+   padding-top: 30px;
+   margin-top: 10px;
+}
+.Social button i {
+   margin-right: 5px;
+   font-size: 20px;
 }
