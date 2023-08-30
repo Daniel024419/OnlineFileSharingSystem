@@ -110,7 +110,7 @@
               Departments (<%= result_department.length %>)
               <% } %>
 
-              <a href="/truncate/department" >Empty Logs</a>
+              <a href="#" onclick="EmptyDepartment()" >Empty Logs</a>
 
             </p>
             <hr class="hr">
@@ -163,7 +163,7 @@
                   <!-- delete -->
                   <span class="tooltip-dashboard">
                     <!-- <a href="/delete/<%= //department.departmentId %>"> -->
-                    <a href="#" id="<%= department.dept_id %>" onclick="confirmDelete(this.id)">
+                    <a href="#" id="<%= department.dept_id %>" onclick="deleteDepartment(this.id)">
                       <span class="icon-trash" id="delete_upload">
                         <span class="tooltiptext-dashboard">Delete</span>
                         <i class="fa fa-trash"></i>
@@ -203,7 +203,20 @@
           </div>
         </div>
 
+      <!-- end -->
+    <% if (message) {%>
 
+     <script type="text/javascript">
+
+     var message = '<%= message %>';
+
+     sucessDelete(message);
+
+
+   </script>
+     <% message = ""; %>
+
+    <% }%>
         <!-- end -->
       </div>
     </div>

@@ -63,6 +63,9 @@ globalVariables = (req, res, next) => {
 
   res.locals.verify_token=req.session.verify_token;
 
+  res.locals.message=req.session.message;
+
+
   next();
 };
 
@@ -666,6 +669,7 @@ for (var i=0;i<25; i++) {
         //get connection
         con.query(sql_insert_file, fileData, (err, result) => {
           if (result) {
+             req.session.message = 'file added.';
             res.redirect("back");
           }
           if (err) throw err;
@@ -714,6 +718,8 @@ filesView = (req, res) => {
                   result_company: results[1],
                   result_department: results[2]
                 });
+
+                 
               }
 
               if (err) throw err;
@@ -742,7 +748,10 @@ deleteFile = (req, res) => {
       con.query(sql_delete_file, fileId, (err, result, fields) => {
         if (err) throw err;
         if (result.affectedRows > 0) {
+          req.session.message = 'file deleted.';
           res.redirect("back");
+          
+
         }  
 
         //releasing connection,when done using it
@@ -751,6 +760,8 @@ deleteFile = (req, res) => {
    } catch (error) {
     console.log("can not delete....");
   }
+
+
 };
 
 // edit files
@@ -887,6 +898,7 @@ fileUpdate = (req, res, err) => {
         //get connection
         con.query(sql_update_file, fileData, (err, result) => {
           if (result) {
+             req.session.message = 'file updated.';
             res.redirect("/files");
           }
           if (err) throw err;
@@ -1026,7 +1038,8 @@ deleteDownload = (req, res) => {
       //get connection
       con.query(sql_delete_downloads, fileId, (err, result, fields) => {
         if (result) {
-          res.redirect("black");
+          req.session.message = 'downloads deleted.';
+          res.redirect("back");
         }
 
         if (err) throw err;
@@ -1050,6 +1063,7 @@ emptydownload = (req, res) => {
       //get connection
       con.query(sql_empty_logs, (err, result, fields) => {
         if (result) {
+          req.session.message = 'downloads emptied.';
           res.redirect("back");
         }
 
@@ -1074,6 +1088,7 @@ emptycompanies = (req, res) => {
       //get connection
       con.query(sql_empty_logs, (err, result, fields) => {
         if (result) {
+            req.session.message = 'companies deleted.';
           res.redirect("back");
         }
 
@@ -1168,6 +1183,7 @@ addCompany = (req, res) => {
             
 
             if (result) {
+               req.session.message = 'company added.';
               res.redirect("back");
             }
 
@@ -1195,6 +1211,7 @@ deleteCompany = (req, res) => {
       //get connection
       con.query(sql_delete_comp, comp_id, (err, result, fields) => {
         if (result) {
+            req.session.message = 'company deleted.';
           res.redirect("back");
         }
 
@@ -1296,6 +1313,7 @@ addDepartment = (req, res) => {
             
 
             if (result_department) {
+               req.session.message = 'department added.';
               res.redirect("back");
             }
 
@@ -1323,6 +1341,7 @@ deleteDepartment = (req, res) => {
       //get connection
       con.query(sql_delete_dept, dept_id, (err, result, fields) => {
         if (result) {
+           req.session.message = 'department deleted.';
           res.redirect("back");
         }
 
@@ -1347,6 +1366,7 @@ emptydepartment = (req, res) => {
       //get connection
       con.query(sql_empty_logs, (err, result, fields) => {
         if (result) {
+           req.session.message = 'departments emptied.';
           res.redirect("back");
         }
 
@@ -1408,6 +1428,7 @@ deleteUsers = (req, res) => {
       //get connection
       con.query(sql_delete_user, userId, (err, result, fields) => {
         if (result) {
+          req.session.message = 'user deleted.';
           res.redirect("back");
         }
 
@@ -1433,6 +1454,7 @@ emptyusers = (req, res) => {
       //get connection
       con.query(sql_empty_logs, (err, result, fields) => {
         if (result) {
+          req.session.message = 'users emptied.';
           res.redirect("back");
         }
 
@@ -1495,6 +1517,7 @@ deletelog = (req, res) => {
       //get connection
       con.query(sql_delete_log, Id, (err, result, fields) => {
         if (result) {
+           req.session.message = 'log deleted.';
           res.redirect("back");
         }
 
@@ -1521,6 +1544,7 @@ emptylogs = (req, res) => {
       //get connection
       con.query(sql_empty_logs, (err, result, fields) => {
         if (result) {
+           req.session.message = 'logs emptied.';
           res.redirect("back");
         }
 
@@ -1582,6 +1606,7 @@ delete_Errlog = (req, res) => {
       //get connection
       con.query(sql_delete_log, Id, (err, result, fields) => {
         if (result) {
+           req.session.message = 'error logs deleted.';
           res.redirect("back");
         }
 
@@ -1608,6 +1633,7 @@ emptyerror_logs = (req, res) => {
       //get connection
       con.query(sql_empty_logs, (err, result, fields) => {
         if (result) {
+           req.session.message = 'error logs emptied.';
           res.redirect("back");
         }
 
@@ -1827,6 +1853,7 @@ downloadFile = (req, res ,next ) => {
                 if (err) {
                   console.log(err);
                 }
+                 req.session.message = 'file added to downloads.';
               });
   // } catch (error) {
   //   console.log("can not download....");
@@ -2139,6 +2166,7 @@ const mailConfigurations = {
       //   console.log(recievers);
       // }
      console.log('Email Sent and file sent Successfully');
+      req.session.message = 'file sent to .';
      //console.log(info);
    });
    

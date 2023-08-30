@@ -31,7 +31,7 @@
               <% if(result_users) {%>
               Users (<%= result_users.length %>)
               <% } %>
-              <a href="/truncate/users" >Empty Logs</a>
+              <a href="#" onclick="EmptyUsers()" >Empty Users</a>
 
 
             </p>
@@ -105,7 +105,7 @@
                     </span>
                     <% }else  {%>
                     
-                    <a href="#" id="<%= user.userId %>" onclick="confirmDelete(this.id)">
+                    <a href="#" id="<%= user.userId %>" onclick="deleteUsers(this.id)">
 
                       <span class="icon-trash" id="delete_upload">
                         <span class="tooltiptext-dashboard">Delete</span>
@@ -149,6 +149,20 @@
           </div>
         </div>
 
+        <!-- end -->
+    <% if (message) {%>
+
+     <script type="text/javascript">
+
+     var message = '<%= message %>';
+
+     sucessDelete(message);
+
+
+   </script>
+     <% message = ""; %>
+
+    <% }%>
 
         <!-- end -->
       </div>

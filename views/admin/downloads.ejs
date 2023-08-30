@@ -90,7 +90,7 @@
                   Downloads (<%= result_downloads.length %>)
                   <% } %>
 
-              <a href="/truncate/downloads" >Empty Logs</a>
+              <a href="#" onclick="EmptyDownloads()">Empty Logs</a>
 
 
               </p>
@@ -142,7 +142,7 @@
   
                      
                      
-                     <a href="#" id="<%= file.fileId %>"    onclick="confirmDelete(this.id)">
+                     <a href="#" id="<%= file.fileId %>"    onclick="deleteDownloads(this.id)">
 
                         <span class="icon-trash" id="delete_upload">
                           <span class="tooltiptext-dashboard">Delete</span>
@@ -190,6 +190,20 @@
       
 
         <!-- end -->
+    <% if (message) {%>
+
+     <script type="text/javascript">
+
+     var message = '<%= message %>';
+
+     sucessDelete(message);
+
+
+   </script>
+     <% message = ""; %>
+
+    <% }%>
+
 
   </div>
   </div>

@@ -91,7 +91,7 @@
               <% if(result_company) {%>
               Company (<%= result_company.length %>)
               <% } %>
-              <a href="/truncate/companies" >Empty Logs</a>
+              <a href="#" onclick="EmptyCompanies()" >Empty Logs</a>
 
 
             </p>
@@ -141,7 +141,7 @@
                   <!-- delete -->
                   <span class="tooltip-dashboard">
                     <!-- <a href="/delete/<%= //department.departmentId %>"> -->
-                    <a href="#" id="<%= company.comp_id %>" onclick="confirmDelete(this.id)">
+                    <a href="#" id="<%= company.comp_id %>" onclick="deleteComapny(this.id)">
                       <span class="icon-trash" id="delete_upload">
                         <span class="tooltiptext-dashboard">Delete</span>
                         <i class="fas fa-trash"></i>
@@ -182,6 +182,20 @@
         </div>
 
 
+        <!-- end -->
+    <% if (message) {%>
+
+     <script type="text/javascript">
+
+     var message = '<%= message %>';
+
+     sucessDelete(message);
+
+
+   </script>
+     <% message = ""; %>
+
+    <% }%>
         <!-- end -->
       </div>
     </div>
