@@ -66,18 +66,18 @@
                   <% if(user.role==1) {%>
                   
                       <span>Admin</span>
-                      <!-- <i class="fas fa-user"></i> -->
+                      <!-- <i class="fa fa-user"></i> -->
                      
                     <% }else  {%>
                     
                         <span>User</span>
-                        <i class="fas fa-padlock"></i>
+                        <i class="fa fa-padlock"></i>
                     <% } %>
                 </td>
                 <td class="hide" ><%= user.comp_id %> </td>
                 <td class="hide" ><%= user.dept_id %> </td>
                 <td class="hide"><%= user.Day %>/<%= user.Month %>/<%= user.Year %></td>
-                <td> <a href="mailto:<%= user.comp_mail %>"><i style="color: grey;" class="fas fa-envelope"></i></a> </td>
+                <td> <a href="mailto:<%= user.comp_mail %>"><i style="color: grey;" class="fa fa-envelope"></i></a> </td>
 
                 <!-- action -->
                 <td class="action">
@@ -87,7 +87,7 @@
 
                       <span class="icon-eye" id="preview">
                         <span class="tooltiptext-dashboard">View</span>
-                        <i class="fas fa-eye"></i>
+                        <i class="fa fa-eye"></i>
                       </span>
                     </a>
                   </span> -->
@@ -101,7 +101,7 @@
                     <% if(user.role==1) {%>
                     <span class="icon-trash" style="background-color: rgb(0, 191, 0)" id="delete_upload">
                       <span class="tooltiptext-dashboard">Admin</span>
-                      <i class="fas fa-user"></i>
+                      <i class="fa fa-user"></i>
                     </span>
                     <% }else  {%>
                     
@@ -109,7 +109,7 @@
 
                       <span class="icon-trash" id="delete_upload">
                         <span class="tooltiptext-dashboard">Delete</span>
-                        <i class="fas fa-trash"></i>
+                        <i class="fa fa-trash"></i>
                       </span>
                     </a>
                     <% } %>

@@ -25,7 +25,7 @@
           <div class="stats">
             <div class="stats-box" id="stats_emails">
               <span class="icon-emails">
-                <i class="fas fa-file-video"></i>
+                <i class="fa fa-file-video"></i>
                 <span class="total-emails"> 
                   <span>
                   <% if(result_files_video) {%>
@@ -35,11 +35,11 @@
               </span>
       
               </span>
-              <p>Total Videos <i class="fas fa-arrow-circle-right"></i></p>
+              <p>Total Videos <i class="fa fa-arrow-circle-right"></i></p>
             </div>
             <div class="stats-box" id="stats_uploads">
               <span class="icon-uploads">
-                <i class="fas fa-file-image"></i>
+                <i class="fa fa-file-image"></i>
                 <span class="total-uploads"> <span>
                   <% if(result_files_image) {%>
                     <%= result_files_image.length %>
@@ -48,11 +48,11 @@
               </span>
       
               </span>
-              <p>Total Images <i class="fas fa-arrow-circle-right"></i></p>
+              <p>Total Images <i class="fa fa-arrow-circle-right"></i></p>
             </div>
             <div class="stats-box" id="stats_downloads">
               <span class="icon-downloads">
-                <i class="fas fa-file-audio"></i>
+                <i class="fa fa-file-audio"></i>
                 <span class="total-download">
                   <% if(result_files_audio) {%>
                     <%= result_files_audio.length %>
@@ -60,13 +60,13 @@
                 </span>
               </span>
               </span>
-              <p>Total Audios <i class="fas fa-arrow-circle-right"></i></p>
+              <p>Total Audios <i class="fa fa-arrow-circle-right"></i></p>
       
             </div>
       
             <div class="stats-box" id="stats_downloads">
               <span class="icon-downloads">
-                <i class="fas fa-file-pdf"></i>
+                <i class="fa fa-file-pdf"></i>
                 <span class="total-download">
                   <% if(result_files_doc) {%>
                     <%= result_files_doc.length %>
@@ -74,7 +74,7 @@
                 </span>
               </span>
               </span>
-              <p>Total PDF Files <i class="fas fa-file-pdf"></i>
+              <p>Total PDF Files <i class="fa fa-file-pdf"></i>
       
             </div>
 
@@ -119,7 +119,7 @@
                   <td class="id"><%= file.userId %> </td>
                   <td><%= file.dept_id %> </td>
                   <td> <%= file.comp_id %></td>
-                  <td> <a href="mailto:<%= file.email %>"><i style="color: grey;" class="fas fa-envelope"></i></a> </td>
+                  <td> <a href="mailto:<%= file.email %>"><i style="color: grey;" class="fa fa-envelope"></i></a> </td>
 
                   <!-- action -->
                   <td class="action">
@@ -129,7 +129,7 @@
   
                         <span class="icon-eye" id="preview">
                           <span class="tooltiptext-dashboard">View</span>
-                          <i class="fas fa-eye"></i>
+                          <i class="fa fa-eye"></i>
                         </span>
                       </a>
                     </span> -->
@@ -146,7 +146,7 @@
 
                         <span class="icon-trash" id="delete_upload">
                           <span class="tooltiptext-dashboard">Delete</span>
-                          <i class="fas fa-trash"></i>
+                          <i class="fa fa-trash"></i>
                         </span>
                       </a>
                   

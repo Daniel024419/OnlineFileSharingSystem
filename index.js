@@ -93,10 +93,10 @@ app.get('/google/auth' , passport.authenticate('google', {
     [ 'email', 'profile' ]
 }));
 
-app.get('/auth/callback/success',controller.authgooglecallbacksuccess);
+app.get('/auth/callback/success',controller.authcallbacksuccess);
 //end
 // failure
-app.get('/auth/callback/failure',controller.authgooglefailure);
+app.get('/auth/callback/failure',controller.authfailure);
 
 
 
