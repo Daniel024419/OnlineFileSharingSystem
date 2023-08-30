@@ -17,7 +17,7 @@ passport.deserializeUser(function(user, done) {
 passport.use(new GoogleStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
-    callbackURL:"https://easyfiles.onrender.com/auth/callback",
+    callbackURL:"http://localhost:3030/auth/callback",
     passReqToCallback:true
 },
 function(request, accessToken, refreshToken, profile, done) {
