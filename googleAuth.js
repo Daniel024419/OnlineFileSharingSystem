@@ -1,26 +1,27 @@
-const express = require('express')
-const app = express()
+
 var CLIENT_ID=process.env.CLIENT_ID_LOGIN;
 var CLIENT_SECRET=process.env.CLIENT_SECRET_LOGIN;
-
-//google auth login
+   
+const dotenv = require("dotenv");
+dotenv.config();
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-// Initialize Passport and configure session support
-app.use(passport.initialize());
-app.use(passport.session());
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
+
+passport.serializeUser((user , done) => {
+    done(null , user);
+})
+passport.deserializeUser(function(user, done) {
+    done(null, user);
+});
+
 passport.use(new GoogleStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
-    callbackURL: 'https://easyfiles.onrender.com/auth/google/callback' // Your redirect URI
+    callbackURL:"http://localhost:3030/auth/callback",
+    passReqToCallback:true
 },
-(accessToken, refreshToken, profile, done) => {
-    // Handle user data and authentication here
-    // Typically, you would save the user's info to a database
+function(request, accessToken, refreshToken, profile, done) {
     return done(null, profile);
-}));
-
-module.exports={
-    passport : passport
 }
+));
 

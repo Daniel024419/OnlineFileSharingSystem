@@ -1,8 +1,9 @@
 const express = require('express')
 const app = express()
-
+const cookieSession = require('cookie-session');
 //controller
 const controller=require('./controller');
+const passport = require('passport');
 
 ///env viriables
 const dotenv = require("dotenv");
@@ -30,6 +31,7 @@ app.use(express.json());
 // Set EJS as templating engine
 app.set('view engine', 'ejs');
 
+
 // time to live for cookies
 const oneDay=100*60*60*24;
 app.use(session({
@@ -39,7 +41,15 @@ app.use(session({
   cookie:{maxAge:oneDay},
 }));
 
+app.set(cookieSession({
+  name: 'google-auth-session',
+  keys: ['key1', 'key2'],
+  // Cookie Options
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}))
 
+app.use(passport.initialize());
+app.use(passport.session());
 
 //defined port or 3000
 const port = process.env.PORT || 3030
@@ -62,14 +72,27 @@ app.use(express.static(path.join(__dirname, 'public', 'files' ,'Profile')));
 app.use(express.static(path.join(__dirname, 'public', 'files' ,'staticFiles')));
 
 
-//google account login
-// Define routes for authentication
-app.get('/auth/google',controller.authgoogle);
-app.get('/auth/google/callback',controller.authgooglecallback);
-//end
-
  //globalizing sessions variables
 app.use(controller.globalVariables);
+
+
+// Auth Callback
+app.get( '/auth/callback',
+    passport.authenticate( 'google', {
+        successRedirect: '/auth/callback/success',
+        failureRedirect: '/auth/callback/failure'
+}));
+
+// Auth 
+app.get('/google/auth' , passport.authenticate('google', { scope:
+    [ 'email', 'profile' ]
+}));
+
+app.get('/auth/callback/success',controller.authgooglecallbacksuccess);
+//end
+// failure
+app.get('/auth/callback/failure',controller.authgooglefailure);
+
 
 //dashboard
 //login screen as index

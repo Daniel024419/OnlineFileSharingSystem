@@ -4,10 +4,8 @@ var mysql = require("mysql");
 var importCon = require("./include/connection");
 var con =importCon.con;
 //google passport
-const passportHelper=require('./googleAuth');
-const passport = passportHelper.passport;
-
-
+require('./googleAuth');
+// Initialize Passport and configure session support
 const bcrypt = require('bcryptjs');
 //files upload to storage
 //multer and upload location
@@ -68,24 +66,15 @@ globalVariables = (req, res, next) => {
 
 
 //check auth for google account
-authgoogle = (req, res) => {
-
-passport.authenticate('google', { scope: ['profile', 'email'] })
-
-}
+authgooglefailure = (req, res) => {
+res.send("Error");
+};
 
 //end
 //success auth
-authgooglecallback = (req, res) => {
-
-passport.authenticate('google', { failureRedirect: '/' }),
-    (req, res) => {
-        // Successful authentication, redirect to a success page or do something else
-        // Successful authentication, user profile data is available in req.user
-       
+authgooglecallbacksuccess = (req, res) => {    
         const user = req.user;
-        const name = user.displayName; // User's display name
-        const email = user.emails[0].value; // User's email
+        const email = user.email; // User's email
         var filData = [email];
 
         var sql_check_user = `SELECT * FROM users WHERE gmail = ?`;
@@ -122,7 +111,7 @@ passport.authenticate('google', { failureRedirect: '/' }),
                     //fetching admin data
                     admin_Session.userId = userId;
                     admin_Session.userName = userName;
-                    admin_Session.gmail = gmail;
+                    admin_Session.gmail = email;
                     admin_Session.role = role;
                     admin_Session.created_at = created_at;
 
@@ -137,7 +126,7 @@ passport.authenticate('google', { failureRedirect: '/' }),
                     //fetching admin data
                     user_Session.userId = userId;
                     user_Session.userName = userName;
-                    user_Session.gmail = gmail;
+                    user_Session.gmail = email;
                     user_Session.role = role;
                     user_Session.dept_id = dept_id;
                     user_Session.comp_id = comp_id;
@@ -196,14 +185,8 @@ passport.authenticate('google', { failureRedirect: '/' }),
           console.log("Can not select db....");
         }
        
-          
 
-
-//end redirect
-        //res.redirect('/success');
-    }
-
-}
+};
 
 
 //index screen page get  /signnup get
@@ -2208,8 +2191,8 @@ module.exports = {
   globalVariables: globalVariables,
   //google auth
   
-  authgoogle: authgoogle,
-  authgooglecallback: authgooglecallback,
+  authgooglefailure: authgooglefailure,
+  authgooglecallbacksuccess: authgooglecallbacksuccess,
   index: index,
   login: login,
   auth: auth,
