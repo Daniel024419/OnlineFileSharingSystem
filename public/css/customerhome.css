@@ -236,3 +236,19 @@ text-transform: lowercase;
 
 
 }
+
+.download a,.share a{
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  padding: 5px 11px;
+  cursor: pointer;
+  font-size: 8px;
+
+  text-decoration: none;
+}
+
+/* Darker background on mouse-over */
+.share a:hover , .download a:hover {
+  background-color: RoyalBlue;
+}
