@@ -2081,6 +2081,7 @@ shareFile = (req, res) => {
               if (result_files) {
                 res.render("../views/shareFile.ejs",
                 {result_files:result_files});
+
               }
 
               if (err) throw err;
@@ -2125,7 +2126,7 @@ sendFile = (req, res, err) => {
           });
  
    var transporter=mailHelper.transporter;
-   var EMAIL_USERNAME=process.env.EMAIL_USERNAME;
+   var EMAIL_USERNAME=process.env.PROTON_USERNAME;
   // configration
 const mailConfigurations = {
 

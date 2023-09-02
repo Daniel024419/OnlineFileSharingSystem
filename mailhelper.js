@@ -7,17 +7,33 @@ var CLIENT_ID=process.env.CLIENT_ID;
 var CLIENT_SECRET=process.env.CLIENT_SECRET;
 var REFRESH_TOKEN=process.env.REFRESH_TOKEN;
 
+//PROTON
+var PROTON_USERNAME=process.env.PROTON_USERNAME;
+var PROTON_PASSWORD=process.env.PROTON_PASSWORD;
+
 var EMAIL_USERNAME_MAIL_TRAP=process.env.EMAIL_USERNAME_MAIL_TRAP;
 var PASSWORD_MAIL_TRAP=process.env.PASSWORD_MAIL_TRAP;
 //mailtrap
+// const transporter = nodemailer.createTransport({
+//   host: "sandbox.smtp.mailtrap.io",
+//   port: 2525,
+//   auth: {
+//     user:EMAIL_USERNAME_MAIL_TRAP,
+//     pass:PASSWORD_MAIL_TRAP,
+//   }
+// });
 
+
+
+//protonn
 const transporter = nodemailer.createTransport({
-  host: "sandbox.smtp.mailtrap.io",
-  port: 2525,
+    host: '127.0.0.1',
+    port: 1025,
+    secure: true, // use SSL
   auth: {
-    user:EMAIL_USERNAME_MAIL_TRAP,
-    pass:PASSWORD_MAIL_TRAP,
-  }
+    user: PROTON_USERNAME, // Your ProtonMail username
+    pass: PROTON_PASSWORD, // Your ProtonMail password
+  },
 });
 
 
