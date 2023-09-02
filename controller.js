@@ -65,7 +65,6 @@ globalVariables = (req, res, next) => {
 
   res.locals.message=req.session.message;
 
-
   next();
 };
 
@@ -78,8 +77,7 @@ res.send("Error");
 //end
 //success auth
 authcallbacksuccess = (req, res) => {    
-        const user = req.user;
-        const email = user.email; // User's email
+        const email = req.user.email; // User's email
         var filData = [email];
 
         var sql_check_user = `SELECT * FROM users WHERE gmail = ?`;
@@ -162,7 +160,7 @@ authcallbacksuccess = (req, res) => {
          //error logs
               // Returns a random integer from 0 to 99999:
               var log_id = Math.floor(Math.random() * 99999);
-              var errorlogData = [, log_id, gmail, password, new Date()];
+              var errorlogData = [, log_id, req.user.email, "auth faild", new Date()];
               var sql_user_error_log = `INSERT INTO error_logs (id,log_id,gmail,password,created_at)
           VALUES (?,?,?,?,?)`;
 

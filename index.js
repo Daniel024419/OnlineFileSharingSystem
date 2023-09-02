@@ -31,7 +31,7 @@ app.use(express.json());
 // Set EJS as templating engine
 app.set('view engine', 'ejs');
 
-
+require('./googleAuth')
 // time to live for cookies
 const oneDay=100*60*60*24;
 app.use(session({
