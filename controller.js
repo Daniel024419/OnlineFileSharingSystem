@@ -1475,7 +1475,8 @@ viewLogs = (req, res) => {
   res.redirect('/login');
 }else{
 
-  var sql_select_logs = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM LOGS ORDER BY created_at ASC`;
+  var sql_select_logs = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at)
+   AS Month FROM logs ORDER BY created_at ASC`;
 
   //catching blockages
   try {
