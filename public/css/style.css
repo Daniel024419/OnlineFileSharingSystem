@@ -1,7 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@100&family=Poppins&display=swap');
 * {
   margin: 0;
   padding: 0;
+  font-family: 'Libre Franklin', sans-serif;
   font-family: 'Poppins', sans-serif;
 }
 :root {
@@ -22,45 +23,90 @@ body {
 /* top */
 .wrapper .top {
   display: flex;
-  justify-content: center;
-  flex-direction: row;
+  justify-content: space-between; /* Adjusted to display items inline with space in between */
+  align-items: center; /* Vertically align items to the center */
   background-color: var(--nav-background);
-  padding: 11px 10px 10px 1px;
+  padding: 6px 10px 10px 10px;
   position: fixed;
   width: 100%;
   z-index: 5;
-  gap: 80.1%;
+
+
 }
+
+/* New logo styles */
+.logo {
+  display: inline-block; /* Display the logo inline with other elements */
+  margin-right: 10px; /* Add right margin to the logo if desired */
+  margin-left: 14px;
+}
+
+.img-logo {
+  width: 35px; /* Adjust the width of the logo as needed */
+  height: 35px; /* Adjust the height of the logo as needed */
+  border-radius: 300px;
+}
+
 
 .img-container {
   display: flex;
-  flex-direction: row;
-  gap: 2%;
-  margin-top: 4px;
-  text-decoration: none;
+  align-items: center; /* Vertically align items in the container */
+  gap: 10px; /* Adjust the gap between the image and username */
+  padding: 5px; /* Add padding to create space inside the border */
 }
-.user-profile  .img-container .img-userprofile  {
-  width: 35px;
-  width: 35px;
-  border-radius: 60px;
-  border: 1px solid var(--nav-background);
-  margin-right: 10px;
-  
-}
-.user-profile a{
-  text-decoration: none !important;
-}
-.top .title {
-  font-size: 20px;
-  color: white;
+/* Style for the user profile image */
+.img-userprofile {
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
 }
 
-.img-container .username {
-  font-size: 19px;
-  color: white;
-  font-weight: bolder;
-  padding-top: 9px;
-  
+/* Style for the dropdown button */
+.dropbtn {
+  background-color: ghostwhite;
+  color: black;
+  padding: 4px 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-top-left-radius: 300px; /* Rounded border for the top-left corner */
+  border-bottom-left-radius: 300px; /* Rounded border for the bottom-left corner */
+  display: flex; /* Display image and username inline */
+  align-items: center; /* Vertically center align content */
+}
+
+/* Style for the username */
+.username {
+  margin-left: 5px; /* Add spacing between image and username */
+  margin-right: 8px;
+}
+
+/* Style for the dropdown container */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Style for the dropdown content */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Style for the dropdown content links */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Show the dropdown content when hovering over the dropdown container */
+.dropdown:hover .dropdown-content {
+  display: block;
 }
 
 @media screen and (max-width: 970px) {
@@ -68,6 +114,9 @@ body {
     display: none;
   }
 }
+
+
+
 
 /* container */
 
@@ -657,28 +706,34 @@ object{
 }
 
 
+//
+    ::-webkit-scrollbar-button{
+       display: initial;
+       color: gray;
+    }
+     /* width */
+::-webkit-scrollbar {
+    width: 9px;
+    margin-left: 2px;
+    
+  }
+  
+ 
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: darkgray; 
+     scroll-behavior: smooth !important ;
+    border-radius: 50px;
+     cursor:pointer;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+
+  }
 
   .error{
     font-size: 12px;
     color: red;
       }
-
-      
-.loader {
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top: 4px solid #3498db;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999; /* Ensure the spinner is on top of other elements */
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}

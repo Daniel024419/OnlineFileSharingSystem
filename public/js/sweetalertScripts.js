@@ -83,6 +83,29 @@ swal({
 
 }
 
+
+ function EmptyFiles(){
+    
+swal({
+  title: "You want to empty this files table?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+
+
+.then((Yes) => {
+  if (Yes) {
+   window.location.href = '/truncate/files';
+  } else {
+    
+  }
+});
+
+}
+
+
+
  function EmptyUsers(){
     
 swal({

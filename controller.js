@@ -638,7 +638,6 @@ fileUpload = (req, res, err) => {
     var chars='01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklnompqrstuvwxyz';
     var fileId='';
 
-
 for (var i=0;i<25; i++) {
   var rnum=Math.floor(Math.random()*chars.length);
   fileId += chars.substring(rnum,rnum+1);
@@ -667,7 +666,48 @@ for (var i=0;i<25; i++) {
         //get connection
         con.query(sql_insert_file, fileData, (err, result) => {
           if (result) {
-             req.session.message = 'file added.';
+
+
+
+            req.session.message = 'file added.';
+      var sql_select_all_dept_users = `SELECT * FROM users WHERE dept_id = ?`;
+
+
+                  //get connection
+      // con.query(sql_preview_file, dept_id, (err, result, fields) => {
+      //   if (result) {}
+
+
+
+      //     })
+
+const axios = require('axios');
+
+// Replace these placeholders with your actual values
+const apiKey = 'hP9ShNpROpiDbXWtkPycMbPsr';
+const recipientNumber = '0547901448';
+const senderId = 'EasyFiles';
+const message = 'Hello Daniel,You have a file received from your origination';
+
+
+// Construct the API URL
+const apiUrl = `https://apps.mnotify.net/smsapi?key=${apiKey}&to=${recipientNumber}&msg=${message}&sender_id=${senderId}`;
+
+// Send the SMS
+axios.get(apiUrl)
+  .then(response => {
+    console.log('SMS sent successfully');
+    console.log(response.data); // Optional: Log the API response
+  })
+  .catch(error => {
+    console.error('Failed to send SMS:', error);
+  });
+
+ 
+
+
+
+
             res.redirect("back");
           }
           if (err) throw err;
