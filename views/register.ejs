@@ -4,7 +4,6 @@
   <head>
     <meta charset="UTF-8">
     <!--<title> Login and Registration Form in HTML & CSS | CodingLab </title>-->
-    <link rel="stylesheet" href="/login-form-style.css">
     <!-- Fontawesome CDN Link -->
     <%- include('./customer/partials/head.ejs') %>
       <link rel="stylesheet" href="/login-form-style.css">
@@ -72,14 +71,14 @@
     <input type="checkbox" id="flip">
     <div class="cover">
       <div class="front">
-        <img src="/logo2.jpg" alt="">
+        <img src="/logo.jpg" alt="">
         <div class="text">
           <span class="text-1">Every new friend is a <br> new adventure</span>
           <span class="text-2">Let's get connected</span>
         </div>
       </div>
       <div class="back">
-        <img class="backImg" src="/logo2.jpg" alt="">
+        <img class="backImg" src="/logo.jpg" alt="">
         <div class="text">
           <span class="text-1">Complete miles of journey <br> with one step</span>
           <span class="text-2">Let's get started</span>
@@ -101,11 +100,14 @@
                         
               </div>  
               <i id="uname_err__msg"></i>
-              <datalist id="check-list" style="display: none;">
+
+
+
+  <datalist id="check-list" style="display: none;">
 <%  if(result_check) { %>
  <!-- start for each -->
  <% result_check.forEach( check => {%>
- <option value="<%= check.gmail %>">
+ <option value="<%= check.gmail %>"><%= check.gmail %></option>
 
    <% }) } %>
     </datalist>
@@ -119,7 +121,7 @@
                     
               </div>
 
-                <i id="email_err__msg"></i>
+              <i id="email_err__msg"></i>
               <div class="input-box">
                 <i class="fas fa-user"></i>
                <input list="dept" name="department" 
@@ -135,12 +137,6 @@
 </datalist>
 <br> 
  
-
- 
-
-
-
-
                 <input list="comp" onkeyup="checkCompany(this.value)" name="company"
                         placeholder="Company" id="company" value="">
         
@@ -159,7 +155,6 @@
  <i id="comp_err__msg"></i>
 <i id="dept_err__msg"></i>
 
-
               <div class="input-box">
               <!-- <i class="fas fa-lock"></i> -->
 
@@ -175,18 +170,37 @@
                                 
 
               </div>
+
+
+
+
                <i id="pass_err__msg"></i>
                 <i id="repass_err__msg"></i>
+
+
+              <div class="input-box">
+                <i class="fas fa-phone-alt"></i>
+                <input type="text" name="tel" autocomplete="off" autofocus="off" onkeyup="checkUsername(this.value)" placeholder="Telephone" id="tel" class="ComP_Ucod">
+                <br>        
+                        
+              </div> 
+
+
+              <div class="input-box">
+                <i class="fas fa-lock"></i>
+                <input type="text" name="ComP_Ucod" autocomplete="off" autofocus="off" onkeyup="checkUsername(this.value)" placeholder=" Unique ID" id="ComP_Ucod" class="ComP_Ucod">
+                <br>        
+                        
+              </div>  
+
 
 
               <div class="button input-box">
                 <input type="submit" value="Sumbit" id="submit_btn">
              </div>
+             <div class="text"><a href="/forgot/password">Forgot password?</a></div>
              <p id="error-msg-form"></p>
-              <div class="text sign-up-text"> Already have an account? <label for="flip">Login now</label></div>
-
-             
-                        
+              <div class="text sign-up-text"> Already have an account? <label for="flip">Login now</label></div>       
                    
             </div>
       </form>
@@ -197,7 +211,7 @@
             <div class="input-boxes">
               <div class="input-box">
                 <i class="fas fa-envelope"></i>
-                <input type="email" placeholder="Enter your email" name="email"  id="email" required>
+                <input type="email" placeholder="Enter your email" name="email"  id="emailLogin" required>
                 <br>
                   
               </div>
@@ -211,64 +225,61 @@
               <div class="text"><a href="/forgot/password">Forgot password?</a></div>
               <div class="button input-box">
                 <input type="submit" value="Login">
-
               </div>
+              <div class="Social">
 <div class="Social">
 <button type="button" onclick="window.location.href='/google/auth'" class="google-btn">
 <i class="fa fa-google" aria-hidden="true"></i> Login with google
 </button>
-<button type="button" onclick="window.location.href='/auth/facebook'" class="facebook-btn">
+<button type="button"   onclick="window.location.href='/auth/facebook'" class="facebook-btn">
 <i class="fa fa-facebook" aria-hidden="true"></i> Login with Facebook
 </button>
-</div>
-              <div class="text sign-up-text">Don't have an account? <label for="flip">Sigup now</label></div>
+</div>     <div class="text sign-up-text">Don't have an account? <label for="flip">Sigup now</label></div>
             </div>
         </form>
-    
-
     </div>
 
 
     </div>
     </div>
   </div>
-    
+
   <script>
         
         //email
-var email=document.querySelector('#email');
-var email_err__msg=document.querySelector('#email_err__msg')
-var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+// var email=document.querySelector('#email');
+// var email_err__msg=document.querySelector('#email_err__msg')
+// var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 
-    email.addEventListener('keyup',(e)=>{
+//     email.addEventListener('keyup',(e)=>{
        
-      if(e.target.value.match(mailformat))
-         {
-            //document.write("Valid email address!");
-            email.style.border='1px solid #01cb44';
-            email_err__msg.style.color='green';
-            email_err__msg.style.display='none'
-            email_err__msg.textContent='Email Good..';
+//       if(e.target.value.match(mailformat))
+//          {
+//             //document.write("Valid email address!");
+//             email.style.borderBottom='1px solid #01cb44';
+//             email_err__msg.style.color='green';
+//             email_err__msg.style.display='none'
+//             email_err__msg.textContent='Email Good..';
 
-            return true;
-         }
-         else if(!e.target.value.match(mailformat))         {
+//             return true;
+//          }
+//          else if(!e.target.value.match(mailformat))         {
 
-            //email.style.placeholder='example@email/com';
-            email.style.border='1px solid #FF5466';
-            email_err__msg.style.color='red';
-            email_err__msg.style.display='initial';            
-            email_err__msg.textContent='Invalid email..';
-            email_err__msg.color='red';
+//             //email.style.placeholder='example@email/com';
+//             email.style.borderBottom='1px solid #FF5466';
+//             email_err__msg.style.color='red';
+//             email_err__msg.style.display='initial';            
+//             email_err__msg.textContent='Invalid email..';
+//             email_err__msg.color='red';
 
-            document.email-form.email.focus();
+//             document.email-form.email.focus();
          
-             return false;
-         }
+//              return false;
+//          }
          
-         email.removeEventListener('keyup');
-    });
+//          email.removeEventListener('keyup');
+//     });
 
 
     var password =document.getElementById('password');
@@ -294,7 +305,7 @@ function showPassNew() {
  
     </script>
     <script src="/validate.js"></script>
-    <script src="/preloader.js"></script>
+<script src="/preloader.js"></script>
   
 
 <div id="overlay" class="overlay">

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('./partials/head.ejs') %>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- top bar -->
+    <%- include('./partials/topNav.ejs') %>
+    <!-- end -->
+
+    <!-- end -->
+    <div class="container">
+      <!-- side bar -->
+      <%- include('./partials/sideNav.ejs') %>
+      <!-- end -->
+      <div class="dashboard">
+
+
+        <div class="form-control">
+          <form action="/update/comapny" name="company_form"  onsubmit="return validateComp()" method="post" enctype="multipart/form-data">
+              <!-- diaplaying data on the table -->
+              <%  if(result_company.length>0) { %>
+
+              <!-- start for each -->
+              <% result_company.forEach( company=> {%>
+              <input type="text" name="comp_id" value="<%= company.comp_id %>" style="display: none;">
+
+            <div class="desc">
+              <label for="dept">
+                <h4>Company Name</h4>
+              </label>
+              <textarea id="compName" name="compName" onkeyup="checkCompanyName(this.value)"  cols="" rows=""><%= company.comp_name %></textarea>
+            <span style="float: right;font-size: 12px;" id="count">0/20</span>
+               <span class="error" >
+                <i id="compName_err__msg"></i>
+                </span>
+             
+            </div>
+            <!-- start -->
+            <div class="business-container">
+            
+            
+              <div class="department">
+                <label for="comapny">
+                  <h4>Company Location  </h4>
+                </label>
+                <input type="text" value="<%= company.comp_location %>" name="comptLocation"  onkeyup="checkCompanyLocation(this.value)" class="comptLocation"    id="department">
+                 <br>
+                 <span class="error" >
+                <i id="comptLocation_err__msg"></i>
+                </span>
+              </div>
+            
+              <div class="department">
+                <label for="department">
+                  <h4>Company Mail </h4>
+                </label>
+                <input type="text" value="<%= company.comp_mail %>"  id="department" onkeyup="checkCompanycompMail(this.value)" name="compMail" class="compMail">
+                <br>
+                 <span class="error" >
+                <i id="compMail_err__msg"></i>
+                </span>
+              </div>
+              <div class="department">
+                <label for="department">
+                  <h4>Comapny Tel </h4>
+                </label>
+                <input type="text" value="<%= company.comp_tel %>" id="department"  onkeyup="checkCompanycomptel(this.value)" name="comptel" class="comptel">
+
+              <br>
+                 <span class="error" >
+                <i id="comptel_err__msg"></i>
+                </span>
+              </div>
+            </div><!-- end -->
+            <div class="submit">
+              <button type="submit" id="submit_btn"><i class="fa fa-save"></i> Update </button>
+            </div>
+            <span>
+               <p id="error-msg-form" class="error"></p>
+            </span>
+
+          </form>
+
+          <% }) } %>
+
+        </div>
+
+
+
+
+
+
+        <!-- end -->
+    <% if (message) {%>
+
+     <script type="text/javascript">
+
+     var message = '<%= message %>';
+
+     sucessDelete(message);
+
+
+   </script>
+     <% message = ""; %>
+
+    <% }%>
+        <!-- end -->
+      </div>
+    </div>
+  </div>
+</body>
+<script src="/validate-dashboard.js"></script>
+
+</html>
+

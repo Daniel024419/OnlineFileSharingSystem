@@ -105,6 +105,7 @@
               <tr class="header">
                 <th>C_name</th>
                 <th>C_Id</th>
+                <th>Unique Code</th>
                 <th>Location </th>
                 <th>Tel</th>
                 <th>Mail</th>
@@ -120,6 +121,7 @@
               <tr>
                 <td><%= company.comp_name %> </td>
                 <td class="id"><%= company.comp_id %> </td>
+                <td class="id"><%= company.ComP_Ucod %> </td>
                 
                 <td><%= company.comp_location %> </td>
                 <td> <a href="tel:<%= company.comp_tel %>"><i style="color: grey;" class="fas fa-phone"></i></a> </td>
@@ -159,6 +161,15 @@
                         }
                       }
                     </script>
+                  </span>
+
+                  
+                    <span class="tooltip-dashboard">
+                    <a href="./edit-company/<%= company.comp_id %>">
+                      <span class="icon-edit" id="edit">
+                        <span class="tooltiptext-dashboard">Edit</span>
+                        <i class="fas fa-edit"></i></span>
+                    </a>
                   </span>
 
                 </td>

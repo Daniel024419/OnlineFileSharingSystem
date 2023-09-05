@@ -200,7 +200,7 @@ body {
   .dashboard {
     padding: 22px !important;
     line-height: 28px;
-    width:auto;
+    width:99%;
     margin-left: 70px !important;
     margin-top: 20%;
   }

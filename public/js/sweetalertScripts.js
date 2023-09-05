@@ -336,3 +336,87 @@ swal({
     });
 
 }
+
+  function CreateAdmin () {
+
+   Swal.fire({
+  title: 'Create Department Admin',
+  html: `
+    <form id="data-form">
+      <input type="text" id="username" class="swal2-input" placeholder="Username">
+      <input type="password" id="password" class="swal2-input" placeholder="Password">
+      <input type="text" id="company" class="swal2-input" placeholder="Company">
+      <input type="tel" id="telephone" class="swal2-input" placeholder="Telephone">
+      <input type="text" id="department" class="swal2-input" placeholder="Department">
+      <input type="email" id="email" class="swal2-input" placeholder="Gmail">
+    </form>
+  `,
+  showCancelButton: true,
+  confirmButtonText: 'Submit',
+  cancelButtonText: 'Cancel',
+  preConfirm: () => {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const company = document.getElementById('company').value;
+    const telephone = document.getElementById('telephone').value;
+    const department = document.getElementById('department').value;
+    const email = document.getElementById('email').value;
+
+    if (!username || !password || !company || !telephone || !department || !email) {
+      Swal.showValidationMessage('Please fill in all fields');
+      return false;
+    }
+
+    return {
+      username: username,
+      password: password,
+      company: company,
+      telephone: telephone,
+      department: department,
+      email: email,
+    };
+  },
+}).then((result) => {
+  if (result.isConfirmed) {
+    const formData = result.value;
+
+    // Send the input data to your server
+    submitDataToServer(formData);
+  }
+});
+
+function submitDataToServer(formData) {
+  fetch('/save-admin-data', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((result) => {
+      if (result.message) {
+        Swal.fire('Success', result.message, 'success');
+        
+      } else {
+        throw new Error('Response does not contain a message');
+      }
+// Reload the page after the Swal alert is closed
+        location.reload();
+
+      
+    })
+    .catch((error) => {
+      Swal.fire('Error', 'An error occurred while saving data', 'error');
+      console.error(error);
+    });
+}
+
+  }
+
+

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('./partials/head.ejs') %>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- top bar -->
+    <%- include('./partials/topNav.ejs') %>
+    <!-- end -->
+
+    <!-- end -->
+    <div class="container">
+      <!-- side bar -->
+      <%- include('./partials/sideNav.ejs') %>
+      <!-- end -->
+      <div class="dashboard">
+
+              <!-- diaplaying data on the table -->
+              <%  if(result_department.length>0) { %>
+
+              <!-- start for each -->
+              <% result_department.forEach( department=> {%>
+        <div class="form-control">
+          <form action="/update-department" method="post" name="dept_form" onsubmit="return validateDept()" enctype="multipart/form-data">
+            <input type="text" name="dept_id" value="<%= department.dept_id %>" style="display: none;">
+            <div class="desc">
+              <label for="dept">
+                <h4>Dept Name</h4>
+              </label>
+              <textarea id="dept" name="deptName"  onkeyup="checkdeptName(this.value)" cols="" rows=""><%= department.dept_name %></textarea>
+            <span style="float: right;font-size: 12px;" id="count">0/20</span>
+               <span class="error" >
+                <i id="deptName_err__msg"></i>
+                </span>
+             
+            </div>
+            <!-- start -->
+            <div class="business-container">
+            
+            
+              <div class="department">
+                <label for="department">
+                  <h4>Dept Location</h4>
+                </label>
+                <input type="text" name="deptLocation" value="<%= department.dept_location %>" onkeyup="checkdeptLocation(this.value)" id="department" class="deptLocation">
+                <br>
+                 <span class="error" >
+                <i id="deptLocation_err__msg"></i>
+                </span>
+              </div>
+            
+              <div class="department">
+                <label for="department">
+                  <h4>Dept Mail</h4>
+                </label>
+                <input type="text" id="department" value="<%= department.dept_mail %>" name="deptMail" onkeyup="checkdeptMail(this.value)" class="deptMail">
+                <br>
+                 <span class="error" >
+                <i id="deptMail_err__msg"></i>
+                </span>
+              </div>
+              <div class="company">
+                <label for="desc"><h4>Company</h4></label>
+                <input list="comp" readonly class="deptComp" value="<%= department.comp_id %>" name="company" id="company"  onkeyup="checkdeptCompany(this.value)"  class="company">
+                 <br>
+                 <span class="error" >
+                <i id="dept_comp_err__msg"></i>
+                </span>
+              </div> 
+
+              <div class="department">
+                <label for="department">
+                  <h4>Telephone</h4>
+                </label>
+                <input type="text" id="department" value="<%= department.tel %>" onkeyup="checkdept_tel(this.value)" name="tel" class="dept_tel">
+                 <br>
+                 <span class="error" >
+                <i id="dept_tel_err__msg"></i>
+                </span>
+              </div>
+            </div><!-- end -->
+            <div class="submit">
+              <button type="submit" id="submit_btn"><i class="fa fa-save"></i> Add </button>
+            </div>
+              <span>
+               <p id="error-msg-form" class="error"></p>
+            </span>
+
+          </form>
+        </div>
+<% }); }%>
+
+
+
+      <!-- end -->
+    <% if (message) {%>
+
+     <script type="text/javascript">
+
+     var message = '<%= message %>';
+
+     sucessDelete(message);
+
+
+   </script>
+     <% message = ""; %>
+
+    <% }%>
+        <!-- end -->
+      </div>
+    </div>
+  </div>
+</body>
+<script src="/validate-dashboard.js"></script>
+
+</html>

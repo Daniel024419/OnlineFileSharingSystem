@@ -162,6 +162,12 @@ app.post('/add/comapny',urlencodedParser,controller.addCompany);
 // /truncate/companies
 app.get('/truncate/downloads',controller.emptycompanies);
 
+//admin edit company
+app.get('/edit-company/:comp_id',controller.editComp);
+//admin update company
+app.post('/update/comapny',urlencodedParser,controller.updateCompany);
+
+
 //departments
 app.get('/department',controller.viewDepartment);
 //admin add dept
@@ -171,6 +177,12 @@ app.get('/dept/delete/:dept_id',controller.deleteDepartment);
 //emptydepartment
 app.get('/truncate/department',controller.emptydepartment);
 
+//admin edit department
+app.get('/edit-department/:dept_id',controller.editDept);
+//admin add dept
+app.post('/update-department',urlencodedParser,controller.updateDepartment);
+
+
 //admin view users
 app.get('/users',controller.viewUsers);
 //admin delete users
@@ -178,6 +190,8 @@ app.get('/delete/user/:userId',controller.deleteUsers);
 //emptyusers
 app.get('/truncate/users',controller.emptyusers);
 
+//add admin view users
+app.post('/save-admin-data',controller.AdddminUsers);
 
 //admin view logs
 app.get('/logs',controller.viewLogs);
