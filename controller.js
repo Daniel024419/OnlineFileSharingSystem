@@ -1481,15 +1481,17 @@ fetchCompanyId = (req, res) => {
         }
  
    // Get input from the request (assuming it's in the query parameters)
-    const comp_id = req.query.input;
+    const ucode = req.query.input;
+    const userSelectionCompId = req.query.userSelectionCompId;
 
-    sql_select_company = `SELECT * FROM company WHERE comp_id = ?`;
-          var  ComP_Ucod='';
+    sql_select_company = `SELECT * FROM company WHERE ComP_Ucod = ? AND comp_id = ?`;
 
+          const data = [ucode,userSelectionCompId];
+          var ComP_Ucod = '';
         //catching blockages
         try {
             //inserting
-            con.query(sql_select_company, comp_id, (err, result_select_company, fields) => {
+            con.query(sql_select_company, data, (err, result_select_company, fields) => {
                 if (result_select_company) {
 
                     result_select_company.forEach(data => {

@@ -241,7 +241,7 @@ function showPassRe() {
 
 function validateForm() {
     let username = document.forms["register"]["username"].value;
-    let company = document.forms["register"]["userName"].value;
+    let company = document.forms["register"]["company"].value;
     let department = document.forms["register"]["department"].value;
     let email = document.forms["register"]["email"].value;
     let password = document.forms["register"]["newpassword"].value;

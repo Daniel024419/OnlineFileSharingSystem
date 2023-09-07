@@ -5,17 +5,18 @@
   const dataContainer = document.getElementById('dataContainer');
   const checkBtn = document.getElementById('checkBtn');
   var confirm =document.getElementById('confirm');
-  var company = document.getElementById('company');
+
   checkBtn.addEventListener('click', () => {
-    const inputValue = ComP_Ucod.value;
+        const inputValue = ComP_Ucod.value;
+        let userSelectionCompId = document.forms["register"]["company"].value;
+
 
     // Make an AJAX request to your Node.js server
-    fetch(`/fetch-company-id?input=${inputValue}`)
-      .then(response => response.json())
+ fetch(`/fetch-company-id?input=${inputValue}&userSelectionCompId=${userSelectionCompId}`)      .then(response => response.json())
       .then(result_select_company => {
         // Update the UI with the fetched data
         if (result_select_company) {
-        dataContainer.innerHTML = result_select_company;
+        // dataContainer.innerHTML = result_select_company;
         checkBtn.value='Verified';
         confirm.checked=true;
         checkBtn.disabled=true;
