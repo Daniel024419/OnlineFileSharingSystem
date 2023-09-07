@@ -200,6 +200,14 @@
              </div>
              <div class="text"><a href="/forgot/password">Forgot password?</a></div>
              <p id="error-msg-form"></p>
+
+
+           
+  <input type="text" id="userInput" placeholder="Enter your input">
+  <div id="dataContainer"></div>
+
+
+
               <div class="text sign-up-text"> Already have an account? <label for="flip">Login now</label></div>       
                    
             </div>
@@ -305,8 +313,29 @@ function showPassNew() {
  
     </script>
     <script src="/validate.js"></script>
-<script src="/preloader.js"></script>
-  
+    <script src="/preloader.js"></script>
+  <script>
+    
+    // script.js
+document.addEventListener('DOMContentLoaded', () => {
+  const userInput = document.getElementById('userInput');
+  const dataContainer = document.getElementById('dataContainer');
+
+  userInput.addEventListener('input', () => {
+    const inputValue = userInput.value;
+
+    // Make an AJAX request to your Node.js server
+    fetch(`/fetch-company-id?input=${inputValue}`)
+      .then(response => response.json())
+      .then(data => {
+        // Update the UI with the fetched data
+        dataContainer.innerHTML = JSON.stringify(data, null, 2);
+      })
+      .catch(error => console.error(error));
+  });
+});
+
+  </script>
 
 <div id="overlay" class="overlay">
   <div class="loader"></div>

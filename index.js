@@ -114,9 +114,6 @@ app.get('/auth/facebook/callback',
 app.get('/auth-success-facebook',controller.authcallbacksuccess);
 app.get('/error',controller.authfailure);
  
-
-
-
 //dashboard
 //login screen as index
 app.get('/',controller.index);
@@ -249,6 +246,13 @@ app.get('/share/file/:fileName/:id/:fileId',controller.shareFile);
 
 //post  send file
 app.post('/send/file',urlencodedParser,controller.sendFile);
+
+
+//check company id
+app.get('/fetch-company-id',controller.fetchCompanyId);
+
+//wait screen 
+app.get('/wait-screen',controller.waitScreen);
 
 
 

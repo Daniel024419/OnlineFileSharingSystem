@@ -1,4 +1,7 @@
 
+
+
+
 function logout(){
     
 
@@ -337,7 +340,7 @@ swal({
 
 }
 
-  function CreateAdmin () {
+  function CreateAdmin (comp_id) {
 
    Swal.fire({
   title: 'Create Department Admin',
@@ -345,7 +348,7 @@ swal({
     <form id="data-form">
       <input type="text" id="username" class="swal2-input" placeholder="Username">
       <input type="password" id="password" class="swal2-input" placeholder="Password">
-      <input type="text" id="company" class="swal2-input" placeholder="Company">
+      <input type="text" id="company" readonly value="${comp_id}" class="swal2-input" placeholder="Company">
       <input type="tel" id="telephone" class="swal2-input" placeholder="Telephone">
       <input type="text" id="department" class="swal2-input" placeholder="Department">
       <input type="email" id="email" class="swal2-input" placeholder="Gmail">

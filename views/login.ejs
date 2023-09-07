@@ -100,9 +100,6 @@
                         
               </div>  
               <i id="uname_err__msg"></i>
-
-
-
   <datalist id="check-list" style="display: none;">
 <%  if(result_check) { %>
  <!-- start for each -->
@@ -122,8 +119,26 @@
               </div>
 
               <i id="email_err__msg"></i>
+
+
+
               <div class="input-box">
                 <i class="fas fa-user"></i>
+                <input list="comp" onkeyup="checkCompany(this.value)" name="company"
+                        placeholder="Company" id="company" value="">
+        
+
+                        <datalist id="comp">
+                            <%  if(result_company) { %>
+                                <!-- start for each -->
+                                <% result_company.forEach( company=> {%>
+                                              <option value="<%= company.comp_id %>" 
+                          label="<%= company.comp_name %>"> 
+                          
+                          <% }) } %>
+                        </datalist>
+                        <br> 
+
                <input list="dept" name="department" 
                         placeholder="Department" onkeyup="checkDept(this.value)" id="department">
 
@@ -137,19 +152,7 @@
 </datalist>
 <br> 
  
-                <input list="comp" onkeyup="checkCompany(this.value)" name="company"
-                        placeholder="Company" id="company" value="">
-        
-                        <datalist id="comp">
-                            <%  if(result_company) { %>
-                                <!-- start for each -->
-                                <% result_company.forEach( company=> {%>
-                                              <option value="<%= company.comp_id %>" 
-                                                label="<%= company.comp_name %>"> 
-                              
-                          <% }) } %>
-                        </datalist>
-                        <br> 
+
                                 
               </div>
  <i id="comp_err__msg"></i>
@@ -180,7 +183,7 @@
 
               <div class="input-box">
                 <i class="fas fa-phone-alt"></i>
-                <input type="text" name="tel" autocomplete="off" autofocus="off" onkeyup="checkUsername(this.value)" placeholder="Telephone" id="tel" class="ComP_Ucod">
+                <input type="text" name="tel" autocomplete="off" autofocus="off" onkeyup="checkUsername(this.value)" placeholder="Telephone"  class="ComP_Ucod">
                 <br>        
                         
               </div> 
@@ -188,7 +191,27 @@
 
               <div class="input-box">
                 <i class="fas fa-lock"></i>
-                <input type="text" name="ComP_Ucod" autocomplete="off" autofocus="off" onkeyup="checkUsername(this.value)" placeholder=" Unique ID"  id="ComP_Ucod" class="ComP_Ucod">
+                <input type="text" name="ComP_Ucod" autocomplete="off" autofocus="off" title="Enter company unique code" required placeholder="Unique ID" id="ComP_Ucod" class="ComP_Ucod">
+
+                <input type="button" id="checkBtn" class="checkBtn" name="Verify" style="width: 100px;" value="Verify">
+                <input type="checkbox" value="Verify"  required id="confirm" >
+
+                <style type="text/css">
+                  
+                  .checkBtn{
+                    padding: 4px 0px;
+                    border: 1px solid #ccc;
+                    margin-left: 6px;
+                    border-radius: 6px;
+                    background-color: green;
+                    color: white;
+
+                  }
+
+                  #confirm{
+                    display: none;
+                  }
+                </style>
                 <br>        
                         
               </div>  
@@ -196,10 +219,15 @@
 
 
               <div class="button input-box">
-                <input type="submit" value="Sumbit" id="submit_btn">
+                <input type="submit" value="Submit"  id="submit_btn">
              </div>
              <div class="text"><a href="/forgot/password">Forgot password?</a></div>
              <p id="error-msg-form"></p>
+
+
+           
+  <div id="dataContainer"></div>
+
               <div class="text sign-up-text"> Already have an account? <label for="flip">Login now</label></div>       
                    
             </div>
@@ -305,8 +333,9 @@ function showPassNew() {
  
     </script>
     <script src="/validate.js"></script>
-<script src="/preloader.js"></script>
-  
+    <script src="/preloader.js"></script>
+    <script src="/sweetalert.min.js"></script>
+   <script src="/validat-compId.js" > </script>
 
 <div id="overlay" class="overlay">
   <div class="loader"></div>

@@ -13,6 +13,7 @@ var PROTON_PASSWORD=process.env.PROTON_PASSWORD;
 
 var EMAIL_USERNAME_MAIL_TRAP=process.env.EMAIL_USERNAME_MAIL_TRAP;
 var PASSWORD_MAIL_TRAP=process.env.PASSWORD_MAIL_TRAP;
+
 //mailtrap
 // const transporter = nodemailer.createTransport({
 //   host: "sandbox.smtp.mailtrap.io",

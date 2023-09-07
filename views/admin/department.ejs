@@ -61,17 +61,11 @@
               </div>
               <div class="company">
                 <label for="desc"><h4>Company</h4></label>
-                <input list="comp" class="deptComp" name="company" id="company"  onkeyup="checkdeptCompany(this.value)" class="company">
-                <datalist id="comp">
-                  <!-- diaplaying data in datalist -->
-                <%  if(result_company) { %>
-                <!-- start for each -->
-                 <% result_company.forEach( company=> {%>
-                  <option value="<%= company.comp_id %>" 
-                    label="<%= company.comp_name %>"> 
-  
-                    <% }) } %>
-                </datalist>
+
+                 <% if(CurrentAdmin != undefined) { %>
+                 <input type="text" id="company" value="<%= CurrentAdmin.comp_id %>" readonly name="company"  class="company">
+                 <% } %>
+ 
                  <br>
                  <span class="error" >
                 <i id="dept_comp_err__msg"></i>

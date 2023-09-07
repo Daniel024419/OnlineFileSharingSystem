@@ -577,6 +577,7 @@ AdddminUsers = (req, res) => {
 //dashboard get admin
 dashboard = (req, res) => {
     // preventing unathorizedaccess to the page
+    var sql_select_files='';
     if (admin_Session.userId == '' && admin_Session.role == '') {
         res.redirect('/');
     } else {
@@ -584,7 +585,24 @@ dashboard = (req, res) => {
         // var sql_select_users = `SELECT * FROM users`;
         // var sql_select_downloads = `SELECT * FROM downloads`;
         // var sql_select_company = `SELECT * FROM company`;
-        var sql_select_files = `SELECT * FROM files;SELECT * FROM users;SELECT * FROM downloads;SELECT * FROM company`;
+
+        //select based on companies
+        if (admin_Session.role==1) {
+
+        var sql_select_files = `SELECT * FROM files;
+        SELECT * FROM users;SELECT * FROM downloads;
+        SELECT * FROM company WHERE comp_id`;
+
+        }else if(admin_Session.role==2){
+
+        var sql_select_files = `SELECT * FROM files WHERE comp_id = ${admin_Session.comp_id};
+        SELECT * FROM users;SELECT * FROM downloads WHERE comp_id = ${admin_Session.comp_id};
+        SELECT * FROM company WHERE comp_id = ${admin_Session.comp_id}`;
+
+        }
+        
+
+
         //catching blockages
         try {
             //inserting
@@ -714,6 +732,7 @@ fileUpload = (req, res, err) => {
 };
 //files view
 filesView = (req, res) => {
+
     if (admin_Session.userId == '' && admin_Session.role == '') {
         res.redirect('/login');
     } else {
@@ -722,7 +741,20 @@ filesView = (req, res) => {
         // var sql_select_company = `SELECT * FROM company`;
         // //company
         // var sql_select_department = `SELECT * FROM department`;
-        var sql_select_file = `SELECT * FROM files ORDER BY created_at desc;SELECT * FROM company;SELECT * FROM department`;
+        var sql_select_file = '';
+                //select based on companies
+        if (admin_Session.role==1) {
+
+         sql_select_file =`SELECT * FROM files ORDER BY created_at desc;SELECT * FROM company;SELECT * FROM department`;
+
+        }else if(admin_Session.role==2){
+        
+        var sql_select_file =`SELECT * FROM files WHERE comp_id = ${admin_Session.comp_id} ORDER BY created_at desc;
+        SELECT * FROM company;SELECT * FROM department WHERE comp_id = ${admin_Session.comp_id}`;
+
+
+        }
+
         //catching blockages
         try {
             //inserting
@@ -929,6 +961,11 @@ viewDownloads = (req, res) => {
         // var sql_select_files_image = `SELECT * FROM downloads WHERE 
         //                               fileType = '.gif' OR fileType = '.png' OR fileType = '.jpg'
         //                                OR fileType = '.jpeg'`;
+
+
+        var sql_select_dowwnloads = '';
+                //select based on companies
+        if (admin_Session.role==1) {
         var sql_select_dowwnloads = `SELECT * FROM downloads;SELECT * FROM downloads WHERE 
                                 fileType = '.mp3' OR fileType = '.m4a' OR fileType = '.wma'
                                  OR fileType = '.acc' OR fileType = '.wav' OR fileType = '.flac';SELECT * FROM downloads WHERE 
@@ -936,8 +973,25 @@ viewDownloads = (req, res) => {
                                  OR fileType = '.webm' OR fileType = '.mkv' OR fileType = '.mov';SELECT * FROM downloads WHERE 
                                 fileType = '.pdf' OR fileType = '.dot' OR fileType = '.doc' OR fileType = '.docm'
                                 OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv';SELECT * FROM downloads WHERE 
-                                fileType = '.gif' OR fileType = '.png' OR fileType = '.jpg'
+                                fileType = '.gif' OR fileType = '.png' OR fileType = '.jpg' OR fileType = '.jfif'
                                  OR fileType = '.jpeg'`;
+
+        }else if(admin_Session.role==2){
+
+               var sql_select_dowwnloads = `SELECT * FROM downloads WHERE comp_id = ${admin_Session.comp_id};
+                               SELECT * FROM downloads WHERE fileType = '.mp3' OR fileType = '.m4a' OR fileType = '.wma'
+                                OR fileType = '.acc' OR fileType = '.wav' OR fileType = '.flac' AND comp_id = ${admin_Session.comp_id};
+                                SELECT * FROM downloads WHERE fileType = '.mp4' OR fileType = '.avi' OR fileType = '.mpeg-2'
+                                OR fileType = '.webm' OR fileType = '.mkv' OR fileType = '.mov' AND comp_id = ${admin_Session.comp_id};
+                                SELECT * FROM downloads WHERE fileType = '.pdf' OR fileType = '.dot' OR fileType = '.doc' OR fileType = '.docm'
+                                OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv' AND comp_id = ${admin_Session.comp_id};
+                                SELECT * FROM downloads WHERE  fileType = '.gif' OR fileType = '.jfif' OR fileType = '.png' OR fileType = '.jpg' OR fileType = '.jpeg' AND comp_id = ${admin_Session.comp_id}`;
+
+
+        }
+
+
+
         //catching blockages
         try {
             //inserting
@@ -1041,7 +1095,23 @@ viewCompanines = (req, res) => {
     if (admin_Session.userId == '' && admin_Session.role == '') {
         res.redirect('/login');
     } else {
+        
+
+        var sql_select_company = '';
+                //select based on companies
+        if (admin_Session.role==1) {
+
         var sql_select_company = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM company`;
+
+        }else if(admin_Session.role==2){
+    
+        var sql_select_company = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM company WHERE comp_id = ${admin_Session.comp_id}`;
+
+
+        }
+
+
+
         //catching blockages
         try {
             //inserting
@@ -1233,8 +1303,25 @@ viewDepartment = (req, res) => {
     if (admin_Session.userId == '' && admin_Session.role == '') {
         res.redirect('/login');
     } else {
-        var sql_select_department = `SELECT * , Day(created_at) AS Day,Year(created_at) AS 
-  Year,Month(created_at) AS Month FROM department ORDER BY created_at desc;SELECT * FROM company ORDER BY created_at desc`;
+        
+
+        var sql_select_department = '';
+                //select based on companies
+        if (admin_Session.role==1) {
+
+      var sql_select_department = `SELECT * , Day(created_at) AS Day,Year(created_at) AS 
+       Year,Month(created_at) AS Month FROM department ORDER BY created_at desc;SELECT * FROM company ORDER BY created_at desc`;
+
+        }else if(admin_Session.role==2){
+        
+
+   sql_select_department = `SELECT * , Day(created_at) AS Day,Year(created_at) AS 
+   Year,Month(created_at) AS Month FROM department WHERE comp_id = ${admin_Session.comp_id} ORDER BY created_at desc;
+   SELECT * FROM company WHERE comp_id = ${admin_Session.comp_id} ORDER BY created_at desc`;
+
+        }
+
+
         //catching blockages
         try {
             //inserting
@@ -1384,6 +1471,45 @@ updateDepartment = (req, res) => {
     });
 };
 // end
+
+
+//fetchCompanyId
+fetchCompanyId = (req, res) => {
+    upload(req, res, function(err) {
+        if (err) {
+            return res.end("Error uploading form data.");
+        }
+ 
+   // Get input from the request (assuming it's in the query parameters)
+    const comp_id = req.query.input;
+
+    sql_select_company = `SELECT * FROM company WHERE comp_id = ?`;
+          var  ComP_Ucod='';
+
+        //catching blockages
+        try {
+            //inserting
+            con.query(sql_select_company, comp_id, (err, result_select_company, fields) => {
+                if (result_select_company) {
+
+                    result_select_company.forEach(data => {
+                       ComP_Ucod =  data.ComP_Ucod;
+                    });
+
+                    res.json(ComP_Ucod);
+                }
+                if (err) throw err;
+                //releasing connection,when done using it
+            });
+        } catch (error) {
+            console.log("can not select company....");
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    });
+};
+// end
+
 // delete department get
 deleteDepartment = (req, res) => {
     var dept_id = req.params.dept_id;
@@ -1431,7 +1557,20 @@ viewUsers = (req, res) => {
     if (admin_Session.userId == '' && admin_Session.role == '') {
         res.redirect('/login');
     } else {
+        
+        var sql_select_users = '';
+                //select based on companies
+        if (admin_Session.role==1) {
+
         var sql_select_users = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM users ORDER BY created_at desc`;
+
+        }else if(admin_Session.role==2){
+        
+        var sql_select_users = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM users WHERE comp_id = ${admin_Session.comp_id} ORDER BY created_at desc`;
+
+        }
+
+
         //catching blockages
         try {
             //inserting
@@ -1499,6 +1638,9 @@ viewLogs = (req, res) => {
     } else {
         var sql_select_logs = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at)
    AS Month FROM logs ORDER BY created_at ASC`;
+
+
+
         //catching blockages
         try {
             //inserting
@@ -1664,7 +1806,9 @@ Customerhome = (req, res) => {
         SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE dept_id = ${dept_id} AND 
                                 fileType = '.pdf' OR fileType = '.dot' OR fileType = '.doc' OR fileType = '.docm'
                                 OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv';
-         SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE dept_id = ${dept_id} AND fileType = '.gif' OR fileType = '.png' OR fileType = '.jpg' OR fileType = '.jpeg'`;
+         SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE dept_id = ${dept_id} AND fileType = '.gif' OR fileType = '.jfif' OR fileType = '.png' OR fileType = '.jpg' OR fileType = '.jpeg'`;
+        
+
         //catching blockages
         try {
             //inserting
@@ -2058,12 +2202,21 @@ logout = (req, res) => {
 };
 //invalid route
 error_404 = (req, res, next) => {
-    res.status(404).send(`Requested page not found..
-  <br>
-  <a href='/' >Go Home</a>
-  `);
-    next();
+  //   res.status(404).send(`Requested page not found..
+  // <br>
+  // <a href='/' >Go Home</a>
+  // `);
+res.render("../views/404.ejs");
+    
 };
+
+//waitScreen
+waitScreen = (req, res, next) => {
+res.render("../views/waitScreen.ejs");
+    
+};
+
+
 //exports
 module.exports = {
     globalVariables: globalVariables,
@@ -2072,6 +2225,7 @@ module.exports = {
     authcallbacksuccess: authcallbacksuccess,
     index: index,
     login: login,
+    waitScreen:waitScreen,
     auth: auth,
     register: register,
     dashboard: dashboard,
@@ -2108,6 +2262,7 @@ module.exports = {
     emptyerror_logs: emptyerror_logs,
     adminProfile: adminProfile,
     // customer
+    fetchCompanyId:fetchCompanyId,
     Customerhome: Customerhome,
     userProfile: userProfile,
     downloadFile: downloadFile,

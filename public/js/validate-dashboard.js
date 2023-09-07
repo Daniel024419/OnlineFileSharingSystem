@@ -25,9 +25,9 @@ function checkDesc(desc) {
   }
 
   //desc length
-  if (desc.length <= 4) {
+  if (desc.length <= 2) {
     desc_err__msg.style.display = 'initial';
-    desc_err__msg.textContent = 'Desc can not be less than 4 chars'
+    desc_err__msg.textContent = 'Desc can not be less than 2 chars'
     desc_err__msg.style.color = 'red';
     document.getElementById('desc').style.borderColor = 'red';
     submit_btn.disabled = true; submit_btn.style.cursor='not-allowed';
@@ -38,9 +38,9 @@ function checkDesc(desc) {
   }
 
   //desc length
-  if (desc.length > 20) {
+  if (desc.length > 15) {
     desc_err__msg.style.display = 'initial';
-    desc_err__msg.textContent = 'Desc can not be greater than 20 chars'
+    desc_err__msg.textContent = 'Desc can not be greater than 15 chars'
     desc_err__msg.style.color = 'red';
     document.getElementById('desc').style.borderColor = 'red';
     submit_btn.disabled = true; submit_btn.style.cursor='not-allowed';

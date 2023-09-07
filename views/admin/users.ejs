@@ -31,7 +31,11 @@
               <% if(result_users) {%>
               Users (<%= result_users.length %>)
               <% } %>
-              <a href="#" style="background-color: green;margin-left: 5px; " onclick="CreateAdmin()" >Create Admin</a>
+
+              <script type="text/javascript">
+                var comp_id = "<%= CurrentAdmin.comp_id %>"
+              </script>
+              <a href="#" style="background-color: green;margin-left: 5px; " onclick="CreateAdmin(comp_id)" >Create Admin</a>
               <a href="#" onclick="EmptyUsers()" >Empty Users</a>
 
             </p>
@@ -63,15 +67,19 @@
                 <td><%= user.userName %> </td>
                 <td class="id"><%= user.userId %> </td>
                 <td class="id">
-                  <% if(user.role==1) {%>
+                   <% if(user.role==1) {%>
                   
                       <span>Admin</span>
                       <!-- <i class="fa fa-user"></i> -->
-                     
+                    <% } else if(user.role==0) {%>
+
+                     <span>Dept Admin</span>
+
                     <% } else  {%>
                     
                         <span>User</span>
                         <i class="fa fa-padlock"></i>
+
                     <% } %>
                 </td>
                 <td class="hide" ><%= user.comp_id %> </td>
