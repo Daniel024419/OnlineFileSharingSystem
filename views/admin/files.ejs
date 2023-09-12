@@ -108,13 +108,19 @@
 
               <a href="#"onclick="EmptyFiles()" >Empty Logs</a>
             </p>
+            <form action="files-logs-download-zip" method="GET">
+              
+            
+            <button type="submit" class="zip" > Export Files</button>
+            <button class="zip"  onclick="exportToExcel('recents')">Export to Excel</button>
             <hr class="hr">
             <br>
 
         <input type="text" id="searhcInput" onkeyup="search()" placeholder="Search for desc.." title="Type in a desc">
 
-            <table id="recents">
+            <table id="recents" >
               <tr class="header">
+                <th></th>
                 <th style="width: 70px;">Desc</th>
                 <th>F_ID</th>
                 <th>C_ID</th>
@@ -131,6 +137,9 @@
               <!-- start for each -->
               <% result.forEach( file=> {%>
               <tr>
+       <td><input type="checkbox"  name="files" value="<%= file.fileName %>"></td>
+
+                </form>
                 <td  style="width: 70px;"><%= file.description%></td>
 
                 <td class="id"><%= file.id %> </td>
@@ -282,4 +291,14 @@
   </div>
 </body>
 <script src="/validate-dashboard.js"></script>
+<script type="text/javascript">
+ function exportToExcel(tableId, filename = 'Files_Data.xlsx') {
+            const table = document.getElementById(tableId);
+            const ws = XLSX.utils.table_to_sheet(table);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+            XLSX.writeFile(wb, filename);
+  }
+
+</script>
 </html>

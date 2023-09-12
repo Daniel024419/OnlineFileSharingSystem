@@ -96,7 +96,6 @@ swal({
   dangerMode: true,
 })
 
-
 .then((Yes) => {
   if (Yes) {
    window.location.href = '/truncate/files';
@@ -107,6 +106,25 @@ swal({
 
 }
 
+
+ function EmptyFilesLogs(){
+    
+swal({
+  title: "You want to empty this files logs table?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+
+.then((Yes) => {
+  if (Yes) {
+   window.location.href = '/truncate/files_logs';
+  } else {
+    
+  }
+});
+
+}
 
 
  function EmptyUsers(){

@@ -39,6 +39,7 @@
               <a href="#" onclick="EmptyUsers()" >Empty Users</a>
 
             </p>
+            <button class="zip"  onclick="exportToExcel('recents')">Export to Excel</button>
             <hr class="hr">
             <br>
 
@@ -189,6 +190,16 @@
       </div>
     </div>
   </div>
+<script type="text/javascript">
+ function exportToExcel(tableId, filename = 'Users_Data.xlsx') {
+            const table = document.getElementById(tableId);
+            const ws = XLSX.utils.table_to_sheet(table);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+            XLSX.writeFile(wb, filename);
+  }
+
+</script>
 </body>
 
 </html>

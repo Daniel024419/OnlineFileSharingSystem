@@ -3,6 +3,9 @@ var mysql = require("mysql");
 //importing connection
 var importCon = require("./include/connection");
 var con = importCon.con;
+//
+const archiver = require('archiver');
+
 //google passport
 require('./googleAuth');
 //facebook
@@ -99,7 +102,7 @@ authcallbacksuccess = (req, res) => {
                 con.query(sql_user_log, logData, (err, result) => {
                     if (result) {
                         // admin
-                        if (role == 1 || role == 2 ) {
+                        if (role == 1 || role == 2) {
                             //fetching admin data
                             admin_Session.userId = userId;
                             admin_Session.userName = userName;
@@ -251,7 +254,7 @@ auth = (req, res) => {
                                     con.query(sql_user_log, logData, (err, result) => {
                                         if (result) {
                                             // admin
-                                            if (role == 1 || role == 2 ) {
+                                            if (role == 1 || role == 2) {
                                                 //fetching admin data
                                                 admin_Session.userId = userId;
                                                 admin_Session.userName = userName;
@@ -445,10 +448,7 @@ register = (req, res) => {
         //end
     });
 };
-
-
 //end
-
 //add admin
 //register screen page /post
 AdddminUsers = (req, res) => {
@@ -456,17 +456,15 @@ AdddminUsers = (req, res) => {
         if (err) {
             return res.end("Error uploading form data.");
         }
-       // checking sql injection
-
-      const {
-      username,
-      password,
-      company,
-      telephone,
-      department,
-      email,
-    } = req.body;
-
+        // checking sql injection
+        const {
+            username,
+            password,
+            company,
+            telephone,
+            department,
+            email,
+        } = req.body;
         var userName = username;
         var comp_id = company;
         var dept_id = department;
@@ -474,9 +472,7 @@ AdddminUsers = (req, res) => {
         var gmail = email;
         var tel = telephone;
         var recipientNumber = telephone;
-
         //here
-        
         var encrptypass = '';
         //var fileName = req.file.filename;
         // var ext = path.extname(req.file.path);
@@ -510,74 +506,61 @@ AdddminUsers = (req, res) => {
                 try {
                     //inserting
                     //get connection
-
-                  //check mail
-                     var sql_check_user = `SELECT * FROM users WHERE gmail = ?`;
-
-                  con.query(sql_check_user, gmail ,(err, result_ck) => {
-                    if(result_ck.length==0){
-                    con.query(sql_insert_users, filData, (err, result) => {
-                        if (result) {
-
-                           // const message = 'Hello '+compName+
-                           //      ', An administrative account has been created for you by your organisation on '
-                           //      +SERVER_NAME+'with credentials Username : '+userName+' Password :'+password+''
-                           //      ' ,to change your password ,click here  : https://easyfiles.onrender.com/ to access your account.';
-
-                                const message = 'Hello '+userName+
-                                ', Your admin account is successfully added to '+SERVER_NAME+' with ,click here : https://easyfiles.onrender.com/ to access your account. </br> '+
-                                'Password ' + password + ' UserName '+userName;
-                                // Construct the API URL
-                                const apiUrl = `https://apps.mnotify.net/smsapi?key=${MNOTIFY_API_KEY}&to=${recipientNumber}&msg=${message}&sender_id=${SENDER_ID}`;
-                                // Send the SMS
-                                axios.get(apiUrl).then(response => {
-                                    console.log('SMS sent successfully');
-                                    console.log(response.data); // Optional: Log the API response
-                                }).catch(error => {
-                                    console.error('Failed to send unique code SMS:', error);
-                                });
-
-                            res.status(200).json({ message: 'Data saved successfully' });
-                            console.log("sucesss");
+                    //check mail
+                    var sql_check_user = `SELECT * FROM users WHERE gmail = ?`;
+                    con.query(sql_check_user, gmail, (err, result_ck) => {
+                        if (result_ck.length == 0) {
+                            con.query(sql_insert_users, filData, (err, result) => {
+                                if (result) {
+                                    // const message = 'Hello '+compName+
+                                    //      ', An administrative account has been created for you by your organisation on '
+                                    //      +SERVER_NAME+'with credentials Username : '+userName+' Password :'+password+''
+                                    //      ' ,to change your password ,click here  : https://easyfiles.onrender.com/ to access your account.';
+                                    const message = 'Hello ' + userName + ', Your admin account is successfully added to ' + SERVER_NAME + ' with ,click here : https://easyfiles.onrender.com/ to access your account. ' + ' Password ' + password.req.body + ' UserName ' + userName;
+                                    // Construct the API URL
+                                    const apiUrl = `https://apps.mnotify.net/smsapi?key=${MNOTIFY_API_KEY}&to=${recipientNumber}&msg=${message}&sender_id=${SENDER_ID}`;
+                                    // Send the SMS
+                                    axios.get(apiUrl).then(response => {
+                                        console.log('SMS sent successfully');
+                                        console.log(response.data); // Optional: Log the API response
+                                    }).catch(error => {
+                                        console.error('Failed to send unique code SMS:', error);
+                                    });
+                                    res.status(200).json({
+                                        message: 'Data saved successfully'
+                                    });
+                                    console.log("sucesss");
+                                } else {
+                                    var error_register = "Account not created successfully,Try again";
+                                    req.session.error_register = error_register;
+                                    req.session.save();
+                                    res.redirect("back");
+                                    console.log(err);
+                                }
+                                if (err) throw err;
+                            });
                         } else {
-                            var error_register = "Account not created successfully,Try again";
-                            req.session.error_register = error_register;
-                            req.session.save();
-                            res.redirect("back");
-                            console.log(err);
+                            res.status(200).json({
+                                message: 'Mail already exist.'
+                            });
                         }
-                        if (err) throw err;
                     });
-
-                }else{
-
-                 res.status(200).json({ message: 'Mail already exist.' });
-
-                }
-
-                    });
-
                     //
-
                     //releasing connection,when done using it
                 } catch (error) {
                     console.log("can not insert....");
                 }
             });
         });
-
         //end
-
-
         //check gmail
         //end
     });
 };
-
 //dashboard get admin
 dashboard = (req, res) => {
     // preventing unathorizedaccess to the page
-    var sql_select_files='';
+    var sql_select_files = '';
     if (admin_Session.userId == '' && admin_Session.role == '') {
         res.redirect('/');
     } else {
@@ -585,24 +568,16 @@ dashboard = (req, res) => {
         // var sql_select_users = `SELECT * FROM users`;
         // var sql_select_downloads = `SELECT * FROM downloads`;
         // var sql_select_company = `SELECT * FROM company`;
-
         //select based on companies
-        if (admin_Session.role==1) {
-
-        var sql_select_files = `SELECT * FROM files;
+        if (admin_Session.role == 1) {
+            var sql_select_files = `SELECT * FROM files;
         SELECT * FROM users;SELECT * FROM downloads;
         SELECT * FROM company WHERE comp_id`;
-
-        }else if(admin_Session.role==2){
-
-        var sql_select_files = `SELECT * FROM files WHERE comp_id = ${admin_Session.comp_id};
+        } else if (admin_Session.role == 2) {
+            var sql_select_files = `SELECT * FROM files WHERE comp_id = ${admin_Session.comp_id};
         SELECT * FROM users;SELECT * FROM downloads WHERE comp_id = ${admin_Session.comp_id};
         SELECT * FROM company WHERE comp_id = ${admin_Session.comp_id}`;
-
         }
-        
-
-
         //catching blockages
         try {
             //inserting
@@ -698,9 +673,7 @@ fileUpload = (req, res, err) => {
                                 created_at = data.created_at;
                                 //send message while looping
                                 //const recipientNumber = '0547901448';
-                                const message = 'Hello '+userName+
-                                ', You have a file received from your organisation '+
-                                'with a description '+description +' ,click here : https://easyfiles.onrender.com/ to access the file';
+                                const message = 'Hello ' + userName + ', You have a file received from your organisation ' + 'with a description ' + description + ' ,click here : https://easyfiles.onrender.com/ to access the file';
                                 // Construct the API URL
                                 const apiUrl = `https://apps.mnotify.net/smsapi?key=${MNOTIFY_API_KEY}&to=${recipientNumber}&msg=${message}&sender_id=${SENDER_ID}`;
                                 // Send the SMS
@@ -710,9 +683,7 @@ fileUpload = (req, res, err) => {
                                 }).catch(error => {
                                     console.error('Failed to send SMS:', error);
                                 });
-
-                              console.log(recipientNumber);
-
+                                console.log(recipientNumber);
                             });
                         } else {
                             console.log("can not select.....");
@@ -732,7 +703,6 @@ fileUpload = (req, res, err) => {
 };
 //files view
 filesView = (req, res) => {
-
     if (admin_Session.userId == '' && admin_Session.role == '') {
         res.redirect('/login');
     } else {
@@ -742,25 +712,17 @@ filesView = (req, res) => {
         // //company
         // var sql_select_department = `SELECT * FROM department`;
         var sql_select_file = '';
-                //select based on companies
-        if (admin_Session.role==1) {
-
-         sql_select_file =`SELECT * FROM files ORDER BY created_at desc;SELECT * FROM company;SELECT * FROM department`;
-
-        }else if(admin_Session.role==2){
-        
-        var sql_select_file =`SELECT * FROM files WHERE comp_id = ${admin_Session.comp_id} ORDER BY created_at desc;
+        //select based on companies
+        if (admin_Session.role == 1) {
+            sql_select_file = `SELECT * FROM files ORDER BY created_at desc;SELECT * FROM company;SELECT * FROM department`;
+        } else if (admin_Session.role == 2) {
+            var sql_select_file = `SELECT * FROM files WHERE comp_id = ${admin_Session.comp_id} ORDER BY created_at desc;
         SELECT * FROM company;SELECT * FROM department WHERE comp_id = ${admin_Session.comp_id}`;
-
-
         }
-
         //catching blockages
         try {
             //inserting
             //get connection
-            //con.query(sql_select_file, (err, result, fields) => {
-            //  con.query(sql_select_company, (err, result_company, fields) => {
             con.query(sql_select_file, (err, results, fields) => {
                 if (results) {
                     res.render("../views/admin/files.ejs", {
@@ -772,31 +734,115 @@ filesView = (req, res) => {
                 if (err) throw err;
                 //releasing connection,when done using it
             });
-            //});
-            //});
+
         } catch (error) {
             console.log("can not select....");
         }
     }
 };
+
+//files view
+filesLogs = (req, res) => {
+    if (admin_Session.userId == '' && admin_Session.role == '') {
+        res.redirect('/login');
+    } else {
+        // var sql_select_file = `SELECT * FROM files ORDER BY created_at desc`;
+        // //company
+        // var sql_select_company = `SELECT * FROM company`;
+        // //company
+        // var sql_select_department = `SELECT * FROM department`;
+        var sql_select_file = '';
+        //select based on companies
+        if (admin_Session.role == 1) {
+            sql_select_file = `SELECT * FROM files_logs ORDER BY created_at desc;SELECT * FROM company;SELECT * FROM department`;
+        } else if (admin_Session.role == 2) {
+            var sql_select_file = `SELECT * FROM files_logs WHERE comp_id = ${admin_Session.comp_id} ORDER BY created_at desc;
+        SELECT * FROM company;SELECT * FROM department WHERE comp_id = ${admin_Session.comp_id}`;
+        }
+        //catching blockages
+        try {
+            //inserting
+            //get connection
+            con.query(sql_select_file, (err, results, fields) => {
+                if (results) {
+                    res.render("../views/admin/filesLogs.ejs", {
+                        result: results[0],
+                        result_company: results[1],
+                        result_department: results[2]
+                    });
+                }
+                if (err) throw err;
+                //releasing connection,when done using it
+            });
+
+        } catch (error) {
+            console.log("can not select....");
+        }
+    }
+};
+
+//end
 // delete files
 deleteFile = (req, res) => {
-    var fileId = req.params.fileId;
-    // console.log(fileId);
-    var sql_delete_file = `DELETE FROM files WHERE fileId = ?`;
     try {
+        var fileId = req.params.fileId;
+        // console.log(fileId);  
+        var description = '';
+        var comp_id = '';
+        var dept_id = '';
+        var fileName = '';
+        var ext = '';
+        var fileSize = '';
+        //    var sql_query_files = `INSERT INTO files_logs (id,fileId,comp_id,dept_id,description,fileName,fileType,fileSize,created_at) 
+        // VALUES (?,?,?,?,?,?,?,?,?);DELETE FROM files WHERE fileId = ?`;
+        var sql_query_file = `SELECT * FROM files WHERE fileId = ?`;
         //inserting
-        //get connection
-        con.query(sql_delete_file, fileId, (err, result, fields) => {
+        var fileData = '';
+        var id = Math.floor(Math.random() * 99999);
+        var sql_query_files = `INSERT INTO files_logs (id, fileId, comp_id, dept_id, description, fileName, fileType, fileSize, created_at) 
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+DELETE FROM files WHERE fileId = ?;`;
+        con.query(sql_query_file, fileId, (err, result_select, fields) => {
             if (err) throw err;
-            if (result.affectedRows > 0) {
-                req.session.message = 'file deleted.';
-                res.redirect("back");
+            console.log(result_select);
+            if (result_select.length > 0) {
+                result_select.forEach(data => {
+                    description = data.description;
+                    comp_id = data.comp_id;
+                    dept_id = data.dept_id;
+                    fileName = data.fileName;
+                    ext = data.fileType;
+                    fileSize = data.fileSize;
+                    fileData = [id, fileId, comp_id, dept_id, description, fileName, ext, fileSize, new Date(), fileId]
+                    //while deleted
+                    con.query(sql_query_files, fileData, (err, result_fetch, fields) => {
+                        if (err) throw err;
+                        if (result_fetch) {
+                            if (result_fetch[0]) {
+                                console.log("file moved to recycle bin");
+                            } else {
+                                console.log("can not move.....");
+                                console.log(err);
+                            }
+                            if (result_fetch[1]) {
+                                console.log("file deleted");
+                            } else {
+                                console.log("can not delete.....");
+                                console.log(err);
+                            }
+                        }
+                        //endif
+                        req.session.message = 'file deleted.';
+                        res.redirect("back");
+                    });
+                    //end foreach
+                });
             }
-            //releasing connection,when done using it
+            //end select if
         });
     } catch (error) {
         console.log("can not delete....");
+        console.log(error);
     }
 };
 // edit files
@@ -931,6 +977,7 @@ emptyfiles = (req, res) => {
         //get connection
         con.query(sql_empty_logs, (err, result, fields) => {
             if (result) {
+                 req.session.message = 'files emptied.';
                 res.redirect("back");
             }
             if (err) throw err;
@@ -941,6 +988,29 @@ emptyfiles = (req, res) => {
     }
 };
 // end
+
+//emptyfiles
+emptyfileslogs = (req, res) => {
+    var sql_empty_logs = `TRUNCATE TABLE files_logs`;
+    try {
+        //inserting
+        //get connection
+        con.query(sql_empty_logs, (err, result, fields) => {
+            if (result) {
+
+                 req.session.message = 'Recycle bin emptied.';
+                res.redirect("back");
+            }
+            if (err) throw err;
+            //releasing connection,when done using it
+        });
+    } catch (error) {
+        console.log("can not TRUNCATE....");
+    }
+};
+// end
+
+
 // end
 //view  downloads
 viewDownloads = (req, res) => {
@@ -961,12 +1031,10 @@ viewDownloads = (req, res) => {
         // var sql_select_files_image = `SELECT * FROM downloads WHERE 
         //                               fileType = '.gif' OR fileType = '.png' OR fileType = '.jpg'
         //                                OR fileType = '.jpeg'`;
-
-
         var sql_select_dowwnloads = '';
-                //select based on companies
-        if (admin_Session.role==1) {
-        var sql_select_dowwnloads = `SELECT * FROM downloads;SELECT * FROM downloads WHERE 
+        //select based on companies
+        if (admin_Session.role == 1) {
+            var sql_select_dowwnloads = `SELECT * FROM downloads;SELECT * FROM downloads WHERE 
                                 fileType = '.mp3' OR fileType = '.m4a' OR fileType = '.wma'
                                  OR fileType = '.acc' OR fileType = '.wav' OR fileType = '.flac';SELECT * FROM downloads WHERE 
                                 fileType = '.mp4' OR fileType = '.avi' OR fileType = '.mpeg-2'
@@ -975,10 +1043,8 @@ viewDownloads = (req, res) => {
                                 OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv';SELECT * FROM downloads WHERE 
                                 fileType = '.gif' OR fileType = '.png' OR fileType = '.jpg' OR fileType = '.jfif'
                                  OR fileType = '.jpeg'`;
-
-        }else if(admin_Session.role==2){
-
-               var sql_select_dowwnloads = `SELECT * FROM downloads WHERE comp_id = ${admin_Session.comp_id};
+        } else if (admin_Session.role == 2) {
+            var sql_select_dowwnloads = `SELECT * FROM downloads WHERE comp_id = ${admin_Session.comp_id};
                                SELECT * FROM downloads WHERE fileType = '.mp3' OR fileType = '.m4a' OR fileType = '.wma'
                                 OR fileType = '.acc' OR fileType = '.wav' OR fileType = '.flac' AND comp_id = ${admin_Session.comp_id};
                                 SELECT * FROM downloads WHERE fileType = '.mp4' OR fileType = '.avi' OR fileType = '.mpeg-2'
@@ -986,12 +1052,7 @@ viewDownloads = (req, res) => {
                                 SELECT * FROM downloads WHERE fileType = '.pdf' OR fileType = '.dot' OR fileType = '.doc' OR fileType = '.docm'
                                 OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv' AND comp_id = ${admin_Session.comp_id};
                                 SELECT * FROM downloads WHERE  fileType = '.gif' OR fileType = '.jfif' OR fileType = '.png' OR fileType = '.jpg' OR fileType = '.jpeg' AND comp_id = ${admin_Session.comp_id}`;
-
-
         }
-
-
-
         //catching blockages
         try {
             //inserting
@@ -1095,23 +1156,13 @@ viewCompanines = (req, res) => {
     if (admin_Session.userId == '' && admin_Session.role == '') {
         res.redirect('/login');
     } else {
-        
-
         var sql_select_company = '';
-                //select based on companies
-        if (admin_Session.role==1) {
-
-        var sql_select_company = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM company`;
-
-        }else if(admin_Session.role==2){
-    
-        var sql_select_company = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM company WHERE comp_id = ${admin_Session.comp_id}`;
-
-
+        //select based on companies
+        if (admin_Session.role == 1) {
+            var sql_select_company = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM company`;
+        } else if (admin_Session.role == 2) {
+            var sql_select_company = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM company WHERE comp_id = ${admin_Session.comp_id}`;
         }
-
-
-
         //catching blockages
         try {
             //inserting
@@ -1142,7 +1193,6 @@ addCompany = (req, res) => {
         var comptLocation = mysql.format(req.body.comptLocation);
         var comptel = mysql.format(req.body.comptel);
         var compMail = mysql.format(req.body.compMail);
-
         //unique code
         // var fileId = Math.random().toString(36).slice(2);
         var chars = '01234567890ABCDEFGHJKLMNOPQRSTUVWXYZ';
@@ -1170,20 +1220,16 @@ addCompany = (req, res) => {
             //inserting
             con.query(sql_insert_company, fileData, (err, result, fields) => {
                 if (result) {
-                                
-
-                                const message = 'Hello '+compName+
-                                ', Your organisation is successfully added to '+SERVER_NAME+'with a unique Code for your members registeration: '+ComP_Ucod +
-                                ' ,click here : https://easyfiles.onrender.com/ to access your organisation.';
-                                // Construct the API URL
-                                const apiUrl = `https://apps.mnotify.net/smsapi?key=${MNOTIFY_API_KEY}&to=${recipientNumber}&msg=${message}&sender_id=${SENDER_ID}`;
-                                // Send the SMS
-                                axios.get(apiUrl).then(response => {
-                                    console.log('SMS sent successfully');
-                                    console.log(response.data); // Optional: Log the API response
-                                }).catch(error => {
-                                    console.error('Failed to send unique code SMS:', error);
-                                });
+                    const message = 'Hello ' + compName + ', Your organisation is successfully added to ' + SERVER_NAME + 'with a unique Code for your members registeration: ' + ComP_Ucod + ' ,click here : https://easyfiles.onrender.com/ to access your organisation.';
+                    // Construct the API URL
+                    const apiUrl = `https://apps.mnotify.net/smsapi?key=${MNOTIFY_API_KEY}&to=${recipientNumber}&msg=${message}&sender_id=${SENDER_ID}`;
+                    // Send the SMS
+                    axios.get(apiUrl).then(response => {
+                        console.log('SMS sent successfully');
+                        console.log(response.data); // Optional: Log the API response
+                    }).catch(error => {
+                        console.error('Failed to send unique code SMS:', error);
+                    });
                     req.session.message = 'company added.';
                     res.redirect("back");
                 }
@@ -1196,7 +1242,6 @@ addCompany = (req, res) => {
     });
 };
 // end
-
 //update company
 updateCompany = (req, res) => {
     upload(req, res, function(err) {
@@ -1209,7 +1254,6 @@ updateCompany = (req, res) => {
         var comptel = mysql.format(req.body.telephone);
         var compMail = mysql.format(req.body.compMail);
         var comp_id = mysql.format(req.body.company);
-
         // Returns a random integer from 0 to 99999:
         var fileData = [
             compName,
@@ -1218,15 +1262,13 @@ updateCompany = (req, res) => {
             compMail,
             comp_id
         ];
-
         //catching blockages
- sql_update_company = `UPDATE company SET comp_name = ?,comp_location = ?,comp_tel = ?,comp_mail = ? WHERE comp_id = ?`;
-            
+        sql_update_company = `UPDATE company SET comp_name = ?,comp_location = ?,comp_tel = ?,comp_mail = ? WHERE comp_id = ?`;
         try {
             //inserting
             con.query(sql_update_company, fileData, (err, result, fields) => {
                 if (result) {
-                    req.session.message = compName+' updated.';
+                    req.session.message = compName + ' updated.';
                     res.redirect('/companies');
                 }
                 if (err) throw err;
@@ -1238,7 +1280,6 @@ updateCompany = (req, res) => {
     });
 };
 // end
-
 //get
 editComp = (req, res) => {
     // preventing unathorizedaccess to the page
@@ -1262,7 +1303,6 @@ editComp = (req, res) => {
                 if (result_company) {
                     res.render("../views/admin/compEdit.ejs", {
                         result_company: result_company,
-                        
                     });
                 }
                 if (err) throw err;
@@ -1276,7 +1316,6 @@ editComp = (req, res) => {
     }
 };
 //  end
-
 // delete department get
 deleteCompany = (req, res) => {
     var comp_id = req.params.comp_id;
@@ -1303,25 +1342,16 @@ viewDepartment = (req, res) => {
     if (admin_Session.userId == '' && admin_Session.role == '') {
         res.redirect('/login');
     } else {
-        
-
         var sql_select_department = '';
-                //select based on companies
-        if (admin_Session.role==1) {
-
-      var sql_select_department = `SELECT * , Day(created_at) AS Day,Year(created_at) AS 
+        //select based on companies
+        if (admin_Session.role == 1) {
+            var sql_select_department = `SELECT * , Day(created_at) AS Day,Year(created_at) AS 
        Year,Month(created_at) AS Month FROM department ORDER BY created_at desc;SELECT * FROM company ORDER BY created_at desc`;
-
-        }else if(admin_Session.role==2){
-        
-
-   sql_select_department = `SELECT * , Day(created_at) AS Day,Year(created_at) AS 
+        } else if (admin_Session.role == 2) {
+            sql_select_department = `SELECT * , Day(created_at) AS Day,Year(created_at) AS 
    Year,Month(created_at) AS Month FROM department WHERE comp_id = ${admin_Session.comp_id} ORDER BY created_at desc;
    SELECT * FROM company WHERE comp_id = ${admin_Session.comp_id} ORDER BY created_at desc`;
-
         }
-
-
         //catching blockages
         try {
             //inserting
@@ -1414,7 +1444,6 @@ addDepartment = (req, res) => {
             con.query(sql_insert_department, fileData, (err, result_department, fields) => {
                 if (result_department) {
                     req.session.message = 'department added.';
-
                     res.redirect("back");
                 }
                 if (err) throw err;
@@ -1426,7 +1455,6 @@ addDepartment = (req, res) => {
     });
 };
 // end
-
 //update department 
 //post
 updateDepartment = (req, res) => {
@@ -1449,17 +1477,13 @@ updateDepartment = (req, res) => {
             tel,
             dept_id
         ];
-
-    sql_update_dept = `UPDATE department SET dept_name = ?,dept_location = ?,dept_mail = ?,tel = ? WHERE dept_id = ?`;
-          
-
+        sql_update_dept = `UPDATE department SET dept_name = ?,dept_location = ?,dept_mail = ?,tel = ? WHERE dept_id = ?`;
         //catching blockages
         try {
             //inserting
             con.query(sql_update_dept, fileData, (err, result_department, fields) => {
                 if (result_department) {
-                    req.session.message = deptName+' updated.';
-
+                    req.session.message = deptName + ' updated.';
                     res.redirect('/department');
                 }
                 if (err) throw err;
@@ -1471,34 +1495,33 @@ updateDepartment = (req, res) => {
     });
 };
 // end
-
-
 //fetchCompanyId
 fetchCompanyId = (req, res) => {
     upload(req, res, function(err) {
         if (err) {
             return res.end("Error uploading form data.");
         }
- 
-   // Get input from the request (assuming it's in the query parameters)
-    const ucode = req.query.input;
-    const userSelectionCompId = req.query.userSelectionCompId;
-
-    sql_select_company = `SELECT * FROM company WHERE ComP_Ucod = ? AND comp_id = ?`;
-
-          const data = [ucode,userSelectionCompId];
-          var ComP_Ucod = '';
+        // Get input from the request (assuming it's in the query parameters)
+        const ucode = req.query.input;
+        const userSelectionCompId = req.query.userSelectionCompId;
+        sql_select_company = `SELECT * FROM company WHERE ComP_Ucod = ? AND comp_id = ?`;
+        const data = [ucode, userSelectionCompId];
+        var ComP_Ucod = '';
         //catching blockages
         try {
             //inserting
             con.query(sql_select_company, data, (err, result_select_company, fields) => {
-                if (result_select_company) {
-
+                if (result_select_company && result_select_company.length > 0) {
                     result_select_company.forEach(data => {
-                       ComP_Ucod =  data.ComP_Ucod;
+                        ComP_Ucod = data.ComP_Ucod;
                     });
-
-                    res.json(ComP_Ucod);
+                    res.status(200).json({
+                        ComP_Ucod: ComP_Ucod
+                    });
+                } else {
+                    res.status(200).json({
+                        ComP_Ucod: "404"
+                    });
                 }
                 if (err) throw err;
                 //releasing connection,when done using it
@@ -1511,7 +1534,6 @@ fetchCompanyId = (req, res) => {
     });
 };
 // end
-
 // delete department get
 deleteDepartment = (req, res) => {
     var dept_id = req.params.dept_id;
@@ -1559,20 +1581,13 @@ viewUsers = (req, res) => {
     if (admin_Session.userId == '' && admin_Session.role == '') {
         res.redirect('/login');
     } else {
-        
         var sql_select_users = '';
-                //select based on companies
-        if (admin_Session.role==1) {
-
-        var sql_select_users = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM users ORDER BY created_at desc`;
-
-        }else if(admin_Session.role==2){
-        
-        var sql_select_users = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM users WHERE comp_id = ${admin_Session.comp_id} ORDER BY created_at desc`;
-
+        //select based on companies
+        if (admin_Session.role == 1) {
+            var sql_select_users = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM users ORDER BY created_at desc`;
+        } else if (admin_Session.role == 2) {
+            var sql_select_users = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM users WHERE comp_id = ${admin_Session.comp_id} ORDER BY created_at desc`;
         }
-
-
         //catching blockages
         try {
             //inserting
@@ -1590,6 +1605,64 @@ viewUsers = (req, res) => {
         }
     }
 };
+
+
+//zip logs
+filesLogsDwonloadsZip = (req, res) => {
+    const selectedFiles = req.query.files;
+   
+
+   try{
+
+    if (Array.isArray(selectedFiles) && selectedFiles.length > 0) {
+        // Create a writable stream for the ZIP archive
+        const archive = archiver('zip', {
+            zlib: { level: 9 } // Compression level (optional, default is 9)
+        });
+
+        // Set the response headers for the ZIP file download
+        res.attachment('EasyFiles-files.zip');
+
+        // Pipe the ZIP archive to the response stream
+        archive.pipe(res);
+
+        // Add selected files to the ZIP archive
+        selectedFiles.forEach((file) => {
+            const filePath = path.join(__dirname, 'public', 'files', file);
+
+            if (fs.existsSync(filePath)) {
+                archive.file(filePath, { name: file });
+            }
+        });
+
+        // Finalize the ZIP archive
+        archive.finalize();
+
+    } else {
+
+        if (selectedFiles.length) {
+
+        // Single file download
+        ///const folderPath = __dirname + "/public/files";
+        const filePath = path.join(__dirname, 'public', 'files', selectedFiles);
+        if (fs.existsSync(filePath)) {
+            res.download(filePath);
+        } else {
+            res.status(404).send('File not found.');
+        }
+
+        }
+
+
+    }
+
+}catch(error){
+    console.log("no files selected");
+    res.redirect("back");
+}
+
+}
+
 // delete user
 deleteUsers = (req, res) => {
     var userId = req.params.userId;
@@ -1640,9 +1713,6 @@ viewLogs = (req, res) => {
     } else {
         var sql_select_logs = `SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at)
    AS Month FROM logs ORDER BY created_at ASC`;
-
-
-
         //catching blockages
         try {
             //inserting
@@ -1792,8 +1862,8 @@ adminProfile = (req, res) => {
 //customer
 //view  files
 Customerhome = (req, res) => {
-      var dept_id = user_Session.dept_id;
-      var comp_id = user_Session.comp_id; 
+    var dept_id = user_Session.dept_id;
+    var comp_id = user_Session.comp_id;
     //preventing unauthorised access 
     if (user_Session.userId == '' && user_Session.role == '') {
         res.redirect('/login');
@@ -1809,8 +1879,6 @@ Customerhome = (req, res) => {
                                 fileType = '.pdf' OR fileType = '.dot' OR fileType = '.doc' OR fileType = '.docm'
                                 OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv';
          SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE dept_id = ${dept_id} AND fileType = '.gif' OR fileType = '.jfif' OR fileType = '.png' OR fileType = '.jpg' OR fileType = '.jpeg'`;
-        
-
         //catching blockages
         try {
             //inserting
@@ -1933,6 +2001,72 @@ downloadFile = (req, res, next) => {
     //   console.log("can not download....");
     // }
 };
+
+
+//files recovery
+// download file
+FileRecovery = (req, res, next) => {
+    var fileType, fileId;
+    var id = req.params.id;
+    var fileName = req.params.fileName;
+    var fileId = req.params.fileId;
+    // The folder path for the files
+    const folderPath = __dirname + "/public/files";
+    // try {
+    var sql_select_file = `SELECT * FROM files_logs WHERE fileId = ?`;
+    var sql_download = `INSERT INTO downloads (id,userId,fileId,fileType,comp_id,dept_id,email,created_at) VALUES (?,?,?,?,?,?,?,?)`;
+    con.query(sql_select_file, fileId, (err, result_select_files) => {
+        if (result_select_files) {
+            result_select_files.forEach(data => {
+
+                //console.log(data);
+                fileType = data.fileType;
+                fileId = data.fileId;
+            });
+            var downloadData = [,
+                admin_Session.userId,
+                fileId, fileType,
+                admin_Session.dept_id,
+                admin_Session.comp_id,
+                admin_Session.gmail,
+                new Date()
+            ];
+        }
+        con.query(sql_download, downloadData, (err, result) => {
+            if (err) throw err;
+            if (result) {
+                //inserted
+                // console.log("inserted");
+                //console.log(downloadData)
+            }
+        });
+    });
+    // end
+    // zip method which take file path
+    // and name as objects
+    // res.zip([
+    //  { path: folderPath+'/multiple_one_gfg.txt',
+    //    name: 'one_gfg.txt'},
+    //  { path: folderPath+'/multiple_two_gfg.txt',
+    //    name: 'two_gfg.txt'},
+    //  { path: folderPath+'/multiple_three_gfg.txt',
+    //    name: 'three_gfg.txt'}
+    // ])
+    // Download function
+    res.download(folderPath + "/" + fileName, function(err) {
+        if (err) {
+            console.log(err);
+        }
+        req.session.message = 'file added to downloads.';
+    });
+    // } catch (error) {
+    //   console.log("can not download....");
+    // }
+};
+
+
+
+
 ///jwt
 const jwt = require('jsonwebtoken');
 //forgot pass
@@ -2204,21 +2338,16 @@ logout = (req, res) => {
 };
 //invalid route
 error_404 = (req, res, next) => {
-  //   res.status(404).send(`Requested page not found..
-  // <br>
-  // <a href='/' >Go Home</a>
-  // `);
-res.render("../views/404.ejs");
-    
+    //   res.status(404).send(`Requested page not found..
+    // <br>
+    // <a href='/' >Go Home</a>
+    // `);
+    res.render("../views/404.ejs");
 };
-
 //waitScreen
 waitScreen = (req, res, next) => {
-res.render("../views/waitScreen.ejs");
-    
+    res.render("../views/waitScreen.ejs");
 };
-
-
 //exports
 module.exports = {
     globalVariables: globalVariables,
@@ -2227,12 +2356,13 @@ module.exports = {
     authcallbacksuccess: authcallbacksuccess,
     index: index,
     login: login,
-    waitScreen:waitScreen,
+    waitScreen: waitScreen,
     auth: auth,
     register: register,
     dashboard: dashboard,
     fileUpload: fileUpload,
     filesView: filesView,
+    filesLogs:filesLogs,
     deleteFile: deleteFile,
     editFile: editFile,
     filePreview: filePreview,
@@ -2242,29 +2372,32 @@ module.exports = {
     deleteDownload: deleteDownload,
     emptydownload: emptydownload,
     viewUsers: viewUsers,
-    deleteUsers: deleteUsers,AdddminUsers:AdddminUsers,
+    deleteUsers: deleteUsers,
+    AdddminUsers: AdddminUsers,
     emptyusers: emptyusers,
     viewCompanines: viewCompanines,
     emptycompanies: emptycompanies,
-    editComp:editComp,
+    editComp: editComp,
     deleteCompany: deleteCompany,
     addCompany: addCompany,
-    updateCompany:updateCompany,
+    updateCompany: updateCompany,
     deleteDepartment: deleteDepartment,
     emptydepartment: emptydepartment,
-    addDepartment: addDepartment, 
-    updateDepartment:updateDepartment,
+    addDepartment: addDepartment,
+    updateDepartment: updateDepartment,
     viewDepartment: viewDepartment,
-    editDept:editDept,
+    editDept: editDept,
     viewLogs: viewLogs,
     deletelog: deletelog,
     emptylogs: emptylogs,
     viewErrLogs: viewErrLogs,
     delete_Errlog: delete_Errlog,
     emptyerror_logs: emptyerror_logs,
-    adminProfile: adminProfile,
+    adminProfile: adminProfile,FileRecovery:FileRecovery
+    ,emptyfileslogs:emptyfileslogs,
+    filesLogsDwonloadsZip:filesLogsDwonloadsZip,
     // customer
-    fetchCompanyId:fetchCompanyId,
+    fetchCompanyId: fetchCompanyId,
     Customerhome: Customerhome,
     userProfile: userProfile,
     downloadFile: downloadFile,

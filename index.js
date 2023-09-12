@@ -127,6 +127,14 @@ app.post('/register',urlencodedParser,controller.register);
 app.get('/dashboard',controller.dashboard);
 //admin view files
 app.get('/files',controller.filesView);
+//admin view recycle Bin
+app.get('/files-logs',controller.filesLogs);
+
+//admin download trash files
+app.get('/files-logs-download-zip',controller.filesLogsDwonloadsZip);
+
+//FileRecovery
+app.get('/download-files-logs/:fileName/:id/:fileId',controller.FileRecovery);
 //admin file  upload route
 app.post('/file-upload',urlencodedParser,controller.fileUpload);
 //admin delete file
@@ -137,9 +145,10 @@ app.get('/edit-file/:fileId',controller.editFile);
 app.get('/preview-file/:fileId',controller.filePreview);
 //admin update file upload
 app.post('/update-file',urlencodedParser,controller.fileUpdate);
-//emptydownload
+//empty files
 app.get('/truncate/files',controller.emptyfiles);
-
+//empty logs
+app.get('/truncate/files_logs',controller.emptyfileslogs);
  //admin view downloads
 app.get('/downloads',controller.viewDownloads);
 //admin delete users

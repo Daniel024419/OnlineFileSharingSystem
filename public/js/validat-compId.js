@@ -5,26 +5,37 @@
   const dataContainer = document.getElementById('dataContainer');
   const checkBtn = document.getElementById('checkBtn');
   var confirm =document.getElementById('confirm');
-
+  let companyID = document.forms["register"]["company"];
   checkBtn.addEventListener('click', () => {
+
         const inputValue = ComP_Ucod.value;
         let userSelectionCompId = document.forms["register"]["company"].value;
 
+    if(inputValue && userSelectionCompId){
+
+
 
     // Make an AJAX request to your Node.js server
- fetch(`/fetch-company-id?input=${inputValue}&userSelectionCompId=${userSelectionCompId}`)      .then(response => response.json())
+ fetch(`/fetch-company-id?input=${inputValue}&userSelectionCompId=${userSelectionCompId}`)     
+  .then(response => response.json())
       .then(result_select_company => {
         // Update the UI with the fetched data
-        if (result_select_company) {
-        // dataContainer.innerHTML = result_select_company;
+ 
+
+         const jsonData = result_select_company.ComP_Ucod;
+        // alert(jsonData);
+    if (jsonData !== '404') {
+    // Check if jsonData is a valid JSON object
+        // dataContainer.innerHTML = jsonData;
         checkBtn.value='Verified';
         confirm.checked=true;
         checkBtn.disabled=true;
+        companyID.disabled=true;
         document.getElementById('ComP_Ucod').readOnly=true;
-		localStorage.removeItem('count');
-		localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('count');
+        localStorage.removeItem('isLoggedIn');
 
-	swal({
+       swal({
         title: 'Verification',
         text:  'Company Verified successfully',
         icon: 'success',
@@ -33,7 +44,7 @@
 
     });
 
-        } else {
+} else if (jsonData == '404'){
 
 // Store data in localStorage
 let count =0;
@@ -76,22 +87,48 @@ atempts = atemp - localStorage.getItem('count')
         swal({
         title: 'Error',
         text:  `Wrong Unique Code ,3 atempts , ${atempts}  left`,
-        icon: 'Warning',
+        icon: 'warning',
         buttons: true,
         // timer: 3100,
     });
 
 confirm.checked=false;
     }else{
-    	console.log("over dose");
+        console.log("over dose");
     }
 
         }
 
+        else{
+
+            alert('not respons');
+        }
+
       })
       .catch(error => console.error(error));
+
+
+
+                }else{
+     console.log("input empty");
+
+       swal({
+        title: 'Error',
+        text:  'Company ID or Key can not be empty',
+        icon: 'warning',
+        buttons: true,
+        timer: 3100,
+
+    });
+                }
+
+
+//event click
   });
+
+//domload
 });
+
 
 
 

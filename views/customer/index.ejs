@@ -6,7 +6,55 @@
   <%- include('../customer/partials/head.ejs') %>
 
 </head>
- 
+    <style>
+        /* Styling for the modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            overflow: auto; /* Enable modal content scrolling */
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            max-width: 80%;
+            max-height: 80%; /* Set max height for modal content */
+            overflow-y: auto; /* Enable vertical scrolling within modal content */
+        }
+
+        /* Close button style */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        /* Styling for the table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
 
 <body>
   <div class="wrapper">
@@ -28,6 +76,8 @@
    
 <!-- here -->
     <div class="container-fluid my-4 weather-data">
+                     
+               
       <div class="row">
 
         <div class="col-xxl-9 col-md-8 mt-md-1 mt-4 pe-lg-4">
@@ -46,7 +96,12 @@
             </div>
 
             <div class="desc-bottom">
-              <span class="date" id="descDate">May 2020/12/11</span>
+
+              <span class="date" id="descDate">May 2020/12/11
+
+              
+
+            </span>
               <span class="file-info">
                 <span class="share">
 
@@ -61,7 +116,6 @@
                    <a href="" id="link-download" class="btn">Save <i class="fa fa-download"></i></a> 
                    
 
-                    
                 </span>
               </span>
             </div>
@@ -70,9 +124,15 @@
               </div>
           </div>
       </div>
-          
+<!--       <button id="displayButton">Display Excel File</button>
        
-
+        <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <div id="modalBody">
+            </div>
+        </div>
+    </div> -->
 
 
         <div class="col-xxl-3 col-md-4 px-lg-4">
@@ -110,7 +170,58 @@
             </div>
           </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <script>
 
+       const modal = document.getElementById('myModal');
+        // Sample Excel file URL (replace with your file URL)
+        const excelFileUrl = '/payment_schedule.csv';
+
+        // Function to display Excel data as an HTML table
+        function displayExcelFile(fileUrl) {
+
+            fetch(fileUrl)
+                .then((response) => response.arrayBuffer())
+                .then((data) => {
+                    const workbook = XLSX.read(data, { type: 'array' });
+
+                    // Assuming you want the first sheet
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+
+                    const tableHtml = XLSX.utils.sheet_to_html(worksheet);
+
+                    // Display the HTML table in a container element
+                    document.getElementById('modalBody').innerHTML = tableHtml;
+                    console.log('Table HTML:', tableHtml);
+
+                // Show the modal
+                modal.style.display = 'block';
+
+                })
+                .catch((error) => {
+                    console.error('Error fetching or parsing Excel data:', error);
+                });
+        }
+
+        // Attach a click event listener to the button
+        document.getElementById('displayButton').addEventListener('click', function () {
+            // Call the function to display the Excel file when the button is clicked
+            displayExcelFile(excelFileUrl);
+        });
+
+         // Close the modal when the close button is clicked
+        closeModal.addEventListener('click', function () {
+            modal.style.display = 'none';
+        });
+
+        // Close the modal when the user clicks outside of it
+        window.addEventListener('click', function (event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
 
         </div>
       </div>

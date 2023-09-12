@@ -14,11 +14,7 @@
              <span class="tooltiptext">Home</span>
            </div>
            <a href="/dashboard" class="desk-a"><i class="fas fa-home"></i> Home</a>
-
-
-
          </li>
-
 
          <li class="list-item">
 
@@ -77,6 +73,10 @@
            </div>
            <a href="/department" class="desk-a"><i class="fas fa-envelope"></i> Departments</a>
          </li>
+
+
+ <% if(CurrentAdmin.role == 1) { %>
+
          <li class="list-item">
           <div class="tooltip">
             <span class="icon" id="logout">
@@ -88,6 +88,7 @@
           </div>
           <a href="/logs" class="desk-a"><i class="fas  fa-user"></i> Logs</a>
         </li>
+
         <li class="list-item">
           <div class="tooltip">
             <span class="icon" id="logout">
@@ -99,6 +100,9 @@
           </div>
           <a href="/error-logs" class="desk-a"><i class="fas  fa-user"></i> Error Logs</a>
         </li>
+
+    <% } %>
+
         <li class="list-item">
           <div class="tooltip">
             <span class="icon" id="logout">
@@ -111,17 +115,21 @@
           <a href="/edit/admin/profile" class="desk-a"><i class="fas  fa-user"></i> Profile</a>
         </li>
 
-         <li class="list-item">
-           <div class="tooltip">
-             <span class="icon" id="logout">
-               <a href="/logout">
-                 <i class="fas  fa-sign-out-alt" id="mobil-a"></i>
-               </a>
-             </span>
-             <span class="tooltiptext">Logout</span>
-           </div>
-           <a href="/logout" class="desk-a"><i class="fas  fa-sign-out-alt"></i> Sign Out</a>
-         </li>
+                <li class="list-item">
+          <div class="tooltip">
+            <span class="icon" id="logout">
+              <a href="/files-logs">
+                <i class="fas  fa-trash-can" id="mobil-a"></i>
+              </a>
+            </span>
+            <span class="tooltiptext">Recycle Bin</span>
+          </div>
+          <a href="/files-logs" class="desk-a"><i class="fas fa-trash"></i> Recycle Bin</a>
+        </li>
+
+        
+
+
 
        </ul>
      </div>
@@ -132,6 +140,7 @@
    <script src="/sweetalert.min.js"></script>
    <script src="/sweetalertScripts.js"></script>
     <script src="/preloader.js"></script>
+    <script src="/xlsx.full.min.js"></script>
  </section>
 
 <div id="overlay" class="overlay">
