@@ -25,7 +25,7 @@
                  ||file.fileType==".webm"||file.fileType==".mpeg-2")
                  {%>
 
-  <video class="video" src="/<%= file.fileName %>" id="<%= file.fileName %>/<%= file.id %>/<%= file.fileId %>" muted ></video>
+     <input type="checkbox" name="<%= file.fileName %>" />  <video class="video" src="/<%= file.fileName %>" id="<%= file.fileName %>/<%= file.id %>/<%= file.fileId %>" muted ></video>
             <!-- pdf -->
             <% }else if(
                   file.fileType==".pdf"||file.fileType==".docx"
