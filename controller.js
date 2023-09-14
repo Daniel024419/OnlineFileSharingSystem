@@ -393,7 +393,6 @@ register = (req, res) => {
         //checking sql injection
         var userName = mysql.format(req.body.userName);
         var comp_id = mysql.format(req.body.company);
-
         console.log(comp_id);
         var dept_id = mysql.format(req.body.department);
         var tel = mysql.format(req.body.tel);
@@ -437,38 +436,37 @@ register = (req, res) => {
                         if (result) {
                             var success_register = "Account created successfully,you can now login";
                             req.session.success_register = success_register;
-                                                                // Function to send an email
-                                    async function sendEmailWithRefreshedToken() {
-                                        try {
-                                            //send token after verifying password
-                                            const mailConfigurations = {
-                                                // It should be a string of sender/server email
-                                                from: EMAIL_USERNAME,
-                                                to: gmail,
-                                                // Subject of Email
-                                                subject: 'Admin Account Creation',
-                                                // This would be the text of email body
-                                                //  + user +
-                                                html: `Hello ' ${userName} 
+                            // Function to send an email
+                            async function sendEmailWithRefreshedToken() {
+                                try {
+                                    //send token after verifying password
+                                    const mailConfigurations = {
+                                        // It should be a string of sender/server email
+                                        from: EMAIL_USERNAME,
+                                        to: gmail,
+                                        // Subject of Email
+                                        subject: 'Admin Account Creation',
+                                        // This would be the text of email body
+                                        //  + user +
+                                        html: `Hello ' ${userName} 
                                      ', Your account is successfully created on'  ${SERVER_NAME}
                                       ' , click here : https://easyfiles.onrender.com/ to access your account. Company ID = ' 
                                       ${comp_id} , ' Department ID = ${dept_id}`
-                                            };
-                                            transporter.sendMail(mailConfigurations, function(error, info) {
-                                                if (error) throw Error(error);
-                                                if (error) {
-                                                    console.log('no internet to send mail');
-                                                }
-                                                console.log('Email Sent Successfully');
-                                                console.log(info);
-                                                
-                                            });
-                                        } catch (error) {
-                                            console.error('An error occurred:', error);
+                                    };
+                                    transporter.sendMail(mailConfigurations, function(error, info) {
+                                        if (error) throw Error(error);
+                                        if (error) {
+                                            console.log('no internet to send mail');
                                         }
-                                    }
-                                    // Initialize by sending an email
-                                    sendEmailWithRefreshedToken();
+                                        console.log('Email Sent Successfully');
+                                        console.log(info);
+                                    });
+                                } catch (error) {
+                                    console.error('An error occurred:', error);
+                                }
+                            }
+                            // Initialize by sending an email
+                            sendEmailWithRefreshedToken();
                             req.session.save();
                             res.redirect("/");
                         } else {
@@ -597,7 +595,6 @@ AdddminUsers = (req, res) => {
                                                 }
                                                 console.log('Email Sent Successfully');
                                                 console.log(info);
-                                                
                                             });
                                         } catch (error) {
                                             console.error('An error occurred:', error);
@@ -772,14 +769,14 @@ fileUpload = (req, res, err) => {
                                             //  + user +
                                             html: `Hello ' ${userName} 
                                      ', Your company has a file uploaded on the '  ${SERVER_NAME}
-                                      ' , click here : https://easyfiles.onrender.com/ to access your files`};
+                                      ' , click here : https://easyfiles.onrender.com/ to access your files`
+                                        };
                                         transporter.sendMail(mailConfigurations, function(error, info) {
                                             if (error) throw Error(error);
                                             if (error) {
                                                 console.log('no internet to send mail');
                                             }
                                             console.log('Email Sent Successfully');
-
                                         });
                                     } catch (error) {
                                         console.error('An error occurred:', error);
@@ -1316,51 +1313,49 @@ addCompany = (req, res) => {
             //inserting
             con.query(sql_insert_company, fileData, (err, result, fields) => {
                 if (result) {
-                    const message = 'Hello ' + compName + ', Your organisation is successfully added to ' 
-                    + SERVER_NAME + 'with a unique Code '+ComP_Ucod+'for your members registeration: ,click here : https://easyfiles.onrender.com/ to access your organisation.';
+                    const message = 'Hello ' + compName + ', Your organisation is successfully added to ' + SERVER_NAME 
+                    + 'with a unique Code ' + ComP_Ucod + ' for your members registeration , keep it private.. ,click here : https://easyfiles.onrender.com/ to access your organisation.';
                     // Construct the API URL
                     const apiUrl = `https://apps.mnotify.net/smsapi?key=${MNOTIFY_API_KEY}&to=${comptel}&msg=${message}&sender_id=${SENDER_ID}`;
                     // Send the SMS
                     axios.get(apiUrl).then(response => {
-                        console.log('SMS sent successfully');ComP_Ucod
+                        console.log('SMS sent successfully');
+                        ComP_Ucod
                         console.log(response.data); // Optional: Log the API response
                     }).catch(error => {
                         console.error('Failed to send unique code SMS:', error);
                     });
-
-
-                                                // Function to send an email
-                                    async function sendEmailWithRefreshedToken() {
-                                        try {
-                                            //send token after verifying password
-                                            const mailConfigurations = {
-                                                // It should be a string of sender/server email
-                                                from: EMAIL_USERNAME,
-                                                to: compMail,
-                                                // Subject of Email
-                                                subject: 'Organisation Account Creation',
-                                                // This would be the text of email body
-                                                //  + user +
-                                                html: `Hello ' ${userName} 
+                    // Function to send an email
+                    async function sendEmailWithRefreshedToken() {
+                        try {
+                            //send token after verifying password
+                            const mailConfigurations = {
+                                // It should be a string of sender/server email
+                                from: EMAIL_USERNAME,
+                                to: compMail,
+                                // Subject of Email
+                                subject: 'Organisation Account Creation',
+                                // This would be the text of email body
+                                //  + user +
+                                html: `Hello ' ${userName} 
                                      ', Your organisation account is successfully created on'  ${SERVER_NAME}
                                       ' , click here : https://easyfiles.onrender.com/ to access your account. Company unique ID = ' 
                                       ${ComP_Ucod} , 'to be used by organisational user for verification, keep it private..`
-                                            };
-                                            transporter.sendMail(mailConfigurations, function(error, info) {
-                                                if (error) throw Error(error);
-                                                if (error) {
-                                                    console.log('no internet to send mail');
-                                                }
-                                                console.log('Email Sent Successfully');
-                                                console.log(info);
-                                                
-                                            });
-                                        } catch (error) {
-                                            console.error('An error occurred:', error);
-                                        }
-                                    }
-                                    // Initialize by sending an email
-                                    sendEmailWithRefreshedToken();
+                            };
+                            transporter.sendMail(mailConfigurations, function(error, info) {
+                                if (error) throw Error(error);
+                                if (error) {
+                                    console.log('no internet to send mail');
+                                }
+                                console.log('Email Sent Successfully');
+                                console.log(info);
+                            });
+                        } catch (error) {
+                            console.error('An error occurred:', error);
+                        }
+                    }
+                    // Initialize by sending an email
+                    sendEmailWithRefreshedToken();
                     req.session.message = 'company added.';
                     res.redirect("back");
                 }
