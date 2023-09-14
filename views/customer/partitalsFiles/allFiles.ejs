@@ -1,4 +1,8 @@
 <section>
+
+    <form action="files-logs-download-zip" method="GET">
+
+    <button type="submit" class="zip" > Export Zip</button>
           <input type="text"  class="py-2 form-control" id="searhcInputNew" onkeyup="searchAll(this.value)"  placeholder="Search for anything..." >
 
 
@@ -15,6 +19,7 @@
                 ||file.fileType==".png"
                 ||file.fileType==".jpeg"
                 ||file.fileType==".jpg") {%>
+ <input type="checkbox"  name="files" value="<%= file.fileName %>">
             <img class="img" id="noAudio"  src="/<%= file.fileName %>" alt="<%= file.fileName %>/<%= file.id %>/<%= file.fileId %>">
             <!-- video -->
             <% } else if(
@@ -25,7 +30,7 @@
                  ||file.fileType==".mkv"||file.fileType==".flv"
                  ||file.fileType==".webm"||file.fileType==".mpeg-2")
                  {%>
-
+ <input type="checkbox"  name="files" value="<%= file.fileName %>">
   <video class="video" src="/<%= file.fileName %>" id="<%= file.fileName %>/<%= file.id %>/<%= file.fileId %>" muted ></video>
             <!-- pdf -->
             <% }else if(
@@ -36,6 +41,7 @@
                 ){ %>
 
             <span class="pdf">
+ <input type="checkbox"  name="files" value="<%= file.fileName %>">
               <embed src="/<%= file.fileName %>" type="/pdf" id="pdfFile" style=" display: none;">
               <img class="img" id="pdfCover" src="/pdfCover.png" id="pdfPreview" alt="<%= file.fileName %>/<%= file.id %>/<%= file.fileId %>">
             </span>
@@ -47,6 +53,7 @@
                 ){ %>
 
             <span id="audio">
+ <input type="checkbox"  name="files" value="<%= file.fileName %>">
               <audio id="audioFile" style=" display: none;" src="/<%= file.fileName %>" controls></audio>
   <img class="img" id="audio"  src="/musicCover.jpg" id="audioPreview" onclick="play()" alt="<%= file.fileName %>/<%= file.id %>/<%= file.fileId %>">
             </span>
@@ -92,7 +99,7 @@
   </table>
 </section>
 
-
+</form>
 <script>
 function searchAll(input) {
   var  filter, table, tr, td, i, txtValue;

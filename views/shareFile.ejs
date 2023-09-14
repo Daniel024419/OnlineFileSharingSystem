@@ -4,8 +4,8 @@
         <%- include('./customer/partials/head.ejs') %>
         <link rel="stylesheet" href="/login.css">
    </head>
-<body>
-    <div class="container">
+<body style="align-content: center;width: 100%;" >
+    <div class="container1" style="margin: 0;" >
         <% if(result_files) {%>
         <% result_files.forEach( file => {   %>
         <div class="left">
@@ -14,19 +14,32 @@
             <object width="" data="/<%= file.fileName %>" type="" id="filePreview"  ></object>
           <style>
  object{
-    width: 177% !important;
-    padding-right: 65vh !important;
-    
+    width: 100%;
+    height: 550px;
   
 
 }
 
-@media screen and (min-width:200px) and (max-width:800px){
-    object{
-    width: 900px !important;
-} 
+
+.container1{
+display: flex;
+flex-direction: row;
+justify-content: space-evenly;
+
 }
-          </style>
+
+
+
+@media screen and (max-width:900px){
+    object{
+        height: 400px;
+    }
+
+    .container1{
+        flex-direction: column;
+    }
+}
+      </style>
         </div>
         </div>
         <div class="right">

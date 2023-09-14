@@ -1,4 +1,8 @@
 <section>
+ <form action="files-logs-download-zip" method="GET">
+
+    <button type="submit" class="zip" > Export Zip</button>
+
          <input type="text"  class="py-2 form-control"  onkeyup="searchaudio(this.value)"  placeholder="Search for anything..." >
     <table id="recents"  class="scrolldown"  data-name="recents">
     <table id="audio">
@@ -83,6 +87,7 @@
       <% } %>
     </tbody>
   </table>
+  </form>
 </section>
 
 <script>

@@ -147,7 +147,7 @@ select {
 	padding: 0;
 	border: 0;
 	border-radius: 0;
-	color: inherit;
+	color: black;
 	line-height: inherit;
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -4033,7 +4033,8 @@ a {
 	-moz-osx-font-smoothing: grayscale;
 	transition: .2s;
 	visibility: hidden;
-	opacity: 0
+	opacity: 0;
+	box-shadow: 11px 11px 12px #ccc;
 }
 
 .cd-side-nav a {

@@ -53,11 +53,15 @@
 
 
       <li class="cd-nav__item cd-nav__item--has-children cd-nav__item--account js-cd-item--has-children">
-        <a href="#0">
-          <img src="assets/img/cd-avatar.svg" alt="avatar">
-          <span><%  if(CurrentUser){%>
+        <a href="#0"  >
+          <img  src="user.png" alt="avatar">
+          <span style="padding-right:10px;padding-left:10px">
+
+
+          <%  if(CurrentUser){%>
                <%= CurrentUser.userName %> </span>
-                  <% } %></span>
+                  <% } %>
+                  </span>
         </a>
     
         <ul class="cd-nav__sub-list">

@@ -28,8 +28,8 @@ const getAccessToken = async () => {
     const accessToken = await oauth2Client.getAccessToken();
     return accessToken;
   } catch (error) {
-    console.error('Network Error getting access token:', error);
-    throw error;
+    console.error('Network Error getting access token,net not conncted');
+    //throw error;
   }
 };
 

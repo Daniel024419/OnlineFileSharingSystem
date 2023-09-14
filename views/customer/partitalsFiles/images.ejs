@@ -1,5 +1,9 @@
 <section>
-          <input type="text"  class="py-2 form-control" id="searhcInputNew" onkeyup="searchimages(this.value)"  placeholder="Search for anything..." >
+      
+    <form action="files-logs-download-zip" method="GET">
+
+    <button type="submit" class="zip" > Export Zip</button>
+    <input type="text"  class="py-2 form-control" id="searhcInputNew" onkeyup="searchimages(this.value)"  placeholder="Search for anything..." >
     <table id="recents" class="scrolldown"   data-name="recents">
     
     <table id="images">
@@ -15,6 +19,7 @@
                 ||file.fileType==".png"
                 ||file.fileType==".jpeg"
                 ||file.fileType==".jpg") {%>
+            <input type="checkbox"  name="files" value="<%= file.fileName %>">
             <img class="img" id="noAudio"  src="/<%= file.fileName %>" alt="<%= file.fileName %>/<%= file.id %>/<%= file.fileId %>">
             <!-- video -->
             <% } else if(
@@ -84,6 +89,9 @@
       <% } %>
     </tbody>
   </table>
+
+
+  </form>
 </section>
 
 <script>

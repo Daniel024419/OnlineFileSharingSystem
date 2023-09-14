@@ -1,6 +1,6 @@
 window.addEventListener('load', () => {
   const timerElement = document.getElementById('timer');
-  let countdown = parseInt(localStorage.getItem('countdown')) || 20; // Get remaining time from localStorage
+  let countdown = parseInt(localStorage.getItem('countdown')) || 2000; // Get remaining time from localStorage
 
   // Function to update the timer and perform actions when it reaches 0
   function updateTimer() {
@@ -16,7 +16,7 @@ window.addEventListener('load', () => {
     } else {
       countdown--;
       localStorage.setItem('countdown', countdown); // Store the remaining time in localStorage
-      setTimeout(updateTimer, 1000); // Update the timer every 1000 milliseconds (1 second)
+      setTimeout(updateTimer, 2000); // Update the timer every 1000 milliseconds (1 second)
     }
   }
 

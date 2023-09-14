@@ -1146,6 +1146,7 @@ viewDownloads = (req, res) => {
                                 OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv' AND comp_id = ${admin_Session.comp_id};
                                 SELECT * FROM downloads WHERE  fileType = '.gif' OR fileType = '.jfif' OR fileType = '.png' OR fileType = '.jpg' OR fileType = '.jpeg' AND comp_id = ${admin_Session.comp_id}`;
         }
+
         //catching blockages
         try {
             //inserting
@@ -1980,16 +1981,16 @@ Customerhome = (req, res) => {
         res.redirect('/login');
     } else {
         var sql_select_files_all = `
-        SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE dept_id = ${dept_id} AND comp_id = ${comp_id} ORDER BY created_at DESC;
+        SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE dept_id = ${dept_id} ORDER BY created_at DESC;
         
-        SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE dept_id = ${dept_id} AND fileType = '.mp3' OR fileType = '.m4a' OR fileType = '.wma'
-                                 OR fileType = '.acc' OR fileType = '.wav' OR fileType = '.flac';
-        SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE dept_id = ${dept_id} AND fileType = '.mp4' OR fileType = '.avi' OR fileType = '.mpeg-2'
-                                 OR fileType = '.webm' OR fileType = '.mkv' OR fileType = '.mov';
-        SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE dept_id = ${dept_id} AND 
-                                fileType = '.pdf' OR fileType = '.dot' OR fileType = '.doc' OR fileType = '.docm'
-                                OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv';
-         SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE dept_id = ${dept_id} AND fileType = '.gif' OR fileType = '.jfif' OR fileType = '.png' OR fileType = '.jpg' OR fileType = '.jpeg'`;
+        SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE (fileType = '.mp3' OR fileType = '.m4a' OR fileType = '.wma'
+                                 OR fileType = '.acc' OR fileType = '.wav' OR fileType = '.flac') AND dept_id = '${dept_id}';
+        SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE (fileType = '.mp4' OR fileType = '.avi' OR fileType = '.mpeg-2'
+                                 OR fileType = '.webm' OR fileType = '.mkv' OR fileType = '.mov') AND dept_id = '${dept_id}';
+        SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE  
+                                fileType = '.pdf' OR fileType = '.dot' OR fileType = '.doc' OR fileType = '.docm' OR fileType = '.docx' OR fileType = '.ppt' OR fileType= '.txt' OR fileType = '.csv AND dept_id = ${dept_id}';
+         SELECT * , Day(created_at) AS Day,Year(created_at) AS Year,Month(created_at) AS Month FROM files WHERE
+          (fileType = '.gif' OR fileType = '.jfif' OR fileType = '.png' OR fileType = '.jpg' OR fileType = '.jpeg') AND dept_id = ${dept_id}`;
         //catching blockages
         try {
             //inserting
