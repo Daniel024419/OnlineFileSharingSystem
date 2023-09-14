@@ -124,15 +124,14 @@
 
               <div class="input-box">
                 <i class="fas fa-user"></i>
-                <input list="comp" onkeyup="checkCompany(this.value)" name="company"
-                        placeholder="Company" id="company" value="">
+                <input list="comp" name="company" onkeyup="checkCompany(this.value)"  placeholder="Company" id="company">
         
 
                         <datalist id="comp">
                             <%  if(result_company) { %>
                                 <!-- start for each -->
                                 <% result_company.forEach( company=> {%>
-                                              <option value="<%= company.comp_id %>" 
+                          <option value="<%= company.comp_id %>" 
                           label="<%= company.comp_name %>"> 
                           
                           <% }) } %>
@@ -183,7 +182,7 @@
 
               <div class="input-box">
                 <i class="fas fa-phone-alt"></i>
-                <input type="text" name="tel" autocomplete="off" autofocus="off" onkeyup="checkUsername(this.value)" placeholder="Telephone"  class="ComP_Ucod">
+                <input type="text" name="tel" autocomplete="off" autofocus="off"  placeholder="Telephone"  class="ComP_Ucod">
                 <br>        
                         
               </div> 

@@ -30,7 +30,6 @@
         checkBtn.value='Verified';
         confirm.checked=true;
         checkBtn.disabled=true;
-        companyID.disabled=true;
         document.getElementById('ComP_Ucod').readOnly=true;
         localStorage.removeItem('count');
         localStorage.removeItem('isLoggedIn');

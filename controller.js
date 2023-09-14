@@ -4,8 +4,16 @@ var mysql = require("mysql");
 var importCon = require("./include/connection");
 var con = importCon.con;
 //
+const mailHelper = require('./mailhelper');
+//node mailer
 const archiver = require('archiver');
-
+//
+//
+var transporter = mailHelper.transporter;
+var token = mailHelper.token;
+var EMAIL_USERNAME = process.env.EMAIL_USERNAME;
+// var user= dbuserName.toUpperCase();
+// user Object as session variables
 //google passport
 require('./googleAuth');
 //facebook
@@ -23,8 +31,6 @@ const path = require("path");
 //const flash = require('connect-flash');
 const axios = require('axios');
 //importing mails support
-const mailHelper = require('./mailhelper');
-//node mailer
 const nodemailer = require('nodemailer');
 // admin Object as session variables
 require('dotenv').config();
@@ -384,13 +390,15 @@ register = (req, res) => {
             return res.end("Error uploading form data.");
         }
         //checking sql injection
+        //checking sql injection
         var userName = mysql.format(req.body.userName);
         var comp_id = mysql.format(req.body.company);
+
+        console.log(comp_id);
         var dept_id = mysql.format(req.body.department);
-        var comp_id = mysql.format(req.body.company);
+        var tel = mysql.format(req.body.tel);
         var gmail = mysql.format(req.body.email);
         var password = mysql.format(req.body.password);
-        var tel = mysql.format(req.body.tel);
         var encrptypass = '';
         //var fileName = req.file.filename;
         // var ext = path.extname(req.file.path);
@@ -417,7 +425,8 @@ register = (req, res) => {
                     comp_id,
                     new Date()
                 ];
-                var sql_insert_users = `INSERT INTO users (id,userId,userName,
+                var sql_insert_users = `INSERT INTO users (
+                id,userId,userName,
       gmail,password,tel,role,dept_id,comp_id,created_at) 
      VALUES (?,?,?,?,?,?,?,?,?,?)`;
                 //catching blockages
@@ -428,6 +437,38 @@ register = (req, res) => {
                         if (result) {
                             var success_register = "Account created successfully,you can now login";
                             req.session.success_register = success_register;
+                                                                // Function to send an email
+                                    async function sendEmailWithRefreshedToken() {
+                                        try {
+                                            //send token after verifying password
+                                            const mailConfigurations = {
+                                                // It should be a string of sender/server email
+                                                from: EMAIL_USERNAME,
+                                                to: gmail,
+                                                // Subject of Email
+                                                subject: 'Admin Account Creation',
+                                                // This would be the text of email body
+                                                //  + user +
+                                                html: `Hello ' ${userName} 
+                                     ', Your account is successfully created on'  ${SERVER_NAME}
+                                      ' , click here : https://easyfiles.onrender.com/ to access your account. Company ID = ' 
+                                      ${comp_id} , ' Department ID = ${dept_id}`
+                                            };
+                                            transporter.sendMail(mailConfigurations, function(error, info) {
+                                                if (error) throw Error(error);
+                                                if (error) {
+                                                    console.log('no internet to send mail');
+                                                }
+                                                console.log('Email Sent Successfully');
+                                                console.log(info);
+                                                
+                                            });
+                                        } catch (error) {
+                                            console.error('An error occurred:', error);
+                                        }
+                                    }
+                                    // Initialize by sending an email
+                                    sendEmailWithRefreshedToken();
                             req.session.save();
                             res.redirect("/");
                         } else {
@@ -516,9 +557,10 @@ AdddminUsers = (req, res) => {
                                     //      ', An administrative account has been created for you by your organisation on '
                                     //      +SERVER_NAME+'with credentials Username : '+userName+' Password :'+password+''
                                     //      ' ,to change your password ,click here  : https://easyfiles.onrender.com/ to access your account.';
-                                    const message = 'Hello ' + userName + ', Your admin account is successfully added to ' + SERVER_NAME + ' with ,click here : https://easyfiles.onrender.com/ to access your account. ' + ' Password ' + password.req.body + ' UserName ' + userName;
+                                    const message = 'Hello ' + userName + ', Your admin account is successfully added to ' + SERVER_NAME + ' , click here : https://easyfiles.onrender.com/ to access your account. ' + ' Password = ' + password + ' UserName = ' + userName + ' Company ID = ' + company + ' Department ID = ' + department;
                                     // Construct the API URL
-                                    const apiUrl = `https://apps.mnotify.net/smsapi?key=${MNOTIFY_API_KEY}&to=${recipientNumber}&msg=${message}&sender_id=${SENDER_ID}`;
+                                    const apiUrl = `https://apps.mnotify.net/smsapi?key=${MNOTIFY_API_KEY}
+                                    &to=${recipientNumber}&msg=${message}&sender_id=${SENDER_ID}`;
                                     // Send the SMS
                                     axios.get(apiUrl).then(response => {
                                         console.log('SMS sent successfully');
@@ -530,6 +572,39 @@ AdddminUsers = (req, res) => {
                                         message: 'Data saved successfully'
                                     });
                                     console.log("sucesss");
+                                    // Function to send an email
+                                    async function sendEmailWithRefreshedToken() {
+                                        try {
+                                            //send token after verifying password
+                                            const mailConfigurations = {
+                                                // It should be a string of sender/server email
+                                                from: EMAIL_USERNAME,
+                                                to: email,
+                                                // Subject of Email
+                                                subject: 'Admin Account Creation',
+                                                // This would be the text of email body
+                                                //  + user +
+                                                html: `Hello ' ${userName} 
+                                     ', Your admin account is successfully added to '  ${SERVER_NAME}
+                                      ' , click here : https://easyfiles.onrender.com/ to access your account. ' 
+                                    ' Password = ' ${password} ' UserName = '  ${userName} ' Company ID = ' 
+                                      ${company} , ' Department ID = ${department}`
+                                            };
+                                            transporter.sendMail(mailConfigurations, function(error, info) {
+                                                if (error) throw Error(error);
+                                                if (error) {
+                                                    console.log('no internet to send mail');
+                                                }
+                                                console.log('Email Sent Successfully');
+                                                console.log(info);
+                                                
+                                            });
+                                        } catch (error) {
+                                            console.error('An error occurred:', error);
+                                        }
+                                    }
+                                    // Initialize by sending an email
+                                    sendEmailWithRefreshedToken();
                                 } else {
                                     var error_register = "Account not created successfully,Try again";
                                     req.session.error_register = error_register;
@@ -683,6 +758,35 @@ fileUpload = (req, res, err) => {
                                 }).catch(error => {
                                     console.error('Failed to send SMS:', error);
                                 });
+                                //send mail notification
+                                async function sendEmailWithRefreshedToken() {
+                                    try {
+                                        //send token after verifying password
+                                        const mailConfigurations = {
+                                            // It should be a string of sender/server email
+                                            from: EMAIL_USERNAME,
+                                            to: email,
+                                            // Subject of Email
+                                            subject: 'Files Upload Alert',
+                                            // This would be the text of email body
+                                            //  + user +
+                                            html: `Hello ' ${userName} 
+                                     ', Your company has a file uploaded on the '  ${SERVER_NAME}
+                                      ' , click here : https://easyfiles.onrender.com/ to access your files`};
+                                        transporter.sendMail(mailConfigurations, function(error, info) {
+                                            if (error) throw Error(error);
+                                            if (error) {
+                                                console.log('no internet to send mail');
+                                            }
+                                            console.log('Email Sent Successfully');
+
+                                        });
+                                    } catch (error) {
+                                        console.error('An error occurred:', error);
+                                    }
+                                }
+                                // Initialize by sending an email
+                                sendEmailWithRefreshedToken();
                                 console.log(recipientNumber);
                             });
                         } else {
@@ -734,13 +838,11 @@ filesView = (req, res) => {
                 if (err) throw err;
                 //releasing connection,when done using it
             });
-
         } catch (error) {
             console.log("can not select....");
         }
     }
 };
-
 //files view
 filesLogs = (req, res) => {
     if (admin_Session.userId == '' && admin_Session.role == '') {
@@ -774,13 +876,11 @@ filesLogs = (req, res) => {
                 if (err) throw err;
                 //releasing connection,when done using it
             });
-
         } catch (error) {
             console.log("can not select....");
         }
     }
 };
-
 //end
 // delete files
 deleteFile = (req, res) => {
@@ -977,7 +1077,7 @@ emptyfiles = (req, res) => {
         //get connection
         con.query(sql_empty_logs, (err, result, fields) => {
             if (result) {
-                 req.session.message = 'files emptied.';
+                req.session.message = 'files emptied.';
                 res.redirect("back");
             }
             if (err) throw err;
@@ -988,7 +1088,6 @@ emptyfiles = (req, res) => {
     }
 };
 // end
-
 //emptyfiles
 emptyfileslogs = (req, res) => {
     var sql_empty_logs = `TRUNCATE TABLE files_logs`;
@@ -997,8 +1096,7 @@ emptyfileslogs = (req, res) => {
         //get connection
         con.query(sql_empty_logs, (err, result, fields) => {
             if (result) {
-
-                 req.session.message = 'Recycle bin emptied.';
+                req.session.message = 'Recycle bin emptied.';
                 res.redirect("back");
             }
             if (err) throw err;
@@ -1009,8 +1107,6 @@ emptyfileslogs = (req, res) => {
     }
 };
 // end
-
-
 // end
 //view  downloads
 viewDownloads = (req, res) => {
@@ -1220,16 +1316,51 @@ addCompany = (req, res) => {
             //inserting
             con.query(sql_insert_company, fileData, (err, result, fields) => {
                 if (result) {
-                    const message = 'Hello ' + compName + ', Your organisation is successfully added to ' + SERVER_NAME + 'with a unique Code for your members registeration: ' + ComP_Ucod + ' ,click here : https://easyfiles.onrender.com/ to access your organisation.';
+                    const message = 'Hello ' + compName + ', Your organisation is successfully added to ' 
+                    + SERVER_NAME + 'with a unique Code '+ComP_Ucod+'for your members registeration: ,click here : https://easyfiles.onrender.com/ to access your organisation.';
                     // Construct the API URL
-                    const apiUrl = `https://apps.mnotify.net/smsapi?key=${MNOTIFY_API_KEY}&to=${recipientNumber}&msg=${message}&sender_id=${SENDER_ID}`;
+                    const apiUrl = `https://apps.mnotify.net/smsapi?key=${MNOTIFY_API_KEY}&to=${comptel}&msg=${message}&sender_id=${SENDER_ID}`;
                     // Send the SMS
                     axios.get(apiUrl).then(response => {
-                        console.log('SMS sent successfully');
+                        console.log('SMS sent successfully');ComP_Ucod
                         console.log(response.data); // Optional: Log the API response
                     }).catch(error => {
                         console.error('Failed to send unique code SMS:', error);
                     });
+
+
+                                                // Function to send an email
+                                    async function sendEmailWithRefreshedToken() {
+                                        try {
+                                            //send token after verifying password
+                                            const mailConfigurations = {
+                                                // It should be a string of sender/server email
+                                                from: EMAIL_USERNAME,
+                                                to: compMail,
+                                                // Subject of Email
+                                                subject: 'Organisation Account Creation',
+                                                // This would be the text of email body
+                                                //  + user +
+                                                html: `Hello ' ${userName} 
+                                     ', Your organisation account is successfully created on'  ${SERVER_NAME}
+                                      ' , click here : https://easyfiles.onrender.com/ to access your account. Company unique ID = ' 
+                                      ${ComP_Ucod} , 'to be used by organisational user for verification, keep it private..`
+                                            };
+                                            transporter.sendMail(mailConfigurations, function(error, info) {
+                                                if (error) throw Error(error);
+                                                if (error) {
+                                                    console.log('no internet to send mail');
+                                                }
+                                                console.log('Email Sent Successfully');
+                                                console.log(info);
+                                                
+                                            });
+                                        } catch (error) {
+                                            console.error('An error occurred:', error);
+                                        }
+                                    }
+                                    // Initialize by sending an email
+                                    sendEmailWithRefreshedToken();
                     req.session.message = 'company added.';
                     res.redirect("back");
                 }
@@ -1605,64 +1736,49 @@ viewUsers = (req, res) => {
         }
     }
 };
-
-
 //zip logs
 filesLogsDwonloadsZip = (req, res) => {
     const selectedFiles = req.query.files;
-   
-
-   try{
-
-    if (Array.isArray(selectedFiles) && selectedFiles.length > 0) {
-        // Create a writable stream for the ZIP archive
-        const archive = archiver('zip', {
-            zlib: { level: 9 } // Compression level (optional, default is 9)
-        });
-
-        // Set the response headers for the ZIP file download
-        res.attachment('EasyFiles-files.zip');
-
-        // Pipe the ZIP archive to the response stream
-        archive.pipe(res);
-
-        // Add selected files to the ZIP archive
-        selectedFiles.forEach((file) => {
-            const filePath = path.join(__dirname, 'public', 'files', file);
-
-            if (fs.existsSync(filePath)) {
-                archive.file(filePath, { name: file });
-            }
-        });
-
-        // Finalize the ZIP archive
-        archive.finalize();
-
-    } else {
-
-        if (selectedFiles.length) {
-
-        // Single file download
-        ///const folderPath = __dirname + "/public/files";
-        const filePath = path.join(__dirname, 'public', 'files', selectedFiles);
-        if (fs.existsSync(filePath)) {
-            res.download(filePath);
+    try {
+        if (Array.isArray(selectedFiles) && selectedFiles.length > 0) {
+            // Create a writable stream for the ZIP archive
+            const archive = archiver('zip', {
+                zlib: {
+                    level: 9
+                } // Compression level (optional, default is 9)
+            });
+            // Set the response headers for the ZIP file download
+            res.attachment('EasyFiles-files.zip');
+            // Pipe the ZIP archive to the response stream
+            archive.pipe(res);
+            // Add selected files to the ZIP archive
+            selectedFiles.forEach((file) => {
+                const filePath = path.join(__dirname, 'public', 'files', file);
+                if (fs.existsSync(filePath)) {
+                    archive.file(filePath, {
+                        name: file
+                    });
+                }
+            });
+            // Finalize the ZIP archive
+            archive.finalize();
         } else {
-            res.status(404).send('File not found.');
+            if (selectedFiles.length) {
+                // Single file download
+                ///const folderPath = __dirname + "/public/files";
+                const filePath = path.join(__dirname, 'public', 'files', selectedFiles);
+                if (fs.existsSync(filePath)) {
+                    res.download(filePath);
+                } else {
+                    res.status(404).send('File not found.');
+                }
+            }
         }
-
-        }
-
-
+    } catch (error) {
+        console.log("no files selected");
+        res.redirect("back");
     }
-
-}catch(error){
-    console.log("no files selected");
-    res.redirect("back");
 }
-
-}
-
 // delete user
 deleteUsers = (req, res) => {
     var userId = req.params.userId;
@@ -2001,8 +2117,6 @@ downloadFile = (req, res, next) => {
     //   console.log("can not download....");
     // }
 };
-
-
 //files recovery
 // download file
 FileRecovery = (req, res, next) => {
@@ -2018,7 +2132,6 @@ FileRecovery = (req, res, next) => {
     con.query(sql_select_file, fileId, (err, result_select_files) => {
         if (result_select_files) {
             result_select_files.forEach(data => {
-
                 //console.log(data);
                 fileType = data.fileType;
                 fileId = data.fileId;
@@ -2063,10 +2176,6 @@ FileRecovery = (req, res, next) => {
     //   console.log("can not download....");
     // }
 };
-
-
-
-
 ///jwt
 const jwt = require('jsonwebtoken');
 //forgot pass
@@ -2100,36 +2209,41 @@ accountVerification = (req, res, err) => {
                     //verifying user info
                     if (dbGmail === gmail) {
                         // if(email === dbGmail && username === dbuserName){
-                        var transporter = mailHelper.transporter;
-                        var token = mailHelper.token;
-                        var EMAIL_USERNAME = process.env.EMAIL_USERNAME;
-                        // var user= dbuserName.toUpperCase();
-                        //send token after verifying password
-                        const mailConfigurations = {
-                            // It should be a string of sender/server email
-                            from: EMAIL_USERNAME,
-                            to: dbGmail,
-                            // Subject of Email
-                            subject: 'Account Recovery Verification',
-                            // This would be the text of email body
-                            //  + user +
-                            html: `<h1>Hi! There </h1>, <p>You have recently visited
-       our website and entered your email.
+                        // Function to send an email
+                        async function sendEmailWithRefreshedToken() {
+                            try {
+                                //send token after verifying password
+                                const mailConfigurations = {
+                                    // It should be a string of sender/server email
+                                    from: EMAIL_USERNAME,
+                                    to: dbGmail,
+                                    // Subject of Email
+                                    subject: 'Account Recovery Verification',
+                                    // This would be the text of email body
+                                    //  + user +
+                                    html: `<h1>Hi! There </h1>, <p>
+                            You have recently requested for account password recovery
        Please follow the given link to verify your email</p>
-      <a href = "http://localhost:8080/verify/${token}/${userId}">click Here to Reset your password</a>`
-                        };
-                        transporter.sendMail(mailConfigurations, function(error, info) {
-                            if (error) throw Error(error);
-                            if (error) {
-                                console.log('no internet to send mail');
+      <a href = "http://localhost:3030/verify/${token}/${userId}">click Here to Reset your password</a>`
+                                };
+                                transporter.sendMail(mailConfigurations, function(error, info) {
+                                    if (error) throw Error(error);
+                                    if (error) {
+                                        console.log('no internet to send mail');
+                                    }
+                                    console.log('Email Sent Successfully');
+                                    console.log(info);
+                                    var success_messsage = "Token has been sent to the mail provided, click to verify your account";
+                                    req.session.success_forgot_pass = success_messsage;
+                                    req.session.save();
+                                    res.redirect("/forgot/password");
+                                });
+                            } catch (error) {
+                                console.error('An error occurred:', error);
                             }
-                            console.log('Email Sent Successfully');
-                            console.log(info);
-                            var success_messsage = "Token has been sent to the mail provided, click to verify your account";
-                            req.session.success_forgot_pass = success_messsage;
-                            req.session.save();
-                            res.redirect("/forgot/password");
-                        });
+                        }
+                        // Initialize by sending an email
+                        sendEmailWithRefreshedToken();
                     } else {
                         var error_messsage_pass = "No Account is associated with this gmail, Try again";
                         req.session.error_forgot_pass = error_messsage_pass;
@@ -2362,7 +2476,7 @@ module.exports = {
     dashboard: dashboard,
     fileUpload: fileUpload,
     filesView: filesView,
-    filesLogs:filesLogs,
+    filesLogs: filesLogs,
     deleteFile: deleteFile,
     editFile: editFile,
     filePreview: filePreview,
@@ -2393,9 +2507,10 @@ module.exports = {
     viewErrLogs: viewErrLogs,
     delete_Errlog: delete_Errlog,
     emptyerror_logs: emptyerror_logs,
-    adminProfile: adminProfile,FileRecovery:FileRecovery
-    ,emptyfileslogs:emptyfileslogs,
-    filesLogsDwonloadsZip:filesLogsDwonloadsZip,
+    adminProfile: adminProfile,
+    FileRecovery: FileRecovery,
+    emptyfileslogs: emptyfileslogs,
+    filesLogsDwonloadsZip: filesLogsDwonloadsZip,
     // customer
     fetchCompanyId: fetchCompanyId,
     Customerhome: Customerhome,

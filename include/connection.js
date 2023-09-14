@@ -1,46 +1,27 @@
-//importing mysql instances from the package
+// Import the MySQL package
 var mysql = require('mysql');
 require('dotenv').config();
-try{
-//creating connection variables
+
+// Create a connection variable using your environment variables
 var con = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     multipleStatements: true,
+    connectTimeout: 30000, // Set a longer timeout (in milliseconds)
 });
 
-//  var con = mysql.createConnection({
-//   host: "www.db4free.net",
-//   user: "daniel024419",
-//   password: "Daniel0547901448",
-//   database: "fileserver"
-// });
-con.connect( (error)=> {
-    
-    try{
-    // throwing error /exception
-   // if (error) throw error;
-    if(error){
-
-        console.log(error);
-        console.log("Xampp not connected");
-    }else{
-        console.log("db connected");
+// Connect to the database
+con.connect(function (error) {
+    if (error) {
+        console.error('Error connecting to the database:', error);
+        return;
     }
-}
-catch(ex){
- console.log("database error,xampp is not running");
-}
-
+    console.log('Connected to the database!');
 });
 
-// exporting connection to be used globally
-module.exports={
-    con:con
-}
-}
-catch(ex){
- console.log("database error,xampp is not running");
-}
+// Export the connection to use it in other parts of your application
+module.exports = {
+    con: con
+};

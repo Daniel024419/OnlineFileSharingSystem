@@ -247,13 +247,15 @@ function validateForm() {
     let password = document.forms["register"]["newpassword"].value;
     let repassword = document.forms["register"]["repassword"].value;
     let error_msg_form = document.getElementById('error-msg-form');
+    let checkbox = document.forms["register"]["checkbox"].value;
 
     if (username == "" 
     || company == "" 
     ||department== ""
     || email== "" 
     ||password== ""
-    ||repassword== "" ) {
+    ||repassword== ""
+    || checkbox =="" ) {
      // alert("input must be filled out");
       error_msg_form.textContent="All input are required....";
       

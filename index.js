@@ -1,10 +1,14 @@
 const express = require('express')
 const app = express()
+const EventEmitter = require('events'); // Import EventEmitter
+// Increase the event listener limit for Express (change 15 to your desired limit)
+EventEmitter.setMaxListeners(100);
 const cookieSession = require('cookie-session');
+
 //controller
 const controller=require('./controller');
 const passport = require('passport');
-
+require('./googleAuth')
 ///env viriables
 const dotenv = require("dotenv");
 dotenv.config();
@@ -31,7 +35,7 @@ app.use(express.json());
 // Set EJS as templating engine
 app.set('view engine', 'ejs');
 
-require('./googleAuth')
+
 // time to live for cookies
 const oneDay=100*60*60*24;
 app.use(session({
@@ -96,7 +100,6 @@ app.get('/auth/callback/success',controller.authcallbacksuccess);
 //end
 // failure
 app.get('/auth/callback/failure',controller.authfailure);
-
 
 
 //FACEBOOK
