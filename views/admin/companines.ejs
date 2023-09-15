@@ -91,6 +91,8 @@
               <% if(result_company) {%>
               Company (<%= result_company.length %>)
               <% } %>
+
+
               <a href="#" onclick="EmptyCompanies()" >Empty Logs</a>
 
 
@@ -141,6 +143,18 @@
                     </a>
                   </span> -->
 
+
+                  <span class="tooltip-dashboard">
+                    <a href="#"  id="<%= company.comp_id %>" rel="<%= company.comp_id %>" onclick="CreateAdmin(this.id,this.rel)">
+                      <span class="icon-edit" id="edit">
+                        <span class="tooltiptext-dashboard">Add Admin</span>
+                        <i class="fas fa-user">+</i>
+                      </span>
+
+                    </a>
+                  </span>
+
+
                   <!-- delete -->
                   <span class="tooltip-dashboard">
                     <!-- <a href="/delete/<%= //department.departmentId %>"> -->
@@ -165,7 +179,7 @@
                   </span>
 
                   
-                    <span class="tooltip-dashboard">
+                  <span class="tooltip-dashboard">
                     <a href="./edit-company/<%= company.comp_id %>">
                       <span class="icon-edit" id="edit">
                         <span class="tooltiptext-dashboard">Edit</span>

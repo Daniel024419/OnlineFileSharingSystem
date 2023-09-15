@@ -49,7 +49,7 @@ function checkDesc(desc) {
       submit_btn.disabled = false; submit_btn.style.cursor='pointer';
   }
 
-  if (desc.length == 20 || desc.length >= 5) {
+  if (desc.length == 20 || desc.length >= 2) {
 
     desc_err__msg.style.display = 'none';
     document.getElementById('desc').style.borderColor = 'green';
@@ -203,14 +203,14 @@ function checkCompanyName(compName) {
   }
 
   //desc length
-  if (compName.length > 4) {
+  if (compName.length > 2) {
     compName_err__msg.style.display = 'none';
     document.getElementById('compName').style.borderColor = 'green';
      submit_btn.disabled = false; submit_btn.style.cursor='pointer';
     return false;
   } else {
     compName_err__msg.style.display = 'initial';
-    compName_err__msg.textContent = 'Name can not be less than 4 chars'
+    compName_err__msg.textContent = 'Name can not be less than 2 chars'
     compName_err__msg.style.color = 'red';
     document.getElementById('compName').style.borderColor = 'red';
     submit_btn.disabled = true; submit_btn.style.cursor='not-allowed';
@@ -240,14 +240,14 @@ function checkCompanyLocation(comptLocation) {
   }
 
   //desc length
-  if (comptLocation.length > 4) {
+  if (comptLocation.length > 2) {
     comptLocation_err__msg.style.display = 'none';
     document.querySelector('.comptLocation').style.borderColor = 'green';
      submit_btn.disabled = false; submit_btn.style.cursor='pointer';
     return false;
   } else {
     comptLocation_err__msg.style.display = 'initial';
-    comptLocation_err__msg.textContent = 'Location can not be less than 4 chars'
+    comptLocation_err__msg.textContent = 'Location can not be less than 2 chars'
     comptLocation_err__msg.style.color = 'red';
     document.querySelector('.comptLocation').style.borderColor = 'red';
     submit_btn.disabled = true; submit_btn.style.cursor='not-allowed';
@@ -385,14 +385,14 @@ function checkdeptName(deptName) {
   }
 
   //desc length
-  if (deptName.length > 4) {
+  if (deptName.length > 2) {
     deptName_err__msg.style.display = 'none';
     document.getElementById('dept').style.borderColor = 'green';
      submit_btn.disabled = false; submit_btn.style.cursor='pointer';
     return false;
   } else {
     deptName_err__msg.style.display = 'initial';
-    deptName_err__msg.textContent = 'Name can not be less than 4 chars'
+    deptName_err__msg.textContent = 'Name can not be less than 2 chars'
     deptName_err__msg.style.color = 'red';
     document.getElementById('dept').style.borderColor = 'red';
     submit_btn.disabled = true; submit_btn.style.cursor='not-allowed';
@@ -421,14 +421,14 @@ function checkdeptLocation(deptLocation) {
   }
 
   //desc length
-  if (deptLocation.length > 4) {
+  if (deptLocation.length > 2) {
     deptLocation_err__msg.style.display = 'none';
     document.querySelector('.deptLocation').style.borderColor = 'green';
      submit_btn.disabled = false; submit_btn.style.cursor='pointer';
     return false;
   } else {
     deptLocation_err__msg.style.display = 'initial';
-    deptLocation_err__msg.textContent = 'Location can not be less than 4 chars'
+    deptLocation_err__msg.textContent = 'Location can not be less than 2 chars'
     deptLocation_err__msg.style.color = 'red';
     document.querySelector('.deptLocation').style.borderColor = 'red';
     submit_btn.disabled = true;

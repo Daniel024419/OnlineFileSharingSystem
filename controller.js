@@ -538,7 +538,7 @@ AdddminUsers = (req, res) => {
                     comp_id,
                     new Date()
                 ];
-                var sql_insert_users = `INSERT INTO users (id,userId,userName,
+    var sql_insert_users = `INSERT INTO users (id,userId,userName,
       gmail,password,tel,role,dept_id,comp_id,created_at) 
      VALUES (?,?,?,?,?,?,?,?,?,?)`;
                 //catching blockages
@@ -548,13 +548,15 @@ AdddminUsers = (req, res) => {
                     //check mail
                     var sql_check_user = `SELECT * FROM users WHERE gmail = ?`;
                     con.query(sql_check_user, gmail, (err, result_ck) => {
+
                         if (result_ck.length == 0) {
+
                             con.query(sql_insert_users, filData, (err, result) => {
+
                                 if (result) {
-                                    // const message = 'Hello '+compName+
-                                    //      ', An administrative account has been created for you by your organisation on '
-                                    //      +SERVER_NAME+'with credentials Username : '+userName+' Password :'+password+''
-                                    //      ' ,to change your password ,click here  : https://easyfiles.onrender.com/ to access your account.';
+
+
+
                                     const message = 'Hello ' + userName + ', Your admin account is successfully added to ' + SERVER_NAME + ' , click here : https://easyfiles.onrender.com/ to access your account. ' + ' Password = ' + password + ' UserName = ' + userName + ' Company ID = ' + company + ' Department ID = ' + department;
                                     // Construct the API URL
                                     const apiUrl = `https://apps.mnotify.net/smsapi?key=${MNOTIFY_API_KEY}
@@ -609,12 +611,15 @@ AdddminUsers = (req, res) => {
                                     res.redirect("back");
                                     console.log(err);
                                 }
-                                if (err) throw err;
+                        if (err) throw err;
                             });
                         } else {
-                            res.status(200).json({
-                                message: 'Mail already exist.'
-                            });
+
+
+                    res.status(200).json({
+                    message: 'Mail already exist...'
+
+                    });
                         }
                     });
                     //
@@ -801,6 +806,7 @@ fileUpload = (req, res, err) => {
         }
         //end
     });
+req.session.message='';
 };
 //files view
 filesView = (req, res) => {
@@ -839,6 +845,7 @@ filesView = (req, res) => {
             console.log("can not select....");
         }
     }
+    req.session.message='';
 };
 //files view
 filesLogs = (req, res) => {
@@ -877,6 +884,7 @@ filesLogs = (req, res) => {
             console.log("can not select....");
         }
     }
+    req.session.message='';
 };
 //end
 // delete files
@@ -941,6 +949,7 @@ DELETE FROM files WHERE fileId = ?;`;
         console.log("can not delete....");
         console.log(error);
     }
+    req.session.message='';
 };
 // edit files
 //get
@@ -1007,6 +1016,7 @@ filePreview = (req, res) => {
             console.log("can not select....");
         }
     }
+    req.session.message='';
 };
 //files update to storage
 //post
@@ -1064,6 +1074,7 @@ fileUpdate = (req, res, err) => {
         }
         //end
     });
+    req.session.message='';
 };
 // end
 //emptyfiles
@@ -1083,6 +1094,7 @@ emptyfiles = (req, res) => {
     } catch (error) {
         console.log("can not TRUNCATE....");
     }
+    req.session.message='';
 };
 // end
 //emptyfiles
@@ -1102,6 +1114,7 @@ emptyfileslogs = (req, res) => {
     } catch (error) {
         console.log("can not TRUNCATE....");
     }
+    req.session.message='';
 };
 // end
 // end
@@ -1183,6 +1196,8 @@ viewDownloads = (req, res) => {
             console.log("can not select....");
         }
     }
+
+    req.session.message='';
 };
 // delete downloads
 deleteDownload = (req, res) => {
@@ -1203,6 +1218,7 @@ deleteDownload = (req, res) => {
     } catch (error) {
         console.log("can not delete....");
     }
+    req.session.message='';
 };
 //end
 //emptyfiles
@@ -1222,6 +1238,8 @@ emptydownload = (req, res) => {
     } catch (error) {
         console.log("can not TRUNCATE....");
     }
+
+    req.session.message='';
 };
 // end
 //emptycompanies
@@ -1241,6 +1259,7 @@ emptycompanies = (req, res) => {
     } catch (error) {
         console.log("can not TRUNCATE....");
     }
+    req.session.message='';
 };
 // end
 // end
@@ -1265,6 +1284,9 @@ viewCompanines = (req, res) => {
                     res.render("../views/admin/companines.ejs", {
                         result_company: result_company
                     });
+
+
+
                 }
                 if (err) throw err;
                 //releasing connection,when done using it
@@ -1273,6 +1295,10 @@ viewCompanines = (req, res) => {
             console.log("can not select....");
         }
     }
+
+     req.session.message='';
+
+
 };
 //end
 //add  Company
@@ -1321,7 +1347,7 @@ addCompany = (req, res) => {
                     // Send the SMS
                     axios.get(apiUrl).then(response => {
                         console.log('SMS sent successfully');
-                        ComP_Ucod
+                        
                         console.log(response.data); // Optional: Log the API response
                     }).catch(error => {
                         console.error('Failed to send unique code SMS:', error);
@@ -1367,6 +1393,7 @@ addCompany = (req, res) => {
             console.log("can not insert....");
         }
     });
+req.session.message='';
 };
 // end
 //update company
@@ -1405,6 +1432,7 @@ updateCompany = (req, res) => {
             console.log("can not insert....");
         }
     });
+    req.session.message='';
 };
 // end
 //get
@@ -1441,6 +1469,7 @@ editComp = (req, res) => {
             console.log("can not select....");
         }
     }
+    req.session.message='';
 };
 //  end
 // delete department get
@@ -1462,6 +1491,8 @@ deleteCompany = (req, res) => {
     } catch (error) {
         console.log("can not delete....");
     }
+
+    req.session.message='';
 };
 //view  companines get
 viewDepartment = (req, res) => {
@@ -1501,6 +1532,7 @@ viewDepartment = (req, res) => {
             console.log("can not select....");
         }
     }
+    req.session.message='';
 };
 // end
 //get
@@ -1537,6 +1569,7 @@ editDept = (req, res) => {
             console.log("can not select....");
         }
     }
+    req.session.message='';
 };
 //  end
 //add  department
@@ -1580,6 +1613,7 @@ addDepartment = (req, res) => {
             console.log("can not insert....");
         }
     });
+    req.session.message='';
 };
 // end
 //update department 
@@ -1620,6 +1654,8 @@ updateDepartment = (req, res) => {
             console.log("can not insert....");
         }
     });
+
+    req.session.message='';
 };
 // end
 //fetchCompanyId
@@ -1680,6 +1716,7 @@ deleteDepartment = (req, res) => {
     } catch (error) {
         console.log("can not delete....");
     }
+    req.session.message='';
 };
 //end 
 //emptydepartment
@@ -1699,6 +1736,7 @@ emptydepartment = (req, res) => {
     } catch (error) {
         console.log("can not TRUNCATE....");
     }
+    req.session.message='';
 };
 // end
 //view  users
@@ -1731,6 +1769,7 @@ viewUsers = (req, res) => {
             console.log("can not select....");
         }
     }
+    req.session.message='';
 };
 //zip logs
 filesLogsDwonloadsZip = (req, res) => {
@@ -1794,6 +1833,7 @@ deleteUsers = (req, res) => {
     } catch (error) {
         console.log("can not delete....");
     }
+    req.session.message='';
 };
 // VIEW admin user
 //emptyusers
@@ -1814,6 +1854,8 @@ emptyusers = (req, res) => {
     } catch (error) {
         console.log("can not TRUNCATE....");
     }
+
+    req.session.message='';
 };
 //end
 //view  logs
@@ -1841,6 +1883,7 @@ viewLogs = (req, res) => {
             console.log("can not select....");
         }
     }
+    req.session.message='';
 };
 // end
 // delete log
@@ -1861,6 +1904,7 @@ deletelog = (req, res) => {
     } catch (error) {
         console.log("can not delete....");
     }
+    req.session.message='';
 };
 // end
 // empty logs
@@ -1880,6 +1924,7 @@ emptylogs = (req, res) => {
     } catch (error) {
         console.log("can not TRUNCATE....");
     }
+    req.session.message='';
 };
 //viewErrLogs
 //view  err logs
@@ -1906,6 +1951,7 @@ viewErrLogs = (req, res) => {
             console.log("can not select....");
         }
     }
+    req.session.message='';
 };
 // end
 // delete err log
@@ -1926,6 +1972,7 @@ delete_Errlog = (req, res) => {
     } catch (error) {
         console.log("can not delete....");
     }
+    req.session.message='';
 };
 // end
 // empty err logs
@@ -1970,6 +2017,7 @@ adminProfile = (req, res) => {
             console.log("can not select....");
         }
     }
+    req.session.message='';
 };
 //customer
 //view  files
@@ -2112,6 +2160,8 @@ downloadFile = (req, res, next) => {
     // } catch (error) {
     //   console.log("can not download....");
     // }
+
+    req.session.message='';
 };
 //files recovery
 // download file
@@ -2171,6 +2221,8 @@ FileRecovery = (req, res, next) => {
     // } catch (error) {
     //   console.log("can not download....");
     // }
+
+    req.session.message='';
 };
 ///jwt
 const jwt = require('jsonwebtoken');
@@ -2433,6 +2485,7 @@ sendFile = (req, res, err) => {
         res.redirect('/home');
         //end
     });
+    req.session.message='';
 };
 //logout user //clear session
 logout = (req, res) => {

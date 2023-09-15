@@ -358,33 +358,36 @@ swal({
 
 }
 
-  function CreateAdmin (comp_id) {
+  function CreateAdmin (comp_id,dept_id) {
 
    Swal.fire({
-  title: 'Create Department Admin',
+  title: 'Create Admin',
   html: `
     <form id="data-form">
-      <input type="text" id="username" class="swal2-input" placeholder="Username">
-      <input type="password" id="password" class="swal2-input" placeholder="Password">
-      <input type="text" id="company" readonly value="${comp_id}" class="swal2-input" placeholder="Company">
-      <input type="tel" id="telephone" class="swal2-input" placeholder="Telephone">
-      <input type="text" id="department" class="swal2-input" placeholder="Department">
-      <input type="email" id="email" class="swal2-input" placeholder="Gmail">
+      <input type="text" id="username"  class="swal2-input" placeholder="Username">
+      <input type="password" id="password"  class="swal2-input" placeholder="Password">
+      <input type="text" id="company_1"   value="${comp_id}" class="swal2-input" placeholder="Company">
+      <input type="tel" id="telephone"  class="swal2-input" placeholder="Telephone">
+      <input type="text" id="department_1"   value="${dept_id}" class="swal2-input" placeholder="Department">
+      <input type="email" id="email"  class="swal2-input" placeholder="Gmail">
     </form>
   `,
   showCancelButton: true,
   confirmButtonText: 'Submit',
   cancelButtonText: 'Cancel',
   preConfirm: () => {
+
+
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    const company = document.getElementById('company').value;
+    const company = document.getElementById('company_1').value;
     const telephone = document.getElementById('telephone').value;
-    const department = document.getElementById('department').value;
+    const department = document.getElementById('department_1').value;
     const email = document.getElementById('email').value;
 
     if (!username || !password || !company || !telephone || !department || !email) {
       Swal.showValidationMessage('Please fill in all fields');
+      console.log(username +' '+ password +' '+company +' '+telephone +' '+ department +' '+ email);
       return false;
     }
 
@@ -427,7 +430,7 @@ function submitDataToServer(formData) {
       } else {
         throw new Error('Response does not contain a message');
       }
-// Reload the page after the Swal alert is closed
+        // Reload the page after the Swal alert is closed
         location.reload();
 
       

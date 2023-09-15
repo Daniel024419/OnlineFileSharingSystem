@@ -33,9 +33,10 @@
               <% } %>
 
               <script type="text/javascript">
-                var comp_id = "<%= CurrentAdmin.comp_id %>"
+                var comp_id = "<%= CurrentAdmin.comp_id %>";
+                var dept_id = "<%= CurrentAdmin.dept_id %>";
               </script>
-              <a href="#" style="background-color: green;margin-left: 5px; " onclick="CreateAdmin(comp_id)" >Create Admin</a>
+              <a href="#" style="background-color: green;margin-left: 5px; " onclick="CreateAdmin(comp_id,dept_id)" >Create Admin</a>
               <a href="#" onclick="EmptyUsers()" >Empty Users</a>
 
             </p>
